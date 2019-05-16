@@ -4,6 +4,10 @@ import 'passengerpage.dart';
 import 'settingspage.dart';
 
 class MyDrawer extends StatelessWidget {
+  DriverPage driverPage;
+  PassengerPage passengerPage;
+  SettingsPage settingsPage;
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -23,7 +27,7 @@ class MyDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => DriverPage()));
+                  builder: (BuildContext context) => this.driverPage));
             },
           ),
           ListTile(
@@ -32,7 +36,7 @@ class MyDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => PassengerPage()));
+                  builder: (BuildContext context) => this.passengerPage));
             },
           ),
           ListTile(
@@ -41,7 +45,7 @@ class MyDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => SettingsPage()));
+                  builder: (BuildContext context) => this.settingsPage));
             },
           ),
         ],
