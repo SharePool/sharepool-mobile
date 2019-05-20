@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
+import 'package:share_pool/driver-settings/addTourPage.dart';
 
 import '../mydrawer.dart';
 
@@ -28,7 +29,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void getToursForUser() async {
     // todo get user id from context
-    var response = await http.get("http://192.168.0.7:8080/tours/users/1");
+    var response = await get("http://192.168.0.7:8080/tours/users/1");
 
     print(response.body);
 
@@ -50,17 +51,24 @@ class _SettingsPageState extends State<SettingsPage> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => AddTourPage(myDrawer)));
+          },
+        ),
         drawer: myDrawer,
         body: Center(
           child: tours == null || tours.isEmpty
               ? Text("No tours defined yet.")
               : ListView.builder(
-              itemCount: tours == null ? 0 : tours.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Card(
-                  child: new Text(tours[index]["fromLocation"]),
-                );
-              }),
+                  itemCount: tours == null ? 0 : tours.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Card(
+                      child: new Text(tours[index]["fromLocation"]),
+                    );
+                  }),
         ));
   }
 }
