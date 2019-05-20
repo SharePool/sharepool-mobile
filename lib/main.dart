@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:share_pool/driver-settings/settingspage.dart';
 import 'package:share_pool/mydrawer.dart';
 import 'package:share_pool/passengerpage.dart';
-import 'package:share_pool/settingspage.dart';
+
 import 'driverpage.dart';
 
 void main() => runApp(MyApp());
