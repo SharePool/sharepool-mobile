@@ -40,8 +40,8 @@ class _AddTourFormState extends State<AddTourPage> {
           title: Text(widget.title),
         ),
         drawer: myDrawer,
-        body: Center(
-            child: Form(
+        body: Form(
+          autovalidate: true,
           key: _formKey,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
@@ -91,24 +91,38 @@ class _AddTourFormState extends State<AddTourPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: RaisedButton(
-                      onPressed: createTour, child: Text('Submit')),
+                      onPressed: () {
+                        var form = _formKey.currentState;
+                        if (form.validate()) {
+                          form.save();
+                          createTour();
+                        }
+                      },
+                      child: Text('Submit')),
                 ),
               ],
             ),
           ),
-        )));
+        ));
   }
 
   void createTour() async {
     // todo get user id from context
-    var response = await post("http://192.168.0.7:8080/tours",
-        body: json.encode(new TourCreationDto(
-            from: fromLocation,
-            to: toLocation,
-            cost: tourCost,
-            currency: "EUR",
-            ownerId: 1)));
+    var body = json.encode(new TourDto(
+        from: this.fromLocation,
+        to: this.toLocation,
+        cost: this.tourCost,
+        currency: "EUR",
+        ownerId: 1));
 
+    print(body);
+
+    var response = await post(
+      "http://192.168.0.7:8080/tours", 
+      body: body,
+      headers: {
+        "Content-Type": "application/json"
+      });
     print(response.body);
   }
 }

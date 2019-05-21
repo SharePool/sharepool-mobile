@@ -1,4 +1,4 @@
-class TourCreationDto extends  {
+class TourDto {
   String from;
   String to;
   String currency;
@@ -6,7 +6,7 @@ class TourCreationDto extends  {
   double kilometers;
   int ownerId;
 
-  TourCreationDto(
+  TourDto(
       {this.from,
       this.to,
       this.currency,
@@ -14,13 +14,24 @@ class TourCreationDto extends  {
       this.kilometers,
       this.ownerId});
 
-  factory TourCreationDto.fromJson(Map<String, dynamic> json) {
-    return TourCreationDto(
+  factory TourDto.fromJson(Map<String, dynamic> json) {
+    return TourDto(
         from: json['from'],
         to: json['to'],
         currency: json['currency'],
         cost: json['cost'],
         kilometers: json['kilometers'],
         ownerId: json['ownerId']);
+  }
+
+  toJson() {
+    return {
+      "from": from,
+      "to": to,
+      "currency": currency,
+      "cost": cost,
+      "kilometers": kilometers,
+      "ownerId": ownerId
+    };
   }
 }

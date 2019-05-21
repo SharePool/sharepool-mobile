@@ -66,7 +66,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   itemCount: tours == null ? 0 : tours.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Card(
-                      child: new Text(tours[index]["fromLocation"]),
+                      child: new Text(tours[index]["from"]),
                     );
                   }),
         ));
