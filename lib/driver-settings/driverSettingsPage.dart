@@ -8,17 +8,17 @@ import 'package:share_pool/driver-settings/tourListWidget.dart';
 import '../mydrawer.dart';
 import 'dto/tourDto.dart';
 
-class SettingsPage extends StatefulWidget {
-  final String title = "Driver Tours";
+class DriverSettingsPage extends StatefulWidget {
+  final String title = "Your Tours";
   MyDrawer myDrawer;
 
-  SettingsPage(this.myDrawer);
+  DriverSettingsPage(this.myDrawer);
 
   @override
-  _SettingsPageState createState() => _SettingsPageState();
+  _DriverSettingsPageState createState() => _DriverSettingsPageState();
 }
 
-class _SettingsPageState extends State<SettingsPage> {
+class _DriverSettingsPageState extends State<DriverSettingsPage> {
   List<TourDto> tours;
 
   Future<void> getToursForUser() async {
@@ -61,7 +61,10 @@ class _SettingsPageState extends State<SettingsPage> {
             child: Center(
               child: tours == null || tours.isEmpty
                   ? Text("No tours defined yet.")
-                  : TourListWidget(tours),
+                  : TourListWidget(
+                myDrawer: widget.myDrawer,
+                tours: tours,
+              ),
             ),
             onRefresh: getToursForUser));
   }

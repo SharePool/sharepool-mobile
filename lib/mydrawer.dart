@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:share_pool/driver-settings/settingspage.dart';
+import 'package:share_pool/driver-settings/driverSettingsPage.dart';
 
 import 'driverpage.dart';
 import 'passengerpage.dart';
@@ -7,7 +7,7 @@ import 'passengerpage.dart';
 class MyDrawer extends StatelessWidget {
   DriverPage driverPage;
   PassengerPage passengerPage;
-  SettingsPage settingsPage;
+  DriverSettingsPage settingsPage;
 
   @override
   Widget build(BuildContext context) {

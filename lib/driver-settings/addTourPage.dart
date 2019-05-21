@@ -9,12 +9,11 @@ import 'package:share_pool/driver-settings/dto/tourDto.dart';
 import '../mydrawer.dart';
 
 class AddTourPage extends StatefulWidget {
-  final String title = "Create a tour";
   MyDrawer myDrawer;
 
-  AddTourPage(MyDrawer myDrawer) {
-    this.myDrawer = myDrawer;
-  }
+  TourDto editableTour;
+
+  AddTourPage(this.myDrawer, [this.editableTour]);
 
   @override
   State<StatefulWidget> createState() {
@@ -30,7 +29,7 @@ class _AddTourFormState extends State<AddTourPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.title),
+          title: Text(widget.editableTour == null ? "Create tour" : "Edit tour"),
         ),
         drawer: widget.myDrawer,
         body: Form(
@@ -64,6 +63,7 @@ class _AddTourFormState extends State<AddTourPage> {
                     tourDto.to = value;
                   },
                 ),
+                // todo set initialValue for currency
                 CurrencyDropdown(onSaved: handleCurrency),
                 TextFormField(
                   decoration: InputDecoration(labelText: "Tour cost"),
@@ -119,6 +119,7 @@ class _AddTourFormState extends State<AddTourPage> {
 
   void createTour() async {
     // todo get user id from context
+    tourDto.ownerId = 1;
     var body = json.encode(tourDto);
     print(body);
 
