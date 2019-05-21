@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:share_pool/driver-settings/dto/TourCreationDto.dart';
+import 'package:share_pool/common/currency.dart';
+import 'package:share_pool/common/currencyDropdown.dart';
+import 'package:share_pool/driver-settings/dto/tourDto.dart';
 
 import '../mydrawer.dart';
 
@@ -16,22 +18,13 @@ class AddTourPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _AddTourFormState(myDrawer);
+    return _AddTourFormState();
   }
 }
 
 class _AddTourFormState extends State<AddTourPage> {
   final _formKey = GlobalKey<FormState>();
-  MyDrawer myDrawer;
-  List tours;
-
-  String fromLocation;
-  String toLocation;
-  double tourCost;
-
-  _AddTourFormState(MyDrawer myDrawer) {
-    this.myDrawer = myDrawer;
-  }
+  TourDto tourDto = TourDto();
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +32,8 @@ class _AddTourFormState extends State<AddTourPage> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        drawer: myDrawer,
+        drawer: widget.myDrawer,
         body: Form(
-          autovalidate: true,
           key: _formKey,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
@@ -58,7 +50,7 @@ class _AddTourFormState extends State<AddTourPage> {
                     }
                   },
                   onSaved: (String value) {
-                    this.fromLocation = value;
+                    tourDto.from = value;
                   },
                 ),
                 TextFormField(
@@ -69,9 +61,10 @@ class _AddTourFormState extends State<AddTourPage> {
                     }
                   },
                   onSaved: (String value) {
-                    this.toLocation = value;
+                    tourDto.to = value;
                   },
                 ),
+                CurrencyDropdown(onSaved: handleCurrency),
                 TextFormField(
                   decoration: InputDecoration(labelText: "Tour cost"),
                   keyboardType: TextInputType.number,
@@ -85,7 +78,7 @@ class _AddTourFormState extends State<AddTourPage> {
                     }
                   },
                   onSaved: (String value) {
-                    this.tourCost = double.parse(value);
+                    tourDto.cost = double.parse(value);
                   },
                 ),
                 Padding(
@@ -106,23 +99,32 @@ class _AddTourFormState extends State<AddTourPage> {
         ));
   }
 
+  void handleCurrency(Currency currency) {
+    print(currency);
+
+    switch (currency) {
+      case Currency.EUR:
+        tourDto.currency = "EUR";
+        break;
+
+      case Currency.USD:
+        tourDto.currency = "USD";
+        break;
+
+      case Currency.GBP:
+        tourDto.currency = "GBP";
+        break;
+    }
+  }
+
   void createTour() async {
     // todo get user id from context
-    var body = json.encode(new TourDto(
-        from: this.fromLocation,
-        to: this.toLocation,
-        cost: this.tourCost,
-        currency: "EUR",
-        ownerId: 1));
-
+    var body = json.encode(tourDto);
     print(body);
 
-    var response = await post(
-      "http://192.168.0.7:8080/tours", 
-      body: body,
-      headers: {
-        "Content-Type": "application/json"
-      });
+    var response = await post("http://192.168.0.7:8080/tours",
+        body: body, headers: {"Content-Type": "application/json"});
+
     print(response.body);
   }
 }
