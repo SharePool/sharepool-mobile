@@ -1,4 +1,5 @@
 class TourDto {
+  int tourId;
   String from;
   String to;
   String currency;
@@ -7,7 +8,8 @@ class TourDto {
   int ownerId;
 
   TourDto(
-      {this.from,
+      {this.tourId,
+      this.from,
       this.to,
       this.currency,
       this.cost,
@@ -16,6 +18,7 @@ class TourDto {
 
   factory TourDto.fromJson(Map<String, dynamic> json) {
     return TourDto(
+        tourId: json['id'],
         from: json['from'],
         to: json['to'],
         currency: json['currency'],
@@ -26,6 +29,7 @@ class TourDto {
 
   toJson() {
     return {
+      "id": tourId,
       "from": from,
       "to": to,
       "currency": currency,

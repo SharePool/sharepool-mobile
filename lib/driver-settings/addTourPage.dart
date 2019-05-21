@@ -17,27 +17,31 @@ class AddTourPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _AddTourFormState();
+    if (editableTour == null) {
+      return _AddTourFormState(TourDto());
+    }
+    return _AddTourFormState(editableTour);
   }
 }
 
 class _AddTourFormState extends State<AddTourPage> {
   final _formKey = GlobalKey<FormState>();
-  TourDto tourDto = TourDto();
+  TourDto tourDto;
+
+  _AddTourFormState(this.tourDto);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.editableTour == null ? "Create tour" : "Edit tour"),
-        ),
+            title: Text(
+                widget.editableTour == null ? "Create tour" : "Edit tour")),
         drawer: widget.myDrawer,
         body: Form(
           key: _formKey,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 25.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 TextFormField(
                   decoration: InputDecoration(
@@ -51,6 +55,7 @@ class _AddTourFormState extends State<AddTourPage> {
                   onSaved: (String value) {
                     tourDto.from = value;
                   },
+                  initialValue: tourDto.from,
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: "Destination"),
@@ -62,6 +67,7 @@ class _AddTourFormState extends State<AddTourPage> {
                   onSaved: (String value) {
                     tourDto.to = value;
                   },
+                  initialValue: tourDto.to,
                 ),
                 // todo set initialValue for currency
                 CurrencyDropdown(onSaved: handleCurrency),
@@ -80,18 +86,33 @@ class _AddTourFormState extends State<AddTourPage> {
                   onSaved: (String value) {
                     tourDto.cost = double.parse(value);
                   },
+                  initialValue:
+                      tourDto.cost == null ? null : tourDto.cost.toString(),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: RaisedButton(
-                      onPressed: () {
-                        var form = _formKey.currentState;
-                        if (form.validate()) {
-                          form.save();
-                          createTour();
-                        }
-                      },
-                      child: Text('Submit')),
+                  child: Row(
+                    children: <Widget>[
+                      // todo only show delete button if we have an id for the tour
+                      tourDto.tourId != null
+                          ? RaisedButton(
+                              onPressed: () => print("test"),
+                              child: Text("Delete"),
+                              color: Colors.red,
+                            )
+                          : Spacer(),
+                      Spacer(),
+                      RaisedButton(
+                          onPressed: () {
+                            var form = _formKey.currentState;
+                            if (form.validate()) {
+                              form.save();
+                              createTour();
+                            }
+                          },
+                          child: Text('Submit')),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -100,8 +121,6 @@ class _AddTourFormState extends State<AddTourPage> {
   }
 
   void handleCurrency(Currency currency) {
-    print(currency);
-
     switch (currency) {
       case Currency.EUR:
         tourDto.currency = "EUR";
@@ -127,5 +146,9 @@ class _AddTourFormState extends State<AddTourPage> {
         body: body, headers: {"Content-Type": "application/json"});
 
     print(response.body);
+  }
+
+  void deleteTour() async {
+    // todo delete tour
   }
 }
