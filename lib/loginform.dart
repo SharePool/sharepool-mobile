@@ -53,7 +53,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  saveLogin() async {
+  void saveLogin() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     prefs.setString("userToken", "0sd9f09s");

@@ -59,7 +59,7 @@ class _AppState extends State<App> {
   }
 }
 
-_checkUserLoggedIn() async {
+Future<String> _checkUserLoggedIn() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setString("userToken", null);
 
