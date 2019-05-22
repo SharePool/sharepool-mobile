@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
+import 'package:share_pool/loginform.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'driverpage.dart';
 import 'passengerpage.dart';
 import 'settingspage.dart';
@@ -48,8 +51,23 @@ class MyDrawer extends StatelessWidget {
                   builder: (BuildContext context) => this.settingsPage));
             },
           ),
+          ListTile(
+            title: Text("Logout"),
+            trailing: Icon(Icons.exit_to_app),
+            onTap: () {
+              logoutUser(context);
+            },
+          ),
         ],
       ),
     );
+  }
+
+  void logoutUser(BuildContext context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove("userToken");
+
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) => new LoginForm(driverPage)));
   }
 }

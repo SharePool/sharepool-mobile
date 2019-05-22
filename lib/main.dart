@@ -9,7 +9,6 @@ import 'driverpage.dart';
 bool _isAuthenticated = false;
 
 void main() async {
-
   _isAuthenticated = await _checkUserLoggedIn() != null;
 
   runApp(App());
@@ -55,13 +54,11 @@ class _AppState extends State<App> {
     myDrawer.driverPage = driverPage;
     myDrawer.passengerPage = passengerPage;
     myDrawer.settingsPage = settingsPage;
-
   }
 }
 
 Future<String> _checkUserLoggedIn() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  prefs.setString("userToken", null);
 
   return prefs.getString("userToken") ?? null;
 }
