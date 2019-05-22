@@ -1,11 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:share_pool/common/currency.dart';
 import 'package:share_pool/common/currencyDropdown.dart';
 import 'package:share_pool/driver-settings/driverSettingsPage.dart';
-import 'package:share_pool/driver-settings/dto/tourDto.dart';
+import 'package:share_pool/model/dto/TourDto.dart';
+import 'package:share_pool/util/rest/TourRestClient.dart';
 
 import '../mydrawer.dart';
 
@@ -142,19 +140,8 @@ class _TourEditPageState extends State<TourEditPage> {
   void createOrUpdateTour() async {
     // todo get user id from context
     tourDto.ownerId = 1;
-    var body = json.encode(tourDto);
 
-    var response;
-    if (tourDto.tourId != null) {
-      response =
-      await put("http://192.168.0.7:8080/tours/" + tourDto.tourId.toString(),
-          body: body, headers: {"Content-Type": "application/json"});
-    } else {
-      response = await post("http://192.168.0.7:8080/tours",
-          body: body, headers: {"Content-Type": "application/json"});
-    }
-
-    print(response.body);
+    await TourRestClient.createOrUpdateTour(tourDto);
 
     // push here instead of pop to trigger reload
     Navigator.push(
@@ -164,10 +151,7 @@ class _TourEditPageState extends State<TourEditPage> {
   }
 
   void deleteTour() async {
-    var response = await delete(
-        "http://192.168.0.7:8080/tours/" + tourDto.tourId.toString());
-
-    print(response.body);
+    await TourRestClient.deleteTour(tourDto.tourId);
 
     // push here instead of pop to trigger reload
     Navigator.push(

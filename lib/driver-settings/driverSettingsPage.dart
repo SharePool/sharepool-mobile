@@ -1,12 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:share_pool/driver-settings/editTourPage.dart';
 import 'package:share_pool/driver-settings/tourListWidget.dart';
+import 'package:share_pool/model/dto/TourDto.dart';
+import 'package:share_pool/util/rest/TourRestClient.dart';
 
 import '../mydrawer.dart';
-import 'dto/tourDto.dart';
 
 class DriverSettingsPage extends StatefulWidget {
   final String title = "Your Tours";
@@ -21,26 +19,20 @@ class DriverSettingsPage extends StatefulWidget {
 class _DriverSettingsPageState extends State<DriverSettingsPage> {
   List<TourDto> tours;
 
-  Future<void> getToursForUser() async {
-    // todo get user id from context
-    var response = await get("http://192.168.0.7:8080/tours/users/1");
+  Future<void> loadTours() async {
+    // todo use user id from context
+    List<TourDto> tours = await TourRestClient.getToursForUser(1);
 
-    if (response.statusCode == 200) {
-      final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
-
-      print(parsed);
-
-      this.setState(() {
-        tours = parsed.map<TourDto>((json) => TourDto.fromJson(json)).toList();
-      });
-    }
+    setState(() {
+      this.tours = tours;
+    });
   }
 
   @override
   void initState() {
     super.initState();
 
-    getToursForUser();
+    loadTours();
   }
 
   @override
@@ -68,6 +60,6 @@ class _DriverSettingsPageState extends State<DriverSettingsPage> {
                 tours: tours,
               ),
             ),
-            onRefresh: getToursForUser));
+            onRefresh: loadTours));
   }
 }
