@@ -5,15 +5,18 @@ import 'currency.dart';
 
 class CurrencyDropdown extends StatefulWidget {
   Function onSaved;
+  Currency initialValue;
 
-  CurrencyDropdown({this.onSaved});
+  CurrencyDropdown({this.onSaved, this.initialValue});
 
   @override
-  _CurrencyDropdownState createState() => _CurrencyDropdownState();
+  _CurrencyDropdownState createState() => _CurrencyDropdownState(initialValue);
 }
 
 class _CurrencyDropdownState extends State<CurrencyDropdown> {
-  Currency dropdownValue = Currency.EUR;
+  Currency dropdownValue;
+
+  _CurrencyDropdownState(this.dropdownValue);
 
   @override
   Widget build(BuildContext context) {

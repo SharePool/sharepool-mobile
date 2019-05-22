@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:share_pool/common/currency.dart';
 import 'package:share_pool/common/currencyDropdown.dart';
+import 'package:share_pool/driver-settings/driverSettingsPage.dart';
 import 'package:share_pool/driver-settings/dto/tourDto.dart';
 
 import '../mydrawer.dart';
@@ -69,8 +70,11 @@ class _TourEditPageState extends State<TourEditPage> {
                   },
                   initialValue: tourDto.to,
                 ),
-                // todo set initialValue for currency
-                CurrencyDropdown(onSaved: handleCurrency),
+                CurrencyDropdown(
+                  onSaved: handleCurrency,
+                  initialValue: currencyfromString(tourDto.currency) ??
+                      Currency.EUR,
+                ),
                 TextFormField(
                   decoration: InputDecoration(labelText: "Tour cost"),
                   keyboardType: TextInputType.number,
@@ -93,10 +97,9 @@ class _TourEditPageState extends State<TourEditPage> {
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: Row(
                     children: <Widget>[
-                      // todo only show delete button if we have an id for the tour
                       tourDto.tourId != null
                           ? RaisedButton(
-                              onPressed: () => print("test"),
+                        onPressed: deleteTour,
                               child: Text("Delete"),
                               color: Colors.red,
                             )
@@ -107,7 +110,7 @@ class _TourEditPageState extends State<TourEditPage> {
                             var form = _formKey.currentState;
                             if (form.validate()) {
                               form.save();
-                              createTour();
+                              createOrUpdateTour();
                             }
                           },
                           child: Text('Submit')),
@@ -136,19 +139,40 @@ class _TourEditPageState extends State<TourEditPage> {
     }
   }
 
-  void createTour() async {
+  void createOrUpdateTour() async {
     // todo get user id from context
     tourDto.ownerId = 1;
     var body = json.encode(tourDto);
-    print(body);
 
-    var response = await post("http://192.168.0.7:8080/tours",
-        body: body, headers: {"Content-Type": "application/json"});
+    var response;
+    if (tourDto.tourId != null) {
+      response =
+      await put("http://192.168.0.7:8080/tours/" + tourDto.tourId.toString(),
+          body: body, headers: {"Content-Type": "application/json"});
+    } else {
+      response = await post("http://192.168.0.7:8080/tours",
+          body: body, headers: {"Content-Type": "application/json"});
+    }
 
     print(response.body);
+
+    // push here instead of pop to trigger reload
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => DriverSettingsPage(widget.myDrawer)));
   }
 
   void deleteTour() async {
-    // todo delete tour
+    var response = await delete(
+        "http://192.168.0.7:8080/tours/" + tourDto.tourId.toString());
+
+    print(response.body);
+
+    // push here instead of pop to trigger reload
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => DriverSettingsPage(widget.myDrawer)));
   }
 }

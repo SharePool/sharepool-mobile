@@ -38,6 +38,8 @@ class _DriverSettingsPageState extends State<DriverSettingsPage> {
 
   @override
   void initState() {
+    super.initState();
+
     getToursForUser();
   }
 
