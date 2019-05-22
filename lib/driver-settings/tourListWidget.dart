@@ -5,7 +5,7 @@ import 'package:share_pool/common/currency.dart';
 import 'package:share_pool/driver-settings/dto/tourDto.dart';
 import 'package:share_pool/mydrawer.dart';
 
-import 'addTourPage.dart';
+import 'editTourPage.dart';
 
 class TourListWidget extends StatelessWidget {
   List<TourDto> tours;
@@ -52,7 +52,7 @@ class TourCard extends StatelessWidget {
           onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => AddTourPage(myDrawer, tour))),
+                  builder: (context) => TourEditPage(myDrawer, tour))),
         ));
   }
 

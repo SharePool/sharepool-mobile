@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:share_pool/driver-settings/addTourPage.dart';
+import 'package:share_pool/driver-settings/editTourPage.dart';
 import 'package:share_pool/driver-settings/tourListWidget.dart';
 
 import '../mydrawer.dart';
@@ -53,7 +53,7 @@ class _DriverSettingsPageState extends State<DriverSettingsPage> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => AddTourPage(widget.myDrawer)));
+                    builder: (context) => TourEditPage(widget.myDrawer)));
           },
         ),
         drawer: widget.myDrawer,

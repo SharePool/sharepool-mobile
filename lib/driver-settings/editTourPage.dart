@@ -8,27 +8,27 @@ import 'package:share_pool/driver-settings/dto/tourDto.dart';
 
 import '../mydrawer.dart';
 
-class AddTourPage extends StatefulWidget {
+class TourEditPage extends StatefulWidget {
   MyDrawer myDrawer;
 
   TourDto editableTour;
 
-  AddTourPage(this.myDrawer, [this.editableTour]);
+  TourEditPage(this.myDrawer, [this.editableTour]);
 
   @override
   State<StatefulWidget> createState() {
     if (editableTour == null) {
-      return _AddTourFormState(TourDto());
+      return _TourEditPageState(TourDto());
     }
-    return _AddTourFormState(editableTour);
+    return _TourEditPageState(editableTour);
   }
 }
 
-class _AddTourFormState extends State<AddTourPage> {
+class _TourEditPageState extends State<TourEditPage> {
   final _formKey = GlobalKey<FormState>();
   TourDto tourDto;
 
-  _AddTourFormState(this.tourDto);
+  _TourEditPageState(this.tourDto);
 
   @override
   Widget build(BuildContext context) {
