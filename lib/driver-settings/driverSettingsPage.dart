@@ -51,14 +51,15 @@ class _DriverSettingsPageState extends State<DriverSettingsPage> {
           },
         ),
         drawer: widget.myDrawer,
+        // todo make it so empty list is also refreshable
         body: RefreshIndicator(
             child: Center(
               child: tours == null || tours.isEmpty
                   ? Text("No tours defined yet.")
                   : TourListWidget(
-                myDrawer: widget.myDrawer,
-                tours: tours,
-              ),
+                      myDrawer: widget.myDrawer,
+                      tours: tours,
+                    ),
             ),
             onRefresh: loadTours));
   }
