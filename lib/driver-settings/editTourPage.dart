@@ -95,13 +95,6 @@ class _TourEditPageState extends State<TourEditPage> {
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: Row(
                     children: <Widget>[
-                      tourDto.tourId != null
-                          ? RaisedButton(
-                        onPressed: deleteTour,
-                              child: Text("Delete"),
-                              color: Colors.red,
-                            )
-                          : Spacer(),
                       Spacer(),
                       RaisedButton(
                           onPressed: () {
@@ -142,16 +135,6 @@ class _TourEditPageState extends State<TourEditPage> {
     tourDto.ownerId = 1;
 
     await TourRestClient.createOrUpdateTour(tourDto);
-
-    // push here instead of pop to trigger reload
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => DriverSettingsPage(widget.myDrawer)));
-  }
-
-  void deleteTour() async {
-    await TourRestClient.deleteTour(tourDto.tourId);
 
     // push here instead of pop to trigger reload
     Navigator.push(

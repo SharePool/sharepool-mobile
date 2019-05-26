@@ -4,22 +4,46 @@ import 'package:flutter/widgets.dart';
 import 'package:share_pool/common/currency.dart';
 import 'package:share_pool/model/dto/TourDto.dart';
 import 'package:share_pool/mydrawer.dart';
+import 'package:share_pool/util/rest/TourRestClient.dart';
 
 import 'editTourPage.dart';
 
-class TourListWidget extends StatelessWidget {
+class TourListWidget extends StatefulWidget {
   List<TourDto> tours;
   MyDrawer myDrawer;
 
   TourListWidget({this.myDrawer, this.tours});
 
   @override
+  _TourListWidgetState createState() => _TourListWidgetState();
+}
+
+class _TourListWidgetState extends State<TourListWidget> {
+  @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: tours == null ? 0 : tours.length,
+        itemCount: widget.tours == null ? 0 : widget.tours.length,
         itemBuilder: (BuildContext context, int index) {
-          return TourCard(tours[index], myDrawer);
+          var tour = widget.tours[index];
+
+          return Dismissible(
+            child: TourCard(tour, widget.myDrawer),
+            key: ObjectKey(tour),
+            onDismissed: (direction) {
+              deleteTour(direction, tour);
+            },
+            background: Container(color: Colors.red),
+            direction: DismissDirection.endToStart,
+          );
         });
+  }
+
+  Future<void> deleteTour(DismissDirection direction, TourDto tour) async {
+    setState(() {
+      widget.tours.remove(tour);
+    });
+
+    await TourRestClient.deleteTour(tour.tourId);
   }
 }
 
