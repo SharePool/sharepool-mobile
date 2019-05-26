@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:share_pool/loginform.dart';
 import 'package:share_pool/mydrawer.dart';
 import 'package:share_pool/passengerpage.dart';
 import 'package:share_pool/settingspage.dart';
+import 'package:share_pool/user_management/usermanagementpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'driverpage.dart';
 
 bool _isAuthenticated = false;
@@ -38,7 +39,8 @@ class _AppState extends State<App> {
         theme: ThemeData(
           primarySwatch: Colors.green,
         ),
-        home: _isAuthenticated ? driverPage : new LoginForm(driverPage));
+        home: _isAuthenticated ? driverPage : new UserManagementPage(
+            driverPage));
   }
 
   @override
