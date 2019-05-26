@@ -80,7 +80,7 @@ class _LoginFormState extends State<LoginForm> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String token =
-        userRestClient.loginUser(new LoginUserDto(_email, _password));
+    await userRestClient.loginUser(new LoginUserDto(_email, _password));
 
     prefs.setString("userToken", token);
 

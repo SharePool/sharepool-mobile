@@ -107,7 +107,7 @@ class _RegisterFormState extends State<RegisterForm> {
   Future doRegister() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String token = userRestClient.registerUser(
+    String token = await userRestClient.registerUser(
         new RegisterUserDto(_firstName, _lastName, _email, _password));
 
     prefs.setString("userToken", token);
