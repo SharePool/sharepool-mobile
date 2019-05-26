@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:share_pool/settingspage.dart';
+
 import 'driverpage.dart';
 import 'passengerpage.dart';
-import 'settingspage.dart';
 
 class MyDrawer extends StatelessWidget {
   DriverPage driverPage;
