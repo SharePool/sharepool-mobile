@@ -82,9 +82,11 @@ class _LoginFormState extends State<LoginForm> {
     String token =
     await userRestClient.loginUser(new LoginUserDto(_email, _password));
 
-    prefs.setString("userToken", token);
+    if (token != null && token.isNotEmpty) {
+      prefs.setString("userToken", token);
 
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => widget.followingPage));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => widget.followingPage));
+    }
   }
 }

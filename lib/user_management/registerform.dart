@@ -18,6 +18,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
   String _firstName = "";
   String _lastName = "";
+  String _userName = "";
   String _email = "";
   String _password = "";
 
@@ -55,6 +56,19 @@ class _RegisterFormState extends State<RegisterForm> {
               },
               onSaved: (String value) {
                 _lastName = value;
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: "Username",
+              ),
+              validator: (value) {
+                if (value.isEmpty) {
+                  return "Username must not be empty";
+                }
+              },
+              onSaved: (String value) {
+                _userName = value;
               },
             ),
             TextFormField(
@@ -107,12 +121,14 @@ class _RegisterFormState extends State<RegisterForm> {
   Future doRegister() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String token = await userRestClient.registerUser(
-        new RegisterUserDto(_firstName, _lastName, _email, _password));
+    String token = await userRestClient.registerUser(new RegisterUserDto(
+        _firstName, _lastName, _userName, _email, _password));
 
-    prefs.setString("userToken", token);
+    if (token != null && token.isNotEmpty) {
+      prefs.setString("userToken", token);
 
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => widget.followingPage));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => widget.followingPage));
+    }
   }
 }
