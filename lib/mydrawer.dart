@@ -4,7 +4,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'driverpage.dart';
 import 'passengerpage.dart';
-import 'settingspage.dart';
 
 class MyDrawer extends StatelessWidget {
   DriverPage driverPage;
