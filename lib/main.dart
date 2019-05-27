@@ -2,27 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:share_pool/mydrawer.dart';
 import 'package:share_pool/passengerpage.dart';
 import 'package:share_pool/settingspage.dart';
+import 'package:share_pool/user_management/usermanagementpage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'driverpage.dart';
 
-void main() => runApp(MyApp());
+bool _isAuthenticated = false;
 
-class MyApp extends StatelessWidget {
+void main() async {
+  _isAuthenticated = await _checkUserLoggedIn() != null;
+
+  runApp(App());
+}
+
+class App extends StatefulWidget {
+  MyApp() {}
+
+  @override
+  Widget build(BuildContext context) {}
+
+  @override
+  _AppState createState() => new _AppState();
+}
+
+class _AppState extends State<App> {
+  Widget startScreen;
+
   DriverPage driverPage;
-
-  MyApp() {
-    MyDrawer myDrawer = new MyDrawer();
-
-    DriverPage driverPage = new DriverPage(myDrawer);
-    PassengerPage passengerPage = new PassengerPage(myDrawer);
-    SettingsPage settingsPage = new SettingsPage(myDrawer);
-
-    myDrawer.driverPage = driverPage;
-    myDrawer.passengerPage = passengerPage;
-    myDrawer.settingsPage = settingsPage;
-
-    this.driverPage = driverPage;
-  }
+  PassengerPage passengerPage;
+  SettingsPage settingsPage;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +39,28 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.green,
         ),
-        home: driverPage);
+        home: _isAuthenticated ? driverPage : new UserManagementPage(
+            driverPage));
   }
+
+  @override
+  initState() {
+    super.initState();
+
+    MyDrawer myDrawer = new MyDrawer();
+
+    driverPage = new DriverPage(myDrawer);
+    passengerPage = new PassengerPage(myDrawer);
+    settingsPage = new SettingsPage(myDrawer);
+
+    myDrawer.driverPage = driverPage;
+    myDrawer.passengerPage = passengerPage;
+    myDrawer.settingsPage = settingsPage;
+  }
+}
+
+Future<String> _checkUserLoggedIn() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  return prefs.getString("userToken") ?? null;
 }
