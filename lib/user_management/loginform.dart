@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:share_pool/model/dto/LoginUserDto.dart';
 import 'package:share_pool/util/rest/UserRestClient.dart';
-import 'package:share_pool/util/rest/UserRestClientImpl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginForm extends StatefulWidget {
@@ -18,8 +17,6 @@ class _LoginFormState extends State<LoginForm> {
 
   String _email = "";
   String _password = "";
-
-  UserRestClient userRestClient = new UserRestClientImpl();
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +77,7 @@ class _LoginFormState extends State<LoginForm> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String token =
-    await userRestClient.loginUser(new LoginUserDto(_email, _password));
+    await UserRestClient.loginUser(new LoginUserDto(_email, _password));
 
     if (token != null && token.isNotEmpty) {
       prefs.setString("userToken", token);

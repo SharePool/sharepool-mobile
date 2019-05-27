@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:share_pool/model/dto/RegisterUserDto.dart';
 import 'package:share_pool/util/rest/UserRestClient.dart';
-import 'package:share_pool/util/rest/UserRestClientImpl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterForm extends StatefulWidget {
@@ -21,8 +20,6 @@ class _RegisterFormState extends State<RegisterForm> {
   String _userName = "";
   String _email = "";
   String _password = "";
-
-  UserRestClient userRestClient = new UserRestClientImpl();
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +118,7 @@ class _RegisterFormState extends State<RegisterForm> {
   Future doRegister() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String token = await userRestClient.registerUser(new RegisterUserDto(
+    String token = await UserRestClient.registerUser(new RegisterUserDto(
         _firstName, _lastName, _userName, _email, _password));
 
     if (token != null && token.isNotEmpty) {
