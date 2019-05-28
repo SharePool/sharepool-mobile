@@ -69,6 +69,7 @@ class _RegisterFormState extends State<RegisterForm> {
               },
             ),
             TextFormField(
+              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 labelText: "Email",
               ),
@@ -97,6 +98,7 @@ class _RegisterFormState extends State<RegisterForm> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Row(
                 children: <Widget>[
+                  Spacer(),
                   RaisedButton(
                       onPressed: () {
                         var form = _formKey.currentState;

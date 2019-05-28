@@ -27,6 +27,7 @@ class _LoginFormState extends State<LoginForm> {
         child: Column(
           children: <Widget>[
             TextFormField(
+              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 labelText: "Email",
               ),
@@ -55,6 +56,7 @@ class _LoginFormState extends State<LoginForm> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Row(
                 children: <Widget>[
+                  Spacer(),
                   RaisedButton(
                       onPressed: () {
                         var form = _formKey.currentState;
