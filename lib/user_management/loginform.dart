@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:share_pool/model/dto/LoginUserDto.dart';
+import 'package:share_pool/model/dto/UserTokenDto.dart';
 import 'package:share_pool/util/rest/UserRestClient.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -78,11 +79,11 @@ class _LoginFormState extends State<LoginForm> {
   void doLogin() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String token =
+    UserTokenDto token =
     await UserRestClient.loginUser(new LoginUserDto(_email, _password));
 
-    if (token != null && token.isNotEmpty) {
-      prefs.setString("userToken", token);
+    if (token != null) {
+      prefs.setString("userToken", token.userToken);
 
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => widget.followingPage));
