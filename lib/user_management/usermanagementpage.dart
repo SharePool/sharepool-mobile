@@ -53,7 +53,9 @@ class _UserManagementPageState extends State<UserManagementPage> {
         title: Text(userManagementWidget is LoginForm ? "Login" : "Register"),
         automaticallyImplyLeading: false,
       ),
-      body: ListView(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           userManagementWidget,
           Padding(

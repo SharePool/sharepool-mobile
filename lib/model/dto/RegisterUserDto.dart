@@ -11,7 +11,7 @@ class RegisterUserDto {
   RegisterUserDto.fromJson(Map<String, dynamic> json)
       : firstName = json['firstName'],
         lastName = json['lastName'],
-        userName = json['username'],
+        userName = json['userName'],
         email = json['email'],
         password = json['password'];
 
