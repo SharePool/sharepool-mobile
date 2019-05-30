@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:share_pool/model/dto/LoginUserDto.dart';
+import 'package:share_pool/model/dto/UserTokenDto.dart';
 import 'package:share_pool/util/rest/UserRestClient.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,6 +28,7 @@ class _LoginFormState extends State<LoginForm> {
         child: Column(
           children: <Widget>[
             TextFormField(
+              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 labelText: "Email",
               ),
@@ -55,6 +57,7 @@ class _LoginFormState extends State<LoginForm> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Row(
                 children: <Widget>[
+                  Spacer(),
                   RaisedButton(
                       onPressed: () {
                         var form = _formKey.currentState;
@@ -76,11 +79,11 @@ class _LoginFormState extends State<LoginForm> {
   void doLogin() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String token =
+    UserTokenDto token =
     await UserRestClient.loginUser(new LoginUserDto(_email, _password));
 
-    if (token != null && token.isNotEmpty) {
-      prefs.setString("userToken", token);
+    if (token != null) {
+      prefs.setString("userToken", token.userToken);
 
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => widget.followingPage));

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:share_pool/model/dto/RegisterUserDto.dart';
+import 'package:share_pool/model/dto/UserTokenDto.dart';
 import 'package:share_pool/util/rest/UserRestClient.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -69,6 +70,7 @@ class _RegisterFormState extends State<RegisterForm> {
               },
             ),
             TextFormField(
+              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 labelText: "Email",
               ),
@@ -97,6 +99,7 @@ class _RegisterFormState extends State<RegisterForm> {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Row(
                 children: <Widget>[
+                  Spacer(),
                   RaisedButton(
                       onPressed: () {
                         var form = _formKey.currentState;
@@ -118,11 +121,11 @@ class _RegisterFormState extends State<RegisterForm> {
   Future doRegister() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String token = await UserRestClient.registerUser(new RegisterUserDto(
+    UserTokenDto token = await UserRestClient.registerUser(new RegisterUserDto(
         _firstName, _lastName, _userName, _email, _password));
 
-    if (token != null && token.isNotEmpty) {
-      prefs.setString("userToken", token);
+    if (token != null) {
+      prefs.setString("userToken", token.userToken);
 
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => widget.followingPage));

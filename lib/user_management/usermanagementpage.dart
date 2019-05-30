@@ -32,7 +32,7 @@ class _UserManagementPageState extends State<UserManagementPage> {
             switchButton = loginButton;
           });
         },
-        child: Text('Register'));
+        child: Text("Register"));
 
     loginButton = RaisedButton(
         onPressed: () {
@@ -41,7 +41,7 @@ class _UserManagementPageState extends State<UserManagementPage> {
             switchButton = registerButton;
           });
         },
-        child: Text('Login'));
+        child: Text("Login"));
 
     switchButton = registerButton;
   }
@@ -50,13 +50,18 @@ class _UserManagementPageState extends State<UserManagementPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Login"),
+        title: Text(userManagementWidget is LoginForm ? "Login" : "Register"),
         automaticallyImplyLeading: false,
       ),
-      body: ListView(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           userManagementWidget,
-          switchButton
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: switchButton,
+          )
         ],
       ),
     );
