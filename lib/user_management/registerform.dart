@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/model/dto/RegisterUserDto.dart';
 import 'package:share_pool/model/dto/UserTokenDto.dart';
 import 'package:share_pool/util/rest/UserRestClient.dart';
@@ -121,11 +122,12 @@ class _RegisterFormState extends State<RegisterForm> {
   Future doRegister() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    UserTokenDto token = await UserRestClient.registerUser(new RegisterUserDto(
+    UserCredentialsDto credentials = await UserRestClient.registerUser(new RegisterUserDto(
         _firstName, _lastName, _userName, _email, _password));
-
-    if (token != null) {
-      prefs.setString("userToken", token.userToken);
+    
+    if (credentials != null) {
+      prefs.setString(Constants.SETTINGS_USER_TOKEN, credentials.userToken);
+      prefs.setInt(Constants.SETTINGS_USER_ID, credentials.userId);
 
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => widget.followingPage));
