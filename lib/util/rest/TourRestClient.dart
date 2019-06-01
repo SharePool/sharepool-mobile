@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
+import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/model/dto/TourDto.dart';
 
 class TourRestClient {
-  static const String BASE_URL = "http://192.168.0.7:8080/tours";
+  static const String BASE_URL = Constants.BASE_REST_URL + "/tours";
 
   static Future<List<TourDto>> getToursForUser(int userId) async {
     var response = await get(BASE_URL + "/users/" + userId.toString());

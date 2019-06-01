@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/mydrawer.dart';
 import 'package:share_pool/passengerpage.dart';
 import 'package:share_pool/settingspage.dart';
@@ -62,5 +63,5 @@ class _AppState extends State<App> {
 Future<String> _checkUserLoggedIn() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  return prefs.getString("userToken") ?? null;
+  return prefs.getString(Constants.SETTINGS_USER_TOKEN) ?? null;
 }
