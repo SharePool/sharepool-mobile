@@ -64,7 +64,7 @@ class _DriverPageState extends State<DriverPage> {
         Text("No tours defined yet.") :
         Column(children: <Widget>[
           DropdownButton<TourDto>(
-              value: tours.isEmpty ? null : tours[0],
+              value: selectedTour,
               onChanged: (TourDto value) {
                 setState(() {
                   selectedTour = value;
