@@ -67,6 +67,7 @@ class MyDrawer extends StatelessWidget {
   void logoutUser(BuildContext context) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove(Constants.SETTINGS_USER_TOKEN);
+    prefs.remove(Constants.SETTINGS_USER_ID);
 
     Navigator.pushReplacement(context,
         MaterialPageRoute(

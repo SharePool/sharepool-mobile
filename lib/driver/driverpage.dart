@@ -5,8 +5,8 @@ import 'package:share_pool/driver-settings/driverSettingsPage.dart';
 import 'package:share_pool/model/dto/TourDto.dart';
 import 'package:share_pool/util/rest/TourRestClient.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../mydrawer.dart';
-import 'generate.dart';
 
 class DriverPage extends StatefulWidget {
   final String title = "Driver";
@@ -22,7 +22,7 @@ class DriverPage extends StatefulWidget {
 
 class _DriverPageState extends State<DriverPage> {
   TourDto selectedTour;
-  List<TourDto> tours = new List();
+  List<TourDto> tours;
 
   Future<void> loadTours() async {
     var sharedPreferences = await SharedPreferences.getInstance();
@@ -32,6 +32,7 @@ class _DriverPageState extends State<DriverPage> {
 
     setState(() {
       this.tours = tours;
+      this.selectedTour = tours != null ? tours[0] : null;
     });
   }
 
@@ -59,13 +60,14 @@ class _DriverPageState extends State<DriverPage> {
       ),
       drawer: widget.myDrawer,
       body: Center(
-        child: Column(children: <Widget>[
+        child: tours == null || tours.isEmpty ?
+        Text("No tours defined yet.") :
+        Column(children: <Widget>[
           DropdownButton<TourDto>(
               value: tours.isEmpty ? null : tours[0],
               onChanged: (TourDto value) {
                 setState(() {
                   selectedTour = value;
-                  print(selectedTour.toJson().toString());
                 });
               },
               items: tours.map((TourDto tour) {
@@ -96,6 +98,6 @@ class _DriverPageState extends State<DriverPage> {
   }
 
   String buildQrCodeData() {
-    return selectedTour == null ? "error" : selectedTour.toJson().toString();
+    return selectedTour == null ? "error" : selectedTour.tourId.toString();
   }
 }
