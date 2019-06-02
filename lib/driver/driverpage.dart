@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/driver-settings/driverSettingsPage.dart';
+import 'package:share_pool/driver-settings/tourListWidget.dart';
 import 'package:share_pool/model/dto/TourDto.dart';
 import 'package:share_pool/util/rest/TourRestClient.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -81,8 +82,7 @@ class _DriverPageState extends State<DriverPage> {
                     ),
                     value: tour);
               }).toList()),
-          Text("Current tour"),
-          Spacer(),
+          new TourCard(selectedTour, widget.myDrawer),
           Padding(
             padding: const EdgeInsets.all(10),
             child: QrImage(

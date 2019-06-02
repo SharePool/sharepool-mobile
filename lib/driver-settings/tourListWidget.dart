@@ -81,5 +81,5 @@ class TourCard extends StatelessWidget {
   }
 
   String buildCurrencyString() =>
-      currencyStringtoSymbol(tour.currency) + " " + tour.cost.toString();
+      currencyStringtoSymbol(tour.currency) + tour.cost.toStringAsFixed(2);
 }
