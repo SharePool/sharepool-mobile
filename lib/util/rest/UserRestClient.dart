@@ -5,7 +5,7 @@ import 'package:share_pool/model/dto/LoginUserDto.dart';
 import 'package:share_pool/model/dto/RegisterUserDto.dart';
 
 class UserRestClient {
-  static const String BASE_URL = "http://192.168.0.100:8080/users";
+  static const String BASE_URL = "http://192.168.178.30:8080/users";
 
   static Future<String> loginUser(LoginUserDto loginUserDto) async {
     var body = json.encode(loginUserDto);
