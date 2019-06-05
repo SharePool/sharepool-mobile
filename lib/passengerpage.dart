@@ -1,7 +1,15 @@
+import 'dart:async';
+
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:share_pool/model/dto/ExpenseConfirmationDto.dart';
+import 'package:share_pool/model/dto/ExpenseRequestDto.dart';
+import 'package:share_pool/util/rest/ExpenseRestClient.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'common/Constants.dart';
+import 'model/dto/ExpenseRequestResponse.dart';
 import 'mydrawer.dart';
 
 class PassengerPage extends StatefulWidget {
@@ -18,7 +26,6 @@ class PassengerPage extends StatefulWidget {
 
 class _PassengerPageState extends State<PassengerPage> {
   MyDrawer myDrawer;
-  String qrCode = "";
 
   _PassengerPageState(MyDrawer myDrawer) {
     this.myDrawer = myDrawer;
@@ -45,13 +52,6 @@ class _PassengerPageState extends State<PassengerPage> {
                     onPressed: scan,
                     child: const Text('START CAMERA SCAN')),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                child: Text(
-                  qrCode,
-                  textAlign: TextAlign.center,
-                ),
-              ),
             ],
           ),
         ));
@@ -59,22 +59,78 @@ class _PassengerPageState extends State<PassengerPage> {
 
   Future scan() async {
     try {
-      String barcode = await BarcodeScanner.scan();
-      setState(() => this.qrCode = barcode);
+      int tourId = 2; //await BarcodeScanner.scan();
+
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      int userId = prefs.getInt(Constants.SETTINGS_USER_ID);
+
+      if (userId != null) {
+        ExpenseRequestResponseDto requestResponse =
+        await requestExpense(tourId);
+
+        if (requestResponse != null) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: new Text(requestResponse.tour.from +
+                      " -> " +
+                      requestResponse.tour.to),
+                  content: new Text("Wanna ride with " +
+                      requestResponse.receiver.userName +
+                      " for " +
+                      requestResponse.tour.cost.toString() +
+                      " " +
+                      requestResponse.tour.currency +
+                      "?"),
+                  actions: <Widget>[
+                    // usually buttons at the bottom of the dialog
+                    new FlatButton(
+                      child: new Text("Yes"),
+                      onPressed: () {
+                        confirmExpense(new ExpenseConfirmationDto(
+                            requestResponse.tour.tourId,
+                            userId,
+                            "Drive from " +
+                                requestResponse.tour.from +
+                                " to " +
+                                requestResponse.tour.to));
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    new FlatButton(
+                      child: new Text("Naah"),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              });
+        }
+      }
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         setState(() {
-          this.qrCode = 'The user did not grant the camera permission!';
+          Scaffold.of(context).showSnackBar(SnackBar(
+            content: Text('Camera permissions not granted!'),
+            duration: Duration(seconds: 3),
+          ));
         });
       } else {
-        setState(() => this.qrCode = 'Unknown error: $e');
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text('Unknown error: $e'),
+          duration: Duration(seconds: 3),
+        ));
       }
-    } on FormatException {
-      setState(() =>
-      this.qrCode =
-      'null (User returned using the "back"-button before scanning anything. Result)');
-    } catch (e) {
-      setState(() => this.qrCode = 'Unknown error: $e');
-    }
+    } on FormatException {} catch (e) {}
+  }
+
+  Future<ExpenseRequestResponseDto> requestExpense(int tourId) async {
+    return ExpenseRestClient.requestExpense(new ExpenseRequestDto(tourId));
+  }
+
+  Future confirmExpense(ExpenseConfirmationDto expenseConfirmationDto) async {
+    await ExpenseRestClient.confirmExpense(expenseConfirmationDto);
   }
 }
