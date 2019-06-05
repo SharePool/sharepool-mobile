@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:share_pool/common/Constants.dart';
-import 'package:share_pool/model/dto/user/LoginUserDto.dart';
+import 'package:share_pool/model/dto/user/UserDto.dart';
 import 'package:share_pool/model/dto/user/UserTokenDto.dart';
 import 'package:share_pool/util/rest/UserRestClient.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -80,8 +80,8 @@ class _LoginFormState extends State<LoginForm> {
   void doLogin() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    UserCredentialsDto credentials =
-    await UserRestClient.loginUser(new LoginUserDto(_email, _password));
+    UserCredentialsDto credentials = await UserRestClient.loginUser(
+        new UserDto(email: _email, password: _password));
 
     if (credentials != null) {
       prefs.setString(Constants.SETTINGS_USER_TOKEN, credentials.userToken);
