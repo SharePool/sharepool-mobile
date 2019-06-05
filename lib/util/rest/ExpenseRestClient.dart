@@ -30,7 +30,7 @@ class ExpenseRestClient {
     return null;
   }
 
-  static Future<void> confirmExpense(
+  static Future<bool> confirmExpense(
       ExpenseConfirmationDto expenseConfirmationDto) async {
     var sharedPreferences = await SharedPreferences.getInstance();
 
@@ -43,8 +43,6 @@ class ExpenseRestClient {
 
     print(response.body);
 
-    if (response.statusCode == 200) {
-      // TODO: show confirmation
-    }
+    return response.statusCode == 201;
   }
 }

@@ -59,7 +59,7 @@ class _PassengerPageState extends State<PassengerPage> {
 
   Future scan() async {
     try {
-      int tourId = 2; //await BarcodeScanner.scan();
+      int tourId = int.parse(await BarcodeScanner.scan());
 
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       int userId = prefs.getInt(Constants.SETTINGS_USER_ID);
@@ -84,22 +84,25 @@ class _PassengerPageState extends State<PassengerPage> {
                       requestResponse.tour.currency +
                       "?"),
                   actions: <Widget>[
-                    // usually buttons at the bottom of the dialog
                     new FlatButton(
                       child: new Text("Yes"),
-                      onPressed: () {
-                        confirmExpense(new ExpenseConfirmationDto(
-                            requestResponse.tour.tourId,
-                            userId,
-                            "Drive from " +
-                                requestResponse.tour.from +
-                                " to " +
-                                requestResponse.tour.to));
+                      onPressed: () async {
+                        bool created =
+                        await confirmExpense(requestResponse, userId);
+
                         Navigator.of(context).pop();
+
+                        if (created) {
+                          // TODO: show snackbar with confirmation
+//                          Scaffold.of(context).showSnackBar(SnackBar(
+//                            content: Text('Camera permissions not granted!'),
+//                            duration: Duration(seconds: 3),
+//                          ));
+                        }
                       },
                     ),
                     new FlatButton(
-                      child: new Text("Naah"),
+                      child: new Text("No"),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -112,16 +115,18 @@ class _PassengerPageState extends State<PassengerPage> {
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         setState(() {
-          Scaffold.of(context).showSnackBar(SnackBar(
-            content: Text('Camera permissions not granted!'),
-            duration: Duration(seconds: 3),
-          ));
+          // TODO: fix context errors
+//          Scaffold.of(context).showSnackBar(SnackBar(
+//            content: Text('Camera permissions not granted!'),
+//            duration: Duration(seconds: 3),
+//          ));
         });
       } else {
-        Scaffold.of(context).showSnackBar(SnackBar(
-          content: Text('Unknown error: $e'),
-          duration: Duration(seconds: 3),
-        ));
+        // TODO: fix context errors
+//        Scaffold.of(context).showSnackBar(SnackBar(
+//          content: Text('Unknown error: $e'),
+//          duration: Duration(seconds: 3),
+//        ));
       }
     } on FormatException {} catch (e) {}
   }
@@ -130,7 +135,14 @@ class _PassengerPageState extends State<PassengerPage> {
     return ExpenseRestClient.requestExpense(new ExpenseRequestDto(tourId));
   }
 
-  Future confirmExpense(ExpenseConfirmationDto expenseConfirmationDto) async {
-    await ExpenseRestClient.confirmExpense(expenseConfirmationDto);
+  Future<bool> confirmExpense(ExpenseRequestResponseDto requestResponse,
+      int userId) async {
+    return await ExpenseRestClient.confirmExpense(new ExpenseConfirmationDto(
+        requestResponse.tour.tourId,
+        userId,
+        "Drive from " +
+            requestResponse.tour.from +
+            " to " +
+            requestResponse.tour.to));
   }
 }
