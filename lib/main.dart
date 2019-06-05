@@ -38,7 +38,7 @@ class _AppState extends State<App> {
     return MaterialApp(
         title: 'SharePool',
         theme: ThemeData(
-          primarySwatch: Colors.green,
+          primarySwatch: Colors.blueGrey,
         ),
         home: _isAuthenticated ? driverPage : new UserManagementPage(
             driverPage));

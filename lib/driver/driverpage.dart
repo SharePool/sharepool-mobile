@@ -4,6 +4,7 @@ import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/driver-settings/driverSettingsPage.dart';
 import 'package:share_pool/driver-settings/editTourPage.dart';
 import 'package:share_pool/driver-settings/tourListWidget.dart';
+import 'package:share_pool/driver/searchTour.dart';
 import 'package:share_pool/model/dto/TourDto.dart';
 import 'package:share_pool/util/rest/TourRestClient.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -65,25 +66,22 @@ class _DriverPageState extends State<DriverPage> {
         child: tours == null || tours.isEmpty
             ? Text("No tours defined yet.")
             : Column(children: <Widget>[
-                DropdownButton<TourDto>(
-                    value: selectedTour,
-                    onChanged: (TourDto value) {
-                      setState(() {
-                        selectedTour = value;
-                      });
-                    },
-                    items: tours.map((TourDto tour) {
-                      return new DropdownMenuItem<TourDto>(
-                          child: Row(
-                            children: <Widget>[
-                              new Text(tour.from),
-                              new Icon(Icons.arrow_forward),
-                              new Text(tour.to)
-                            ],
-                          ),
-                          value: tour);
-                    }).toList()),
-                new TourCard(selectedTour, widget.myDrawer),
+                Spacer(),
+                Row(
+                  children: <Widget>[
+                    Flexible(
+                        child: new TourCard(selectedTour, widget.myDrawer)),
+                    IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      SearchTourPage(widget.myDrawer)));
+                        })
+                  ],
+                ),
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: QrImage(
@@ -91,7 +89,8 @@ class _DriverPageState extends State<DriverPage> {
                       onError: (ex) {
                         print("[QR] ERROR - $ex");
                       }),
-                )
+                ),
+                Spacer()
               ]),
       ),
       floatingActionButton: tours == null || tours.isEmpty
