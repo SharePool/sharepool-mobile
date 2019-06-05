@@ -3,13 +3,12 @@ import 'dart:async';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:share_pool/model/dto/ExpenseConfirmationDto.dart';
-import 'package:share_pool/model/dto/ExpenseRequestDto.dart';
+import 'package:share_pool/model/dto/expense/ExpenseConfirmationDto.dart';
+import 'package:share_pool/model/dto/expense/ExpenseRequestResponse.dart';
 import 'package:share_pool/util/rest/ExpenseRestClient.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'common/Constants.dart';
-import 'model/dto/ExpenseRequestResponse.dart';
 import 'mydrawer.dart';
 
 class PassengerPage extends StatefulWidget {
@@ -59,7 +58,9 @@ class _PassengerPageState extends State<PassengerPage> {
 
   Future scan() async {
     try {
-      int tourId = int.parse(await BarcodeScanner.scan());
+      String qrCode = await BarcodeScanner.scan();
+
+      int tourId = int.parse(qrCode);
 
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       int userId = prefs.getInt(Constants.SETTINGS_USER_ID);
@@ -132,7 +133,7 @@ class _PassengerPageState extends State<PassengerPage> {
   }
 
   Future<ExpenseRequestResponseDto> requestExpense(int tourId) async {
-    return ExpenseRestClient.requestExpense(new ExpenseRequestDto(tourId));
+    return ExpenseRestClient.requestExpense(tourId);
   }
 
   Future<bool> confirmExpense(ExpenseRequestResponseDto requestResponse,

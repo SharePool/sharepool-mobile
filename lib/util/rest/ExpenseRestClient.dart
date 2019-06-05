@@ -2,21 +2,18 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:share_pool/common/Constants.dart';
-import 'package:share_pool/model/dto/ExpenseConfirmationDto.dart';
-import 'package:share_pool/model/dto/ExpenseRequestDto.dart';
-import 'package:share_pool/model/dto/ExpenseRequestResponse.dart';
+import 'package:share_pool/model/dto/expense/ExpenseConfirmationDto.dart';
+import 'package:share_pool/model/dto/expense/ExpenseRequestResponse.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ExpenseRestClient {
   static const String BASE_URL = Constants.BASE_REST_URL + "/expenses";
 
-  static Future<ExpenseRequestResponseDto> requestExpense(
-      ExpenseRequestDto expenseRequestDto) async {
+  static Future<ExpenseRequestResponseDto> requestExpense(int tourId) async {
     var sharedPreferences = await SharedPreferences.getInstance();
 
-    var body = expenseRequestDto.tourId.toString();
-
-    var response = await post(BASE_URL + "/request", body: body, headers: {
+    var response = await post(
+        BASE_URL + "/request/" + tourId.toString(), headers: {
       "Content-Type": "application/json",
       "Auth-Token": sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
     });

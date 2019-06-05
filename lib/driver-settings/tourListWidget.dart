@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:share_pool/common/currency.dart';
-import 'package:share_pool/model/dto/TourDto.dart';
+import 'package:share_pool/model/dto/tour/TourDto.dart';
 import 'package:share_pool/mydrawer.dart';
 import 'package:share_pool/util/rest/TourRestClient.dart';
 

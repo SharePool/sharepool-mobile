@@ -1,6 +1,5 @@
-import 'package:share_pool/model/dto/TourDto.dart';
-
-import 'UserDto.dart';
+import 'package:share_pool/model/dto/tour/TourDto.dart';
+import 'package:share_pool/model/dto/user/UserDto.dart';
 
 class ExpenseRequestResponseDto {
   TourDto tour;

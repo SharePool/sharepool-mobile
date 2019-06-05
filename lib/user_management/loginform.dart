@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:share_pool/common/Constants.dart';
-import 'package:share_pool/model/dto/LoginUserDto.dart';
-import 'package:share_pool/model/dto/UserTokenDto.dart';
+import 'package:share_pool/model/dto/user/LoginUserDto.dart';
+import 'package:share_pool/model/dto/user/UserTokenDto.dart';
 import 'package:share_pool/util/rest/UserRestClient.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
