@@ -1,13 +1,20 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
+import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/model/dto/TourDto.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TourRestClient {
-  static const String BASE_URL = "http://192.168.178.30:8080/tours";
+  static const String BASE_URL = Constants.BASE_REST_URL + "/tours";
 
   static Future<List<TourDto>> getToursForUser(int userId) async {
-    var response = await get(BASE_URL + "/users/" + userId.toString());
+    var sharedPreferences = await SharedPreferences.getInstance();
+
+    var response =
+        await get(BASE_URL + "/users/" + userId.toString(), headers: {
+      "Auth-Token": sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
+    });
 
     print(response.body);
 
@@ -20,15 +27,24 @@ class TourRestClient {
   }
 
   static Future<void> createOrUpdateTour(TourDto tourDto) async {
+    var sharedPreferences = await SharedPreferences.getInstance();
+
     var body = json.encode(tourDto);
 
     var response;
     if (tourDto.tourId != null) {
       response = await put(BASE_URL + "/" + tourDto.tourId.toString(),
-          body: body, headers: {"Content-Type": "application/json"});
+          body: body,
+          headers: {
+            "Content-Type": "application/json",
+            "Auth-Token":
+                sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
+          });
     } else {
-      response = await post(BASE_URL,
-          body: body, headers: {"Content-Type": "application/json"});
+      response = await post(BASE_URL, body: body, headers: {
+        "Content-Type": "application/json",
+        "Auth-Token": sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
+      });
     }
 
     print(response.body);

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/common/currency.dart';
 import 'package:share_pool/common/currencyDropdown.dart';
 import 'package:share_pool/driver-settings/driverSettingsPage.dart';
 import 'package:share_pool/model/dto/TourDto.dart';
 import 'package:share_pool/util/rest/TourRestClient.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../mydrawer.dart';
 
@@ -131,8 +133,9 @@ class _TourEditPageState extends State<TourEditPage> {
   }
 
   void createOrUpdateTour() async {
-    // todo get user id from context
-    tourDto.ownerId = 1;
+    var sharedPreferences = await SharedPreferences.getInstance();
+
+    tourDto.ownerId = sharedPreferences.getInt(Constants.SETTINGS_USER_ID);
 
     await TourRestClient.createOrUpdateTour(tourDto);
 
