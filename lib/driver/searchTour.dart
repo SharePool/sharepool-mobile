@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_pool/common/Constants.dart';
-import 'package:share_pool/driver-settings/driverSettingsPage.dart';
-import 'package:share_pool/driver-settings/editTourPage.dart';
 import 'package:share_pool/driver-settings/tourListWidget.dart';
-import 'package:share_pool/driver/searchTour.dart';
-import 'package:share_pool/model/dto/TourDto.dart';
+import 'package:share_pool/model/dto/tour/TourDto.dart';
 import 'package:share_pool/util/rest/TourRestClient.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
