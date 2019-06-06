@@ -72,7 +72,10 @@ class _SearchTourPageState extends State<SearchTourPage> {
               Flexible(
                   child:
                   // todo replace lambdas of tour list widget and tour card
-                      TourListWidget(tours: tours, myDrawer: widget.myDrawer)),
+                  TourListWidget(
+                      tours: tours,
+                      myDrawer: widget.myDrawer,
+                      isDismissable: false)),
             ],
           ),
         ));

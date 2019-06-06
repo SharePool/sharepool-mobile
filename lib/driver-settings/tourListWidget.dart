@@ -11,8 +11,9 @@ import 'editTourPage.dart';
 class TourListWidget extends StatefulWidget {
   List<TourDto> tours;
   MyDrawer myDrawer;
+  bool isDismissable;
 
-  TourListWidget({this.myDrawer, this.tours});
+  TourListWidget({this.myDrawer, this.tours, this.isDismissable = true});
 
   @override
   _TourListWidgetState createState() => _TourListWidgetState();
@@ -26,15 +27,19 @@ class _TourListWidgetState extends State<TourListWidget> {
         itemBuilder: (BuildContext context, int index) {
           var tour = widget.tours[index];
 
-          return Dismissible(
-            child: TourCard(tour, widget.myDrawer),
-            key: ObjectKey(tour),
-            onDismissed: (direction) {
-              deleteTour(direction, tour);
-            },
-            background: Container(color: Colors.red),
-            direction: DismissDirection.endToStart,
-          );
+          if (widget.isDismissable) {
+            return Dismissible(
+              child: TourCard(tour, widget.myDrawer),
+              key: ObjectKey(tour),
+              onDismissed: (direction) {
+                deleteTour(direction, tour);
+              },
+              background: Container(color: Colors.red, child: Text("Delete")),
+              direction: DismissDirection.endToStart,
+            );
+          } else {
+            return TourCard(tour, widget.myDrawer);
+          }
         });
   }
 
