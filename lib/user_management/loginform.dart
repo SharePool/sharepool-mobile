@@ -17,7 +17,7 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
 
-  String _emailOrUserName = "";
+  String _userNameOrEmail = "";
   String _password = "";
 
   @override
@@ -39,7 +39,7 @@ class _LoginFormState extends State<LoginForm> {
                 }
               },
               onSaved: (String value) {
-                _emailOrUserName = value;
+                _userNameOrEmail = value;
               },
             ),
             TextFormField(
@@ -81,7 +81,7 @@ class _LoginFormState extends State<LoginForm> {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     UserCredentialsDto credentials = await UserRestClient.loginUser(
-        new UserLoginDto(_emailOrUserName, _password));
+        new UserLoginDto(_userNameOrEmail, _password));
 
     if (credentials != null) {
       prefs.setString(Constants.SETTINGS_USER_TOKEN, credentials.userToken);
