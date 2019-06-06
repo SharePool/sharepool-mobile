@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:share_pool/common/Constants.dart';
-import 'package:share_pool/model/dto/LoginUserDto.dart';
-import 'package:share_pool/model/dto/UserTokenDto.dart';
+import 'package:share_pool/model/dto/user/UserLoginDto.dart';
+import 'package:share_pool/model/dto/user/UserTokenDto.dart';
 import 'package:share_pool/util/rest/UserRestClient.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,7 +17,7 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
 
-  String _email = "";
+  String _userNameOrEmail = "";
   String _password = "";
 
   @override
@@ -31,15 +31,15 @@ class _LoginFormState extends State<LoginForm> {
             TextFormField(
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                labelText: "Email",
+                labelText: "Email or Username",
               ),
               validator: (value) {
                 if (value.isEmpty) {
-                  return "Email must not be empty";
+                  return "Email or Username must not be empty";
                 }
               },
               onSaved: (String value) {
-                _email = value;
+                _userNameOrEmail = value;
               },
             ),
             TextFormField(
@@ -80,8 +80,8 @@ class _LoginFormState extends State<LoginForm> {
   void doLogin() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    UserCredentialsDto credentials =
-    await UserRestClient.loginUser(new LoginUserDto(_email, _password));
+    UserCredentialsDto credentials = await UserRestClient.loginUser(
+        new UserLoginDto(_userNameOrEmail, _password));
 
     if (credentials != null) {
       prefs.setString(Constants.SETTINGS_USER_TOKEN, credentials.userToken);
