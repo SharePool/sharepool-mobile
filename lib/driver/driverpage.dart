@@ -13,11 +13,11 @@ import '../mydrawer.dart';
 
 class DriverPage extends StatefulWidget {
   final String title = "Driver";
-  MyDrawer myDrawer;
 
-  DriverPage(MyDrawer myDrawer) {
-    this.myDrawer = myDrawer;
-  }
+  MyDrawer myDrawer;
+  TourDto tour;
+
+  DriverPage(this.myDrawer, [this.tour]);
 
   @override
   _DriverPageState createState() => _DriverPageState();
@@ -35,7 +35,12 @@ class _DriverPageState extends State<DriverPage> {
 
     setState(() {
       this.tours = tours;
-      this.selectedTour = tours != null ? tours[0] : null;
+
+      if (widget.tour != null) {
+        this.selectedTour = widget.tour;
+      } else {
+        this.selectedTour = tours != null ? tours[0] : null;
+      }
     });
   }
 
@@ -78,7 +83,7 @@ class _DriverPageState extends State<DriverPage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      SearchTourPage(widget.myDrawer)));
+                                      SearchTourPage(widget.myDrawer, tours)));
                         })
                   ],
                 ),
