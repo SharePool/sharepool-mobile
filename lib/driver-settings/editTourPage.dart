@@ -3,7 +3,7 @@ import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/common/currency.dart';
 import 'package:share_pool/common/currencyDropdown.dart';
 import 'package:share_pool/driver-settings/driverSettingsPage.dart';
-import 'package:share_pool/model/dto/TourDto.dart';
+import 'package:share_pool/model/dto/tour/TourDto.dart';
 import 'package:share_pool/util/rest/TourRestClient.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

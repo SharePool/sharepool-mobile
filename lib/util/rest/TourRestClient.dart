@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:share_pool/common/Constants.dart';
-import 'package:share_pool/model/dto/TourDto.dart';
+import 'package:share_pool/model/dto/tour/TourDto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TourRestClient {

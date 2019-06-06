@@ -1,14 +1,17 @@
-class RegisterUserDto {
+class UserDto {
   String firstName;
   String lastName;
   String userName;
   String email;
   String password;
 
-  RegisterUserDto(this.firstName, this.lastName, this.userName, this.email,
-      this.password);
+  UserDto({this.firstName,
+    this.lastName,
+    this.userName,
+    this.email,
+    this.password});
 
-  RegisterUserDto.fromJson(Map<String, dynamic> json)
+  UserDto.fromJson(Map<String, dynamic> json)
       : firstName = json['firstName'],
         lastName = json['lastName'],
         userName = json['userName'],
