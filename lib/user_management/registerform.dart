@@ -17,6 +17,11 @@ class RegisterForm extends StatefulWidget {
 class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
 
+  final RegExp emailRegExp = new RegExp(
+      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
+  final RegExp passwordRegExp = new RegExp(
+      r"^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).*$");
+
   String _firstName = "";
   String _lastName = "";
   String _userName = "";
@@ -36,8 +41,9 @@ class _RegisterFormState extends State<RegisterForm> {
                 labelText: "First Name",
               ),
               validator: (value) {
-                if (value.isEmpty) {
-                  return "First Name must not be empty";
+                int strLen = value.length;
+                if (strLen < 3 || strLen > 20) {
+                  return "First Name must have between 3 and 20 characters";
                 }
               },
               onSaved: (String value) {
@@ -49,8 +55,9 @@ class _RegisterFormState extends State<RegisterForm> {
                 labelText: "Last Name",
               ),
               validator: (value) {
-                if (value.isEmpty) {
-                  return "Last Name must not be empty";
+                int strLen = value.length;
+                if (strLen < 3 || strLen > 20) {
+                  return "Last Name must have between 3 and 20 characters";
                 }
               },
               onSaved: (String value) {
@@ -62,8 +69,9 @@ class _RegisterFormState extends State<RegisterForm> {
                 labelText: "Username",
               ),
               validator: (value) {
-                if (value.isEmpty) {
-                  return "Username must not be empty";
+                int strLen = value.length;
+                if (strLen < 5 || strLen > 20) {
+                  return "Username must have between 5 and 20 characters";
                 }
               },
               onSaved: (String value) {
@@ -76,8 +84,8 @@ class _RegisterFormState extends State<RegisterForm> {
                 labelText: "Email",
               ),
               validator: (value) {
-                if (value.isEmpty) {
-                  return "Email must not be empty";
+                if (value.isEmpty || !emailRegExp.hasMatch(value)) {
+                  return "Email must be valid";
                 }
               },
               onSaved: (String value) {
@@ -88,8 +96,8 @@ class _RegisterFormState extends State<RegisterForm> {
               decoration: InputDecoration(labelText: "Password"),
               obscureText: true,
               validator: (value) {
-                if (value.isEmpty) {
-                  return "Password must not be empty";
+                if (value.isEmpty || !passwordRegExp.hasMatch(value)) {
+                  return "Password must have between 8 and 25 characters\nContain lower- and uppercase letters\nand one special character";
                 }
               },
               onSaved: (String value) {
