@@ -39,7 +39,7 @@ class _TourListWidgetState extends State<TourListWidget> {
               onDismissed: (direction) {
                 deleteTour(direction, tour);
               },
-              background: Container(color: Colors.red, child: Text("Delete")),
+              background: Container(color: Colors.red),
               direction: DismissDirection.endToStart,
             );
           } else {
