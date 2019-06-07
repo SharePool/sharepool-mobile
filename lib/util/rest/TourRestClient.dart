@@ -51,7 +51,11 @@ class TourRestClient {
   }
 
   static Future<void> deleteTour(int tourId) async {
-    var response = await delete(BASE_URL + "/" + tourId.toString());
+    var sharedPreferences = await SharedPreferences.getInstance();
+
+    var response = await delete(BASE_URL + "/" + tourId.toString(), headers: {
+      "Auth-Token": sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
+    });
 
     print(response.body);
   }

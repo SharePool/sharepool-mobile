@@ -4,7 +4,7 @@ import 'package:share_pool/user_management/usermanagementpage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'common/Constants.dart';
-import 'driverpage.dart';
+import 'driver/driverpage.dart';
 import 'passengerpage.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -67,6 +67,7 @@ class MyDrawer extends StatelessWidget {
   void logoutUser(BuildContext context) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove(Constants.SETTINGS_USER_TOKEN);
+    prefs.remove(Constants.SETTINGS_USER_ID);
 
     Navigator.pushReplacement(context,
         MaterialPageRoute(

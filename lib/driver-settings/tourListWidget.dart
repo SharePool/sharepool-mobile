@@ -11,8 +11,14 @@ import 'editTourPage.dart';
 class TourListWidget extends StatefulWidget {
   List<TourDto> tours;
   MyDrawer myDrawer;
+  bool isDismissable;
+  TourTapCallback tourTapCallback;
 
-  TourListWidget({this.myDrawer, this.tours});
+  TourListWidget({
+    this.myDrawer,
+    this.tours,
+    this.isDismissable = true,
+    this.tourTapCallback});
 
   @override
   _TourListWidgetState createState() => _TourListWidgetState();
@@ -26,15 +32,19 @@ class _TourListWidgetState extends State<TourListWidget> {
         itemBuilder: (BuildContext context, int index) {
           var tour = widget.tours[index];
 
-          return Dismissible(
-            child: TourCard(tour, widget.myDrawer),
-            key: ObjectKey(tour),
-            onDismissed: (direction) {
-              deleteTour(direction, tour);
-            },
-            background: Container(color: Colors.red),
-            direction: DismissDirection.endToStart,
-          );
+          if (widget.isDismissable) {
+            return Dismissible(
+              child: TourCard(tour, widget.myDrawer),
+              key: ObjectKey(tour),
+              onDismissed: (direction) {
+                deleteTour(direction, tour);
+              },
+              background: Container(color: Colors.red),
+              direction: DismissDirection.endToStart,
+            );
+          } else {
+            return TourCard(tour, widget.myDrawer, widget.tourTapCallback);
+          }
         });
   }
 
@@ -50,8 +60,9 @@ class _TourListWidgetState extends State<TourListWidget> {
 class TourCard extends StatelessWidget {
   TourDto tour;
   MyDrawer myDrawer;
+  TourTapCallback tourTapCallback;
 
-  TourCard(this.tour, this.myDrawer);
+  TourCard(this.tour, this.myDrawer, [this.tourTapCallback]);
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +84,9 @@ class TourCard extends StatelessWidget {
               ],
             ),
           ),
-          onTap: () => Navigator.push(
+          onTap: () =>
+          tourTapCallback != null ? tourTapCallback(context, myDrawer, tour) :
+          Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => TourEditPage(myDrawer, tour))),
@@ -81,5 +94,7 @@ class TourCard extends StatelessWidget {
   }
 
   String buildCurrencyString() =>
-      currencyStringtoSymbol(tour.currency) + " " + tour.cost.toString();
+      currencyStringtoSymbol(tour.currency) + tour.cost.toStringAsFixed(2);
 }
+
+typedef TourTapCallback = void Function(BuildContext context, MyDrawer myDrawer, TourDto tour);

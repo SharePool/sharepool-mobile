@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/driver-settings/editTourPage.dart';
 import 'package:share_pool/driver-settings/tourListWidget.dart';
+import 'package:share_pool/driver/driverpage.dart';
 import 'package:share_pool/model/dto/tour/TourDto.dart';
 import 'package:share_pool/util/rest/TourRestClient.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,6 +45,19 @@ class _DriverSettingsPageState extends State<DriverSettingsPage> {
     return Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
+          actions: <Widget>[
+            IconButton(
+                icon: Icon(
+                    Icons.directions_car,
+                    color: Colors.white),
+                onPressed: () =>
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                DriverPage(widget.myDrawer)))
+            )
+          ],
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),

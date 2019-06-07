@@ -52,7 +52,6 @@ class GenerateScreenState extends State<GenerateScreen> {
                 key: globalKey,
                 child: QrImage(
                   data: "qr data string",
-                  size: 0.5 * bodyHeight,
                   onError: (ex) {
                     print("[QR] ERROR - $ex");
                   },
