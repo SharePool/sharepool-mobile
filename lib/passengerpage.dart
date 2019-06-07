@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
@@ -131,17 +132,33 @@ class _PassengerPageState extends State<PassengerPage> {
   }
 
   Future<ExpenseRequestResponseDto> requestExpense(int tourId) async {
-    return ExpenseRestClient.requestExpense(tourId);
+    try {
+      return ExpenseRestClient.requestExpense(tourId);
+    } on SocketException catch (e) {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('Something went wrong!'),
+        duration: Duration(seconds: 3),
+      ));
+    }
+
+    return null;
   }
 
   Future<bool> confirmExpense(ExpenseRequestResponseDto requestResponse,
       int userId) async {
-    return await ExpenseRestClient.confirmExpense(new ExpenseConfirmationDto(
-        requestResponse.tour.tourId,
-        userId,
-        "Drive from " +
-            requestResponse.tour.from +
-            " to " +
-            requestResponse.tour.to));
+    try {
+      return await ExpenseRestClient.confirmExpense(new ExpenseConfirmationDto(
+          requestResponse.tour.tourId,
+          userId,
+          "Drive from " +
+              requestResponse.tour.from +
+              " to " +
+              requestResponse.tour.to));
+    } on SocketException catch (e) {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('Something went wrong!'),
+        duration: Duration(seconds: 3),
+      ));
+    }
   }
 }

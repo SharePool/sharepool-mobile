@@ -18,8 +18,9 @@ class SearchTourPage extends StatefulWidget {
 }
 
 class _SearchTourPageState extends State<SearchTourPage> {
-  List<TourDto> tours;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  List<TourDto> tours;
 
   @override
   void initState() {
@@ -31,6 +32,7 @@ class _SearchTourPageState extends State<SearchTourPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text(widget.title),
         ),
@@ -52,19 +54,19 @@ class _SearchTourPageState extends State<SearchTourPage> {
                             BorderRadius.all(Radius.circular(25.0))))),
               ),
               Flexible(
-                  child:
-                  TourListWidget(
-                      tours: tours,
-                      myDrawer: widget.myDrawer,
-                      isDismissable: false,
-                      tourTapCallback: (context, myDrawer, tour) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    DriverPage(myDrawer, tour)));
-                      })
-              ),
+                  child: TourListWidget(
+                    tours: tours,
+                    myDrawer: widget.myDrawer,
+                    isDismissable: false,
+                    tourTapCallback: (context, myDrawer, tour) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  DriverPage(myDrawer, tour)));
+                    },
+                    scaffoldKey: _scaffoldKey,
+                  )),
             ],
           ),
         ));
@@ -81,8 +83,8 @@ class _SearchTourPageState extends State<SearchTourPage> {
     setState(() {
       tours = widget.tours
           .where((t) =>
-              t.from.toLowerCase().contains(value.toLowerCase()) ||
-              t.to.toLowerCase().contains(value.toLowerCase()))
+      t.from.toLowerCase().contains(value.toLowerCase()) ||
+          t.to.toLowerCase().contains(value.toLowerCase()))
           .toList();
     });
   }

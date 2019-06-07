@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,16 +11,18 @@ import 'package:share_pool/util/rest/TourRestClient.dart';
 import 'editTourPage.dart';
 
 class TourListWidget extends StatefulWidget {
+  final GlobalKey<ScaffoldState> scaffoldKey;
+
   List<TourDto> tours;
   MyDrawer myDrawer;
   bool isDismissable;
   TourTapCallback tourTapCallback;
 
-  TourListWidget({
-    this.myDrawer,
+  TourListWidget({this.myDrawer,
     this.tours,
     this.isDismissable = true,
-    this.tourTapCallback});
+    this.tourTapCallback,
+    this.scaffoldKey});
 
   @override
   _TourListWidgetState createState() => _TourListWidgetState();
@@ -49,11 +53,18 @@ class _TourListWidgetState extends State<TourListWidget> {
   }
 
   Future<void> deleteTour(DismissDirection direction, TourDto tour) async {
-    setState(() {
-      widget.tours.remove(tour);
-    });
+    try {
+      await TourRestClient.deleteTour(tour.tourId);
 
-    await TourRestClient.deleteTour(tour.tourId);
+      setState(() {
+        widget.tours.remove(tour);
+      });
+    } on SocketException catch (e) {
+      widget.scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text("Tour couldn't be deleted!"),
+        duration: Duration(seconds: 3),
+      ));
+    }
   }
 }
 
@@ -85,8 +96,9 @@ class TourCard extends StatelessWidget {
             ),
           ),
           onTap: () =>
-          tourTapCallback != null ? tourTapCallback(context, myDrawer, tour) :
-          Navigator.push(
+          tourTapCallback != null
+              ? tourTapCallback(context, myDrawer, tour)
+              : Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => TourEditPage(myDrawer, tour))),
@@ -97,4 +109,5 @@ class TourCard extends StatelessWidget {
       currencyStringtoSymbol(tour.currency) + tour.cost.toStringAsFixed(2);
 }
 
-typedef TourTapCallback = void Function(BuildContext context, MyDrawer myDrawer, TourDto tour);
+typedef TourTapCallback = void Function(
+    BuildContext context, MyDrawer myDrawer, TourDto tour);
