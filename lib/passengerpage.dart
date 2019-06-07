@@ -15,9 +15,7 @@ class PassengerPage extends StatefulWidget {
   final String title = "Passenger";
   MyDrawer myDrawer;
 
-  PassengerPage(MyDrawer myDrawer) {
-    this.myDrawer = myDrawer;
-  }
+  PassengerPage(this.myDrawer);
 
   @override
   _PassengerPageState createState() => _PassengerPageState(myDrawer);
@@ -26,6 +24,8 @@ class PassengerPage extends StatefulWidget {
 class _PassengerPageState extends State<PassengerPage> {
   MyDrawer myDrawer;
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   _PassengerPageState(MyDrawer myDrawer) {
     this.myDrawer = myDrawer;
   }
@@ -33,6 +33,7 @@ class _PassengerPageState extends State<PassengerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text(widget.title),
         ),
@@ -58,7 +59,7 @@ class _PassengerPageState extends State<PassengerPage> {
 
   Future scan() async {
     try {
-      String qrCode = await BarcodeScanner.scan();
+      String qrCode = "27"; //await BarcodeScanner.scan();
 
       int tourId = int.parse(qrCode);
 
@@ -94,11 +95,10 @@ class _PassengerPageState extends State<PassengerPage> {
                         Navigator.of(context).pop();
 
                         if (created) {
-                          // TODO: show snackbar with confirmation
-//                          Scaffold.of(context).showSnackBar(SnackBar(
-//                            content: Text('Camera permissions not granted!'),
-//                            duration: Duration(seconds: 3),
-//                          ));
+                          _scaffoldKey.currentState.showSnackBar(SnackBar(
+                            content: Text('Expense confirmed'),
+                            duration: Duration(seconds: 3),
+                          ));
                         }
                       },
                     ),
@@ -116,18 +116,16 @@ class _PassengerPageState extends State<PassengerPage> {
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         setState(() {
-          // TODO: fix context errors
-//          Scaffold.of(context).showSnackBar(SnackBar(
-//            content: Text('Camera permissions not granted!'),
-//            duration: Duration(seconds: 3),
-//          ));
+          _scaffoldKey.currentState.showSnackBar(SnackBar(
+            content: Text('Camera permissions not granted!'),
+            duration: Duration(seconds: 3),
+          ));
         });
       } else {
-        // TODO: fix context errors
-//        Scaffold.of(context).showSnackBar(SnackBar(
-//          content: Text('Unknown error: $e'),
-//          duration: Duration(seconds: 3),
-//        ));
+        _scaffoldKey.currentState.showSnackBar(SnackBar(
+          content: Text('Unknown error: $e'),
+          duration: Duration(seconds: 3),
+        ));
       }
     } on FormatException {} catch (e) {}
   }

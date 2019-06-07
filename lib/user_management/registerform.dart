@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/model/dto/user/UserDto.dart';
@@ -7,8 +9,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterForm extends StatefulWidget {
   final Widget followingPage;
+  final GlobalKey<ScaffoldState> _scaffoldKey;
 
-  const RegisterForm(this.followingPage);
+  const RegisterForm(this.followingPage, this._scaffoldKey);
 
   @override
   _RegisterFormState createState() => _RegisterFormState();
@@ -130,13 +133,18 @@ class _RegisterFormState extends State<RegisterForm> {
   Future doRegister() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    UserCredentialsDto credentials = await UserRestClient.registerUser(
-        new UserDto(
-            firstName: _firstName,
-            lastName: _lastName,
-            userName: _userName,
-            email: _email,
-            password: _password));
+    UserCredentialsDto credentials = null;
+    try {
+      credentials = await UserRestClient.registerUser(
+          new UserDto(
+              firstName: _firstName,
+              lastName: _lastName,
+              userName: _userName,
+              email: _email,
+              password: _password));
+    } on SocketException catch (e) {
+      // NOP: is handled by null check below
+    }
 
     if (credentials != null) {
       prefs.setString(Constants.SETTINGS_USER_TOKEN, credentials.userToken);
@@ -144,6 +152,11 @@ class _RegisterFormState extends State<RegisterForm> {
 
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => widget.followingPage));
+    } else {
+      widget._scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('Something went wrong!'),
+        duration: Duration(seconds: 3),
+      ));
     }
   }
 }

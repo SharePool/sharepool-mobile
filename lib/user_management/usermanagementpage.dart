@@ -15,6 +15,8 @@ class UserManagementPage extends StatefulWidget {
 
 class _UserManagementPageState extends State<UserManagementPage> {
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   DriverPage driverPage;
   Widget userManagementWidget;
 
@@ -23,12 +25,12 @@ class _UserManagementPageState extends State<UserManagementPage> {
   Widget switchButton;
 
   _UserManagementPageState(this.driverPage) {
-    userManagementWidget = LoginForm(driverPage);
+    userManagementWidget = LoginForm(driverPage, _scaffoldKey);
 
     registerButton = RaisedButton(
         onPressed: () {
           setState(() {
-            userManagementWidget = RegisterForm(driverPage);
+            userManagementWidget = RegisterForm(driverPage, _scaffoldKey);
             switchButton = loginButton;
           });
         },
@@ -37,7 +39,7 @@ class _UserManagementPageState extends State<UserManagementPage> {
     loginButton = RaisedButton(
         onPressed: () {
           setState(() {
-            userManagementWidget = LoginForm(driverPage);
+            userManagementWidget = LoginForm(driverPage, _scaffoldKey);
             switchButton = registerButton;
           });
         },
@@ -49,6 +51,7 @@ class _UserManagementPageState extends State<UserManagementPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(userManagementWidget is LoginForm ? "Login" : "Register"),
         automaticallyImplyLeading: false,
