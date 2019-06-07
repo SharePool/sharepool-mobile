@@ -59,7 +59,7 @@ class _PassengerPageState extends State<PassengerPage> {
 
   Future scan() async {
     try {
-      String qrCode = "27"; //await BarcodeScanner.scan();
+      String qrCode = await BarcodeScanner.scan();
 
       int tourId = int.parse(qrCode);
 
