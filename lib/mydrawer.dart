@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'common/Constants.dart';
 import 'driver/driverpage.dart';
+import 'model/dto/user/UserDto.dart';
 import 'passengerpage.dart';
 
 class MyDrawer extends StatelessWidget {
@@ -12,17 +13,21 @@ class MyDrawer extends StatelessWidget {
   PassengerPage passengerPage;
   SettingsPage settingsPage;
 
+  final UserDto userDto;
+
+  MyDrawer(this.userDto);
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: Text("Geanik"),
-            accountEmail: Text("geanik@gmail.com"),
+            accountName: Text(userDto?.userName ?? ""),
+            accountEmail: Text(userDto?.email ?? ""),
             currentAccountPicture: CircleAvatar(
               backgroundImage: NetworkImage(
-                  "https://store.playstation.com/store/api/chihiro/00_09_000/container/US/en/999/UP0151-CUSA09971_00-AV00000000000001/1553247430000/image?w=240&h=240&bg_color=000000&opacity=100&_version=00_09_000"),
+                  "https://images.sk-static.com/images/media/img/col6/20180129-145533-323755.jpg"),
             ),
           ),
           ListTile(
@@ -71,6 +76,6 @@ class MyDrawer extends StatelessWidget {
 
     Navigator.pushReplacement(context,
         MaterialPageRoute(
-            builder: (context) => new UserManagementPage(driverPage)));
+            builder: (context) => new UserManagementPage(driverPage, userDto)));
   }
 }

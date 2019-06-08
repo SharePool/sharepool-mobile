@@ -7,15 +7,16 @@ import 'package:share_pool/model/dto/expense/ExpenseRequestResponse.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ExpenseRestClient {
-  static const String BASE_URL = Constants.BASE_REST_URL + "/expenses";
+  static const String BASE_URL = Constants.BASE_REST_URL + "/expenses/";
 
   static Future<ExpenseRequestResponseDto> requestExpense(int tourId) async {
     var sharedPreferences = await SharedPreferences.getInstance();
 
     var response = await post(
-        BASE_URL + "/request/" + tourId.toString(), headers: {
+        BASE_URL + tourId.toString(), headers: {
       "Content-Type": "application/json",
-      "Auth-Token": sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
+      Constants.HTTP_AUTHORIZATION: sharedPreferences.getString(
+          Constants.SETTINGS_USER_TOKEN)
     });
 
     print(response.body);
@@ -31,11 +32,14 @@ class ExpenseRestClient {
       ExpenseConfirmationDto expenseConfirmationDto) async {
     var sharedPreferences = await SharedPreferences.getInstance();
 
-    var body = json.encode(expenseConfirmationDto);
+    var body = "";
 
-    var response = await put(BASE_URL + "/confirmation", body: body, headers: {
+    var response = await put(
+        BASE_URL + "/confirmations/" + expenseConfirmationDto.tourId.toString(),
+        body: body, headers: {
       "Content-Type": "application/json",
-      "Auth-Token": sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
+      Constants.HTTP_AUTHORIZATION: sharedPreferences.getString(
+          Constants.SETTINGS_USER_TOKEN)
     });
 
     print(response.body);
