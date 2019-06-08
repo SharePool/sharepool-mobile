@@ -1,3 +1,4 @@
+import 'dart:_http';
 import 'dart:async';
 import 'dart:convert';
 
@@ -26,7 +27,8 @@ class UserRestClient {
     return null;
   }
 
-  static Future<UserCredentialsDto> registerUser(UserDto registerUserDto) async {
+  static Future<UserCredentialsDto> registerUser(
+      UserDto registerUserDto) async {
     var body = json.encode(registerUserDto);
 
     var response = await put(BASE_URL,
@@ -44,10 +46,9 @@ class UserRestClient {
   static Future<UserDto> getUser() async {
     var sharedPreferences = await SharedPreferences.getInstance();
 
-    var response =
-    await get(BASE_URL, headers: {
-      "Authorization": sharedPreferences.getString(
-          Constants.SETTINGS_USER_TOKEN)
+    var response = await get(BASE_URL, headers: {
+      HttpHeaders.authorizationHeader:
+          sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
     });
 
     print(response.body);

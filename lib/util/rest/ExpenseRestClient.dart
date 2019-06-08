@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:share_pool/common/Constants.dart';
@@ -12,11 +13,10 @@ class ExpenseRestClient {
   static Future<ExpenseRequestResponseDto> requestExpense(int tourId) async {
     var sharedPreferences = await SharedPreferences.getInstance();
 
-    var response = await post(
-        BASE_URL + tourId.toString(), headers: {
+    var response = await post(BASE_URL + tourId.toString(), headers: {
       "Content-Type": "application/json",
-      Constants.HTTP_AUTHORIZATION: sharedPreferences.getString(
-          Constants.SETTINGS_USER_TOKEN)
+      HttpHeaders.authorizationHeader:
+          sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
     });
 
     print(response.body);
@@ -36,11 +36,12 @@ class ExpenseRestClient {
 
     var response = await put(
         BASE_URL + "/confirmations/" + expenseConfirmationDto.tourId.toString(),
-        body: body, headers: {
-      "Content-Type": "application/json",
-      Constants.HTTP_AUTHORIZATION: sharedPreferences.getString(
-          Constants.SETTINGS_USER_TOKEN)
-    });
+        body: body,
+        headers: {
+          "Content-Type": "application/json",
+          HttpHeaders.authorizationHeader:
+              sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
+        });
 
     print(response.body);
 
