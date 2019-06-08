@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:share_pool/common/Constants.dart';
@@ -13,7 +14,7 @@ class TourRestClient {
 
     var response =
         await get(BASE_URL + "/users/" + userId.toString(), headers: {
-          Constants.HTTP_AUTHORIZATION:
+      HttpHeaders.authorizationHeader:
           sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
     });
 
@@ -38,14 +39,14 @@ class TourRestClient {
           body: body,
           headers: {
             "Content-Type": "application/json",
-            Constants.HTTP_AUTHORIZATION:
+            HttpHeaders.authorizationHeader:
                 sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
           });
     } else {
       response = await post(BASE_URL, body: body, headers: {
         "Content-Type": "application/json",
-        Constants.HTTP_AUTHORIZATION:
-        sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
+        HttpHeaders.authorizationHeader:
+            sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
       });
     }
 
@@ -56,8 +57,8 @@ class TourRestClient {
     var sharedPreferences = await SharedPreferences.getInstance();
 
     var response = await delete(BASE_URL + "/" + tourId.toString(), headers: {
-      Constants.HTTP_AUTHORIZATION:
-      sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
+      HttpHeaders.authorizationHeader:
+          sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
     });
 
     print(response.body);
