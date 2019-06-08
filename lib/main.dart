@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -20,6 +21,10 @@ void main() async {
 
   try {
     currentUser = await UserRestClient.getUser();
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(
+        Constants.SETTINGS_LOGGED_IN_USER, json.encode(currentUser.toJson()));
   } on SocketException catch (e) {
     print("Error fetching user from server");
   }
@@ -53,7 +58,7 @@ class _AppState extends State<App> {
         ),
         home:
         _isAuthenticated ? driverPage : new UserManagementPage(
-            driverPage, currentUser));
+            driverPage));
   }
 
   @override
@@ -61,24 +66,10 @@ class _AppState extends State<App> {
     super.initState();
 
     if (currentUser == null) {
-//      showDialog(
-//          context: context,
-//          builder: (BuildContext context) {
-//            return SimpleDialog(
-//              title: const Text('Server not reachable'),
-//              children: <Widget>[
-//                SimpleDialogOption(
-//                  onPressed: () {
-//                    exit(0);
-//                  },
-//                  child: const Text('OK'),
-//                ),
-//              ],
-//            );
-//          });
+      // TODO: show error message "server not reachable"
     }
 
-    MyDrawer myDrawer = new MyDrawer(currentUser);
+    MyDrawer myDrawer = new MyDrawer();
 
     driverPage = new DriverPage(myDrawer);
     passengerPage = new PassengerPage(myDrawer);
