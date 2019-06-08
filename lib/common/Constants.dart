@@ -3,6 +3,7 @@ class Constants {
 
   static const String SETTINGS_USER_TOKEN = "userToken";
   static const String SETTINGS_USER_ID = "userId";
+  static const String SETTINGS_LOGGED_IN_USER = "loggedInUser";
 
   static const String HTTP_AUTHORIZATION = "Authorization";
 }

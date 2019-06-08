@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -10,9 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class RegisterForm extends StatefulWidget {
   final Widget followingPage;
   final GlobalKey<ScaffoldState> _scaffoldKey;
-  UserDto userDto;
 
-  RegisterForm(this.followingPage, this._scaffoldKey, this.userDto);
+  RegisterForm(this.followingPage, this._scaffoldKey);
 
   @override
   _RegisterFormState createState() => _RegisterFormState();
@@ -151,7 +151,8 @@ class _RegisterFormState extends State<RegisterForm> {
       prefs.setString(Constants.SETTINGS_USER_TOKEN, credentials.userToken);
       prefs.setInt(Constants.SETTINGS_USER_ID, credentials.userId);
 
-      widget.userDto = await UserRestClient.getUser();
+      prefs.setString(Constants.SETTINGS_LOGGED_IN_USER,
+          json.encode((await UserRestClient.getUser()).toJson()));
 
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => widget.followingPage));

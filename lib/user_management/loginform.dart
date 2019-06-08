@@ -1,8 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:share_pool/common/Constants.dart';
-import 'package:share_pool/model/dto/user/UserDto.dart';
 import 'package:share_pool/model/dto/user/UserLoginDto.dart';
 import 'package:share_pool/model/dto/user/UserTokenDto.dart';
 import 'package:share_pool/util/rest/UserRestClient.dart';
@@ -11,9 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LoginForm extends StatefulWidget {
   final Widget followingPage;
   final GlobalKey<ScaffoldState> _scaffoldKey;
-  UserDto userDto;
 
-  LoginForm(this.followingPage, this._scaffoldKey, this.userDto);
+  LoginForm(this.followingPage, this._scaffoldKey);
 
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -93,7 +92,8 @@ class _LoginFormState extends State<LoginForm> {
         prefs.setString(Constants.SETTINGS_USER_TOKEN, credentials.userToken);
         prefs.setInt(Constants.SETTINGS_USER_ID, credentials.userId);
 
-        widget.userDto = await UserRestClient.getUser();
+        prefs.setString(Constants.SETTINGS_LOGGED_IN_USER,
+            json.encode((await UserRestClient.getUser()).toJson()));
 
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => widget.followingPage));

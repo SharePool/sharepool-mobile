@@ -46,7 +46,7 @@ class UserRestClient {
 
     var response =
     await get(BASE_URL, headers: {
-      "Authorization": sharedPreferences.getString(
+      Constants.HTTP_AUTHORIZATION: sharedPreferences.getString(
           Constants.SETTINGS_USER_TOKEN)
     });
 
