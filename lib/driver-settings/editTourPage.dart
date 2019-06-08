@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/common/currency.dart';
@@ -27,6 +29,8 @@ class TourEditPage extends StatefulWidget {
 
 class _TourEditPageState extends State<TourEditPage> {
   final _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   TourDto tourDto;
 
   _TourEditPageState(this.tourDto);
@@ -34,6 +38,7 @@ class _TourEditPageState extends State<TourEditPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
             title: Text(
                 widget.editableTour == null ? "Create tour" : "Edit tour")),
@@ -72,8 +77,8 @@ class _TourEditPageState extends State<TourEditPage> {
                 ),
                 CurrencyDropdown(
                   onSaved: handleCurrency,
-                  initialValue: currencyfromString(tourDto.currency) ??
-                      Currency.EUR,
+                  initialValue:
+                  currencyfromString(tourDto.currency) ?? Currency.EUR,
                 ),
                 TextFormField(
                   decoration: InputDecoration(labelText: "Tour cost"),
@@ -91,7 +96,7 @@ class _TourEditPageState extends State<TourEditPage> {
                     tourDto.cost = double.parse(value);
                   },
                   initialValue:
-                      tourDto.cost == null ? null : tourDto.cost.toString(),
+                  tourDto.cost == null ? null : tourDto.cost.toString(),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -137,12 +142,18 @@ class _TourEditPageState extends State<TourEditPage> {
 
     tourDto.ownerId = sharedPreferences.getInt(Constants.SETTINGS_USER_ID);
 
-    await TourRestClient.createOrUpdateTour(tourDto);
+    try {
+      await TourRestClient.createOrUpdateTour(tourDto);
 
-    // push here instead of pop to trigger reload
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => DriverSettingsPage(widget.myDrawer)));
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => DriverSettingsPage(widget.myDrawer)));
+    } on SocketException catch (e) {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text("Tour couldn't be updated/created!"),
+        duration: Duration(seconds: 3),
+      ));
+    }
   }
 }
