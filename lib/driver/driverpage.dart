@@ -44,7 +44,8 @@ class _DriverPageState extends State<DriverPage> {
         if (widget.tour != null) {
           this.selectedTour = widget.tour;
         } else {
-          this.selectedTour = tours != null ? tours[0] : null;
+          this.selectedTour =
+          tours != null && tours.isNotEmpty ? tours[0] : null;
         }
       });
     } on SocketException catch (e) {

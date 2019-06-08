@@ -88,7 +88,14 @@ class _PassengerPageState extends State<PassengerPage> {
                       "?"),
                   actions: <Widget>[
                     new FlatButton(
+                      child: new Text("No"),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    new RaisedButton(
                       child: new Text("Yes"),
+                      textColor: Colors.white,
                       onPressed: () async {
                         bool created =
                         await confirmExpense(requestResponse, userId);
@@ -101,12 +108,6 @@ class _PassengerPageState extends State<PassengerPage> {
                             duration: Duration(seconds: 3),
                           ));
                         }
-                      },
-                    ),
-                    new FlatButton(
-                      child: new Text("No"),
-                      onPressed: () {
-                        Navigator.of(context).pop();
                       },
                     ),
                   ],
