@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:share_pool/settingspage.dart';
 import 'package:share_pool/user_management/usermanagementpage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:share_pool/util/PreferencesService.dart';
 
-import 'common/Constants.dart';
 import 'driver/driverpage.dart';
 import 'model/dto/user/UserDto.dart';
 import 'passengerpage.dart';
@@ -82,9 +79,7 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   void logoutUser(BuildContext context) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove(Constants.SETTINGS_USER_TOKEN);
-    prefs.remove(Constants.SETTINGS_USER_ID);
+    PreferencesService.deleteUserInfo();
 
     Navigator.pushReplacement(context,
         MaterialPageRoute(
@@ -92,10 +87,9 @@ class _MyDrawerState extends State<MyDrawer> {
   }
 
   Future getUserInfo() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    UserDto loggedInUser = await PreferencesService.getLoggedInUser();
     setState(() {
-      userDto = UserDto.fromJson(
-          json.decode(prefs.getString(Constants.SETTINGS_LOGGED_IN_USER)));
+      userDto = loggedInUser;
     });
   }
 }

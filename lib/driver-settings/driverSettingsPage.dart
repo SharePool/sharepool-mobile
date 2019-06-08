@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/driver-settings/editTourPage.dart';
 import 'package:share_pool/driver-settings/tourListWidget.dart';
 import 'package:share_pool/driver/driverpage.dart';
 import 'package:share_pool/model/dto/tour/TourDto.dart';
+import 'package:share_pool/util/PreferencesService.dart';
 import 'package:share_pool/util/rest/TourRestClient.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../mydrawer.dart';
 
@@ -23,10 +22,8 @@ class _DriverSettingsPageState extends State<DriverSettingsPage> {
   List<TourDto> tours;
 
   Future<void> loadTours() async {
-    var sharedPreferences = await SharedPreferences.getInstance();
-
     List<TourDto> tours = await TourRestClient.getToursForUser(
-      sharedPreferences.getInt(Constants.SETTINGS_USER_ID));
+        await PreferencesService.getUserId());
 
     setState(() {
       this.tours = tours;
@@ -47,16 +44,12 @@ class _DriverSettingsPageState extends State<DriverSettingsPage> {
           title: Text(widget.title),
           actions: <Widget>[
             IconButton(
-                icon: Icon(
-                    Icons.directions_car,
-                    color: Colors.white),
+                icon: Icon(Icons.directions_car, color: Colors.white),
                 onPressed: () =>
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                DriverPage(widget.myDrawer)))
-            )
+                            builder: (context) => DriverPage(widget.myDrawer))))
           ],
         ),
         floatingActionButton: FloatingActionButton(
