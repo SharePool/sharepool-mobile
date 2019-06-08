@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:share_pool/driver/driverpage.dart';
+import 'package:share_pool/model/dto/user/UserDto.dart';
 import 'package:share_pool/user_management/loginform.dart';
 import 'package:share_pool/user_management/registerform.dart';
 
 class UserManagementPage extends StatefulWidget {
   DriverPage driverPage;
+  UserDto userDto;
 
-  UserManagementPage(this.driverPage);
+  UserManagementPage(this.driverPage, this.userDto);
 
   @override
   State<UserManagementPage> createState() =>
-      _UserManagementPageState(driverPage);
+      _UserManagementPageState(driverPage, userDto);
 }
 
 class _UserManagementPageState extends State<UserManagementPage> {
@@ -24,13 +26,16 @@ class _UserManagementPageState extends State<UserManagementPage> {
   Widget loginButton;
   Widget switchButton;
 
-  _UserManagementPageState(this.driverPage) {
-    userManagementWidget = LoginForm(driverPage, _scaffoldKey);
+  UserDto userDto;
+
+  _UserManagementPageState(this.driverPage, this.userDto) {
+    userManagementWidget = LoginForm(driverPage, _scaffoldKey, userDto);
 
     registerButton = RaisedButton(
         onPressed: () {
           setState(() {
-            userManagementWidget = RegisterForm(driverPage, _scaffoldKey);
+            userManagementWidget =
+                RegisterForm(driverPage, _scaffoldKey, userDto);
             switchButton = loginButton;
           });
         },
@@ -39,7 +44,7 @@ class _UserManagementPageState extends State<UserManagementPage> {
     loginButton = RaisedButton(
         onPressed: () {
           setState(() {
-            userManagementWidget = LoginForm(driverPage, _scaffoldKey);
+            userManagementWidget = LoginForm(driverPage, _scaffoldKey, userDto);
             switchButton = registerButton;
           });
         },

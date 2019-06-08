@@ -10,8 +10,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class RegisterForm extends StatefulWidget {
   final Widget followingPage;
   final GlobalKey<ScaffoldState> _scaffoldKey;
+  UserDto userDto;
 
-  const RegisterForm(this.followingPage, this._scaffoldKey);
+  RegisterForm(this.followingPage, this._scaffoldKey, this.userDto);
 
   @override
   _RegisterFormState createState() => _RegisterFormState();
@@ -149,6 +150,8 @@ class _RegisterFormState extends State<RegisterForm> {
     if (credentials != null) {
       prefs.setString(Constants.SETTINGS_USER_TOKEN, credentials.userToken);
       prefs.setInt(Constants.SETTINGS_USER_ID, credentials.userId);
+
+      widget.userDto = await UserRestClient.getUser();
 
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => widget.followingPage));
