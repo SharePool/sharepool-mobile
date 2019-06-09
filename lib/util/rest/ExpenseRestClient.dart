@@ -24,7 +24,7 @@ class ExpenseRestClient {
 
     if (response.statusCode == 200) {
       var decode = json.decode(response.body);
-      var hateoasDto = HateoasDto.
+      var hateoasDto = HateoasDto.create(() => ExpenseRequestResponseDto.fromJson(decode), decode);
       return hateoasDto;
     }
 

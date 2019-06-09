@@ -4,8 +4,8 @@ class HateoasDto<T> {
 
   HateoasDto(this.dto, this.link);
 
-  static HateoasDto<F> create(DtoFromJsonFunction<F> func, Map<String, dynamic> json) {
-    return new HateoasDto(func(json), getRelLinkFromJson("self", json));
+  static HateoasDto<T> create<T>(DtoFromJsonFunction<T> func, Map<String, dynamic> json) {
+    return new HateoasDto(func(), getRelLinkFromJson("self", json));
   }
 
   static String getRelLinkFromJson(String relName, Map<String, dynamic> json) {
@@ -13,4 +13,4 @@ class HateoasDto<T> {
   }
 }
 
-typedef DtoFromJsonFunction<T> = T Function(Map<String, dynamic> json);
+typedef DtoFromJsonFunction<T> = T Function();
