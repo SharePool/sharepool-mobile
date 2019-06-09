@@ -1,18 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/model/dto/user/UserDto.dart';
 import 'package:share_pool/model/dto/user/UserTokenDto.dart';
+import 'package:share_pool/util/PreferencesService.dart';
 import 'package:share_pool/util/rest/UserRestClient.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterForm extends StatefulWidget {
   final Widget followingPage;
   final GlobalKey<ScaffoldState> _scaffoldKey;
-  UserDto userDto;
 
-  RegisterForm(this.followingPage, this._scaffoldKey, this.userDto);
+  RegisterForm(this.followingPage, this._scaffoldKey);
 
   @override
   _RegisterFormState createState() => _RegisterFormState();
@@ -132,26 +130,22 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   Future doRegister() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
     UserCredentialsDto credentials = null;
     try {
-      credentials = await UserRestClient.registerUser(
-          new UserDto(
-              firstName: _firstName,
-              lastName: _lastName,
-              userName: _userName,
-              email: _email,
-              password: _password));
+      credentials = await UserRestClient.registerUser(new UserDto(
+          firstName: _firstName,
+          lastName: _lastName,
+          userName: _userName,
+          email: _email,
+          password: _password));
     } on SocketException catch (e) {
       // NOP: is handled by null check below
     }
 
     if (credentials != null) {
-      prefs.setString(Constants.SETTINGS_USER_TOKEN, credentials.userToken);
-      prefs.setInt(Constants.SETTINGS_USER_ID, credentials.userId);
-
-      widget.userDto = await UserRestClient.getUser();
+      PreferencesService.saveUserToken(credentials.userToken);
+      PreferencesService.saveUserId(credentials.userId);
+      PreferencesService.saveLoggedInUser(await UserRestClient.getUser());
 
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => widget.followingPage));

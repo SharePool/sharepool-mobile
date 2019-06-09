@@ -1,14 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/model/dto/user/UserDto.dart';
 import 'package:share_pool/mydrawer.dart';
 import 'package:share_pool/passengerpage.dart';
 import 'package:share_pool/settingspage.dart';
 import 'package:share_pool/user_management/usermanagementpage.dart';
+import 'package:share_pool/util/PreferencesService.dart';
 import 'package:share_pool/util/rest/UserRestClient.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'driver/driverpage.dart';
 
@@ -18,10 +17,14 @@ UserDto currentUser;
 void main() async {
   _isAuthenticated = await _checkUserLoggedIn() != null;
 
-  try {
-    currentUser = await UserRestClient.getUser();
-  } on SocketException catch (e) {
-    print("Error fetching user from server");
+  if (_isAuthenticated) {
+    try {
+      currentUser = await UserRestClient.getUser();
+
+      PreferencesService.saveLoggedInUser(currentUser);
+    } on SocketException catch (e) {
+      print("Error fetching user from server");
+    }
   }
 
   runApp(App());
@@ -53,7 +56,7 @@ class _AppState extends State<App> {
         ),
         home:
         _isAuthenticated ? driverPage : new UserManagementPage(
-            driverPage, currentUser));
+            driverPage));
   }
 
   @override
@@ -61,24 +64,10 @@ class _AppState extends State<App> {
     super.initState();
 
     if (currentUser == null) {
-//      showDialog(
-//          context: context,
-//          builder: (BuildContext context) {
-//            return SimpleDialog(
-//              title: const Text('Server not reachable'),
-//              children: <Widget>[
-//                SimpleDialogOption(
-//                  onPressed: () {
-//                    exit(0);
-//                  },
-//                  child: const Text('OK'),
-//                ),
-//              ],
-//            );
-//          });
+      // TODO: show error message "server not reachable"
     }
 
-    MyDrawer myDrawer = new MyDrawer(currentUser);
+    MyDrawer myDrawer = new MyDrawer();
 
     driverPage = new DriverPage(myDrawer);
     passengerPage = new PassengerPage(myDrawer);
@@ -91,7 +80,5 @@ class _AppState extends State<App> {
 }
 
 Future<String> _checkUserLoggedIn() async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  return prefs.getString(Constants.SETTINGS_USER_TOKEN) ?? null;
+  return await PreferencesService.getUserToken();
 }

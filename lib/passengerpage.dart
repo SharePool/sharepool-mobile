@@ -6,10 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:share_pool/model/dto/common/HateoasDto.dart';
 import 'package:share_pool/model/dto/expense/ExpenseRequestResponse.dart';
+import 'package:share_pool/util/PreferencesService.dart';
 import 'package:share_pool/util/rest/ExpenseRestClient.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'common/Constants.dart';
 import 'mydrawer.dart';
 
 class PassengerPage extends StatefulWidget {
@@ -63,9 +62,7 @@ class _PassengerPageState extends State<PassengerPage> {
       String qrCode = await BarcodeScanner.scan();
 
       int tourId = int.parse(qrCode);
-
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      int userId = prefs.getInt(Constants.SETTINGS_USER_ID);
+      int userId = await PreferencesService.getUserId();
 
       if (userId != null) {
         HateoasDto<ExpenseRequestResponseDto> requestResponse =

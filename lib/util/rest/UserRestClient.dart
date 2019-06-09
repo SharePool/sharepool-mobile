@@ -7,7 +7,7 @@ import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/model/dto/user/UserDto.dart';
 import 'package:share_pool/model/dto/user/UserLoginDto.dart';
 import 'package:share_pool/model/dto/user/UserTokenDto.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:share_pool/util/PreferencesService.dart';
 
 class UserRestClient {
   static const String BASE_URL = Constants.BASE_REST_URL + "/users";
@@ -44,11 +44,9 @@ class UserRestClient {
   }
 
   static Future<UserDto> getUser() async {
-    var sharedPreferences = await SharedPreferences.getInstance();
-
     var response = await get(BASE_URL, headers: {
       HttpHeaders.authorizationHeader:
-          sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
+      await PreferencesService.getUserToken()
     });
 
     print(response.body);

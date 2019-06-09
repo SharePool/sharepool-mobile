@@ -4,18 +4,16 @@ import 'dart:io';
 import 'package:http/http.dart';
 import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/model/dto/tour/TourDto.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:share_pool/util/PreferencesService.dart';
 
 class TourRestClient {
   static const String BASE_URL = Constants.BASE_REST_URL + "/tours";
 
   static Future<List<TourDto>> getToursForUser(int userId) async {
-    var sharedPreferences = await SharedPreferences.getInstance();
-
     var response =
         await get(BASE_URL + "/users/" + userId.toString(), headers: {
-      HttpHeaders.authorizationHeader:
-          sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
+          HttpHeaders.authorizationHeader: await PreferencesService
+              .getUserToken()
     });
 
     print(response.body);
@@ -29,8 +27,6 @@ class TourRestClient {
   }
 
   static Future<void> createOrUpdateTour(TourDto tourDto) async {
-    var sharedPreferences = await SharedPreferences.getInstance();
-
     var body = json.encode(tourDto);
 
     var response;
@@ -40,13 +36,12 @@ class TourRestClient {
           headers: {
             "Content-Type": "application/json",
             HttpHeaders.authorizationHeader:
-                sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
+            await PreferencesService.getUserToken()
           });
     } else {
       response = await post(BASE_URL, body: body, headers: {
         "Content-Type": "application/json",
-        HttpHeaders.authorizationHeader:
-            sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
+        HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
       });
     }
 
@@ -54,11 +49,8 @@ class TourRestClient {
   }
 
   static Future<void> deleteTour(int tourId) async {
-    var sharedPreferences = await SharedPreferences.getInstance();
-
     var response = await delete(BASE_URL + "/" + tourId.toString(), headers: {
-      HttpHeaders.authorizationHeader:
-          sharedPreferences.getString(Constants.SETTINGS_USER_TOKEN)
+      HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
     });
 
     print(response.body);

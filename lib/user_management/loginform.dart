@@ -1,19 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:share_pool/common/Constants.dart';
-import 'package:share_pool/model/dto/user/UserDto.dart';
 import 'package:share_pool/model/dto/user/UserLoginDto.dart';
 import 'package:share_pool/model/dto/user/UserTokenDto.dart';
+import 'package:share_pool/util/PreferencesService.dart';
 import 'package:share_pool/util/rest/UserRestClient.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginForm extends StatefulWidget {
   final Widget followingPage;
   final GlobalKey<ScaffoldState> _scaffoldKey;
-  UserDto userDto;
 
-  LoginForm(this.followingPage, this._scaffoldKey, this.userDto);
+  LoginForm(this.followingPage, this._scaffoldKey);
 
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -83,17 +80,14 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void doLogin() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
     try {
       UserCredentialsDto credentials = await UserRestClient.loginUser(
           new UserLoginDto(_userNameOrEmail, _password));
 
       if (credentials != null) {
-        prefs.setString(Constants.SETTINGS_USER_TOKEN, credentials.userToken);
-        prefs.setInt(Constants.SETTINGS_USER_ID, credentials.userId);
-
-        widget.userDto = await UserRestClient.getUser();
+        PreferencesService.saveUserToken(credentials.userToken);
+        PreferencesService.saveUserId(credentials.userId);
+        PreferencesService.saveLoggedInUser(await UserRestClient.getUser());
 
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => widget.followingPage));

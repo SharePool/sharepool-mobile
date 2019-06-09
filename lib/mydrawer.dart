@@ -1,21 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:share_pool/settingspage.dart';
 import 'package:share_pool/user_management/usermanagementpage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:share_pool/util/PreferencesService.dart';
 
-import 'common/Constants.dart';
 import 'driver/driverpage.dart';
 import 'model/dto/user/UserDto.dart';
 import 'passengerpage.dart';
 
-class MyDrawer extends StatelessWidget {
+class MyDrawer extends StatefulWidget {
   DriverPage driverPage;
   PassengerPage passengerPage;
   SettingsPage settingsPage;
 
-  final UserDto userDto;
+  @override
+  _MyDrawerState createState() => _MyDrawerState();
+}
 
-  MyDrawer(this.userDto);
+class _MyDrawerState extends State<MyDrawer> {
+
+  UserDto userDto;
+
+
+  @override
+  void initState() {
+    getUserInfo();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +45,7 @@ class MyDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => this.driverPage));
+                  builder: (BuildContext context) => widget.driverPage));
             },
           ),
           ListTile(
@@ -45,7 +54,7 @@ class MyDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => this.passengerPage));
+                  builder: (BuildContext context) => widget.passengerPage));
             },
           ),
           ListTile(
@@ -54,7 +63,7 @@ class MyDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => this.settingsPage));
+                  builder: (BuildContext context) => widget.settingsPage));
             },
           ),
           ListTile(
@@ -70,12 +79,17 @@ class MyDrawer extends StatelessWidget {
   }
 
   void logoutUser(BuildContext context) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove(Constants.SETTINGS_USER_TOKEN);
-    prefs.remove(Constants.SETTINGS_USER_ID);
+    PreferencesService.deleteUserInfo();
 
     Navigator.pushReplacement(context,
         MaterialPageRoute(
-            builder: (context) => new UserManagementPage(driverPage, userDto)));
+            builder: (context) => new UserManagementPage(widget.driverPage)));
+  }
+
+  Future getUserInfo() async {
+    UserDto loggedInUser = await PreferencesService.getLoggedInUser();
+    setState(() {
+      userDto = loggedInUser;
+    });
   }
 }
