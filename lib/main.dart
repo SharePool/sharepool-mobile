@@ -1,15 +1,13 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/model/dto/user/UserDto.dart';
 import 'package:share_pool/mydrawer.dart';
 import 'package:share_pool/passengerpage.dart';
 import 'package:share_pool/settingspage.dart';
 import 'package:share_pool/user_management/usermanagementpage.dart';
+import 'package:share_pool/util/PreferencesService.dart';
 import 'package:share_pool/util/rest/UserRestClient.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'driver/driverpage.dart';
 
@@ -19,14 +17,14 @@ UserDto currentUser;
 void main() async {
   _isAuthenticated = await _checkUserLoggedIn() != null;
 
-  try {
-    currentUser = await UserRestClient.getUser();
+  if (_isAuthenticated) {
+    try {
+      currentUser = await UserRestClient.getUser();
 
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(
-        Constants.SETTINGS_LOGGED_IN_USER, json.encode(currentUser.toJson()));
-  } on SocketException catch (e) {
-    print("Error fetching user from server");
+      PreferencesService.saveLoggedInUser(currentUser);
+    } on SocketException catch (e) {
+      print("Error fetching user from server");
+    }
   }
 
   runApp(App());
@@ -82,7 +80,5 @@ class _AppState extends State<App> {
 }
 
 Future<String> _checkUserLoggedIn() async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  return prefs.getString(Constants.SETTINGS_USER_TOKEN) ?? null;
+  return await PreferencesService.getUserToken();
 }
