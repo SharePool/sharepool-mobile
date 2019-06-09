@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:share_pool/model/dto/expense/ExpenseConfirmationDto.dart';
+import 'package:share_pool/model/dto/common/HateoasDto.dart';
 import 'package:share_pool/model/dto/expense/ExpenseRequestResponse.dart';
 import 'package:share_pool/util/PreferencesService.dart';
 import 'package:share_pool/util/rest/ExpenseRestClient.dart';
@@ -65,7 +65,7 @@ class _PassengerPageState extends State<PassengerPage> {
       int userId = await PreferencesService.getUserId();
 
       if (userId != null) {
-        ExpenseRequestResponseDto requestResponse =
+        HateoasDto<ExpenseRequestResponseDto> requestResponse =
         await requestExpense(tourId);
 
         if (requestResponse != null) {
@@ -73,15 +73,15 @@ class _PassengerPageState extends State<PassengerPage> {
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
-                  title: new Text(requestResponse.tour.from +
+                  title: new Text(requestResponse.dto.tour.from +
                       " -> " +
-                      requestResponse.tour.to),
+                      requestResponse.dto.tour.to),
                   content: new Text("Wanna ride with " +
-                      requestResponse.receiver.userName +
+                      requestResponse.dto.receiver.userName +
                       " for " +
-                      requestResponse.tour.cost.toString() +
+                      requestResponse.dto.tour.cost.toString() +
                       " " +
-                      requestResponse.tour.currency +
+                      requestResponse.dto.tour.currency +
                       "?"),
                   actions: <Widget>[
                     new FlatButton(
@@ -95,7 +95,7 @@ class _PassengerPageState extends State<PassengerPage> {
                       textColor: Colors.white,
                       onPressed: () async {
                         bool created =
-                        await confirmExpense(requestResponse, userId);
+                        await confirmExpense(requestResponse);
 
                         Navigator.of(context).pop();
 
@@ -129,7 +129,7 @@ class _PassengerPageState extends State<PassengerPage> {
     } on FormatException {} catch (e) {}
   }
 
-  Future<ExpenseRequestResponseDto> requestExpense(int tourId) async {
+  Future<HateoasDto<ExpenseRequestResponseDto>> requestExpense(int tourId) async {
     try {
       return ExpenseRestClient.requestExpense(tourId);
     } on SocketException catch (e) {
@@ -142,16 +142,9 @@ class _PassengerPageState extends State<PassengerPage> {
     return null;
   }
 
-  Future<bool> confirmExpense(ExpenseRequestResponseDto requestResponse,
-      int userId) async {
+  Future<bool> confirmExpense(HateoasDto<ExpenseRequestResponseDto> requestResponse) async {
     try {
-      return await ExpenseRestClient.confirmExpense(new ExpenseConfirmationDto(
-          requestResponse.tour.tourId,
-          userId,
-          "Drive from " +
-              requestResponse.tour.from +
-              " to " +
-              requestResponse.tour.to));
+      return await ExpenseRestClient.confirmExpense(requestResponse);
     } on SocketException catch (e) {
       _scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text('Something went wrong!'),
