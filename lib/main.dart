@@ -5,6 +5,7 @@ import 'package:share_pool/model/dto/user/UserDto.dart';
 import 'package:share_pool/mydrawer.dart';
 import 'package:share_pool/passengerpage.dart';
 import 'package:share_pool/settingspage.dart';
+import 'package:share_pool/statistics/statistics_page.dart';
 import 'package:share_pool/user_management/usermanagementpage.dart';
 import 'package:share_pool/util/PreferencesService.dart';
 import 'package:share_pool/util/rest/UserRestClient.dart';
@@ -46,6 +47,7 @@ class _AppState extends State<App> {
   DriverPage driverPage;
   PassengerPage passengerPage;
   SettingsPage settingsPage;
+  StatisticsPage statisticsPage;
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +74,12 @@ class _AppState extends State<App> {
     driverPage = new DriverPage(myDrawer);
     passengerPage = new PassengerPage(myDrawer);
     settingsPage = new SettingsPage(myDrawer);
+    statisticsPage = new StatisticsPage(myDrawer);
 
     myDrawer.driverPage = driverPage;
     myDrawer.passengerPage = passengerPage;
     myDrawer.settingsPage = settingsPage;
+    myDrawer.statisticsPage = statisticsPage;
   }
 }
 

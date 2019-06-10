@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:share_pool/settingspage.dart';
+import 'package:share_pool/statistics/statistics_page.dart';
 import 'package:share_pool/user_management/usermanagementpage.dart';
 import 'package:share_pool/util/PreferencesService.dart';
 
@@ -11,6 +12,7 @@ class MyDrawer extends StatefulWidget {
   DriverPage driverPage;
   PassengerPage passengerPage;
   SettingsPage settingsPage;
+  StatisticsPage statisticsPage;
 
   @override
   _MyDrawerState createState() => _MyDrawerState();
@@ -19,7 +21,6 @@ class MyDrawer extends StatefulWidget {
 class _MyDrawerState extends State<MyDrawer> {
 
   UserDto userDto;
-
 
   @override
   void initState() {
@@ -55,6 +56,15 @@ class _MyDrawerState extends State<MyDrawer> {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => widget.passengerPage));
+            },
+          ),
+          ListTile(
+            title: Text("Statistics"),
+            trailing: Icon(Icons.insert_chart),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => widget.statisticsPage));
             },
           ),
           ListTile(
