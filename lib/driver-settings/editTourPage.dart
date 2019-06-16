@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:share_pool/common/SnackBars.dart';
 import 'package:share_pool/common/currency.dart';
 import 'package:share_pool/common/currencyDropdown.dart';
 import 'package:share_pool/driver-settings/driverSettingsPage.dart';
 import 'package:share_pool/model/dto/tour/TourDto.dart';
-import 'package:share_pool/util/PreferencesService.dart';
 import 'package:share_pool/util/rest/TourRestClient.dart';
 
 import '../mydrawer.dart';
@@ -137,8 +137,6 @@ class _TourEditPageState extends State<TourEditPage> {
   }
 
   void createOrUpdateTour() async {
-    tourDto.ownerId = await PreferencesService.getUserId();
-
     try {
       await TourRestClient.createOrUpdateTour(tourDto);
 
@@ -146,11 +144,10 @@ class _TourEditPageState extends State<TourEditPage> {
           context,
           MaterialPageRoute(
               builder: (context) => DriverSettingsPage(widget.myDrawer)));
-    } on SocketException catch (e) {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text("Tour couldn't be updated/created!"),
-        duration: Duration(seconds: 3),
-      ));
+    } on SocketException {
+      _scaffoldKey.currentState.showSnackBar(
+          FailureSnackBar("Tour couldn't be updated/created!")
+      );
     }
   }
 }

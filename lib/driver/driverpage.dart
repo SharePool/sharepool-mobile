@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:share_pool/common/SnackBars.dart';
 import 'package:share_pool/driver-settings/driverSettingsPage.dart';
 import 'package:share_pool/driver-settings/editTourPage.dart';
 import 'package:share_pool/driver-settings/tourListWidget.dart';
 import 'package:share_pool/driver/searchTour.dart';
 import 'package:share_pool/model/dto/tour/TourDto.dart';
-import 'package:share_pool/util/PreferencesService.dart';
 import 'package:share_pool/util/rest/TourRestClient.dart';
 
 import '../mydrawer.dart';
@@ -32,8 +32,7 @@ class _DriverPageState extends State<DriverPage> {
 
   Future<void> loadTours() async {
     try {
-      List<TourDto> tours = await TourRestClient.getToursForUser(
-          await PreferencesService.getUserId());
+      List<TourDto> tours = await TourRestClient.getToursForUser();
 
       setState(() {
         this.tours = tours;
@@ -45,11 +44,10 @@ class _DriverPageState extends State<DriverPage> {
           tours != null && tours.isNotEmpty ? tours[0] : null;
         }
       });
-    } on SocketException catch (e) {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text("Tours couldn't be loaded!"),
-        duration: Duration(seconds: 3),
-      ));
+    } on SocketException {
+      _scaffoldKey.currentState.showSnackBar(
+          FailureSnackBar("Tours couldn't be loaded!")
+      );
     }
   }
 
