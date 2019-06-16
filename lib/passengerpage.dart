@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:share_pool/common/currency.dart';
 import 'package:share_pool/model/dto/common/HateoasDto.dart';
 import 'package:share_pool/model/dto/expense/ExpenseRequestResponse.dart';
 import 'package:share_pool/util/PreferencesService.dart';
@@ -79,9 +80,10 @@ class _PassengerPageState extends State<PassengerPage> {
                   content: new Text("Wanna ride with " +
                       requestResponse.dto.receiver.userName +
                       " for " +
-                      requestResponse.dto.tour.cost.toString() +
+                      requestResponse.dto.tour.cost.toStringAsFixed(2) +
                       " " +
-                      requestResponse.dto.tour.currency +
+                      currencyStringtoSymbol(
+                          requestResponse.dto.tour.currency) +
                       "?"),
                   actions: <Widget>[
                     new FlatButton(

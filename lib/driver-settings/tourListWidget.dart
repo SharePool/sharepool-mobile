@@ -62,7 +62,7 @@ class _TourListWidgetState extends State<TourListWidget> {
       await TourRestClient.deleteTour(tour.tourId);
 
       setState(() {
-        widget.tours[widget.tours.indexOf(tour)].active = false;
+        widget.tours.remove(tour);
       });
     } on SocketException catch (e) {
       _scaffoldKey.currentState.showSnackBar(SnackBar(

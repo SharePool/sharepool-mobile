@@ -39,7 +39,7 @@ class TourRestClient {
 
     var response;
     if (tourDto.tourId != null) {
-      response = await put(BASE_URL + "/" + tourDto.tourId.toString(),
+      response = await put("$BASE_URL/${tourDto.tourId.toString()}",
           body: body,
           headers: {
             "Content-Type": "application/json",
@@ -57,7 +57,16 @@ class TourRestClient {
   }
 
   static Future<void> deleteTour(int tourId) async {
-    var response = await delete(BASE_URL + "/" + tourId.toString(), headers: {
+    var response = await delete("$BASE_URL/${tourId.toString()}", headers: {
+      HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
+    });
+
+    print(response.body);
+  }
+
+  static Future<void> activateTour(int tourId) async {
+    var response = await put(
+        "$BASE_URL/${tourId.toString()}/activate", headers: {
       HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
     });
 
