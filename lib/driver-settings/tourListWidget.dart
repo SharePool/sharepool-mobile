@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:share_pool/common/SnackBars.dart';
 import 'package:share_pool/common/currency.dart';
 import 'package:share_pool/model/dto/tour/TourDto.dart';
 import 'package:share_pool/mydrawer.dart';
@@ -64,11 +65,10 @@ class _TourListWidgetState extends State<TourListWidget> {
       setState(() {
         widget.tours.remove(tour);
       });
-    } on SocketException catch (e) {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text("Tour couldn't be deleted!"),
-        duration: Duration(seconds: 3),
-      ));
+    } on SocketException {
+      _scaffoldKey.currentState.showSnackBar(
+          FailureSnackBar("Tour couldn't be deleted!")
+      );
     }
   }
 }
