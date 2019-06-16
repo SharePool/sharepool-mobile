@@ -3,7 +3,6 @@ import 'package:share_pool/driver-settings/editTourPage.dart';
 import 'package:share_pool/driver-settings/tourListWidget.dart';
 import 'package:share_pool/driver/driverpage.dart';
 import 'package:share_pool/model/dto/tour/TourDto.dart';
-import 'package:share_pool/util/PreferencesService.dart';
 import 'package:share_pool/util/rest/TourRestClient.dart';
 
 import '../mydrawer.dart';
@@ -22,8 +21,7 @@ class _DriverSettingsPageState extends State<DriverSettingsPage> {
   List<TourDto> tours;
 
   Future<void> loadTours() async {
-    List<TourDto> tours = await TourRestClient.getToursForUser(
-        await PreferencesService.getUserId());
+    List<TourDto> tours = await TourRestClient.getToursForUser();
 
     setState(() {
       this.tours = tours;

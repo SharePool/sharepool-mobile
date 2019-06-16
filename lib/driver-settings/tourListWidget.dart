@@ -29,6 +29,8 @@ class TourListWidget extends StatefulWidget {
 }
 
 class _TourListWidgetState extends State<TourListWidget> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -43,7 +45,10 @@ class _TourListWidgetState extends State<TourListWidget> {
               onDismissed: (direction) {
                 deleteTour(direction, tour);
               },
-              background: Container(color: Colors.red),
+              background: Card(
+                margin: const EdgeInsets.all(10),
+                color: Colors.red,
+              ),
               direction: DismissDirection.endToStart,
             );
           } else {
@@ -57,10 +62,10 @@ class _TourListWidgetState extends State<TourListWidget> {
       await TourRestClient.deleteTour(tour.tourId);
 
       setState(() {
-        widget.tours.remove(tour);
+        widget.tours[widget.tours.indexOf(tour)].active = false;
       });
     } on SocketException catch (e) {
-      widget.scaffoldKey.currentState.showSnackBar(SnackBar(
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
         content: Text("Tour couldn't be deleted!"),
         duration: Duration(seconds: 3),
       ));
@@ -77,32 +82,34 @@ class TourCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        margin: const EdgeInsets.all(10),
-        child: InkWell(
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Row(
-              children: <Widget>[
-                Text(
-                  tour.from,
-                  style: TextStyle(fontSize: 18),
+    return Opacity(
+        opacity: tour.active ? 1 : .5,
+        child: Card(
+            margin: const EdgeInsets.all(10),
+            child: InkWell(
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      tour.from,
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    Icon(Icons.arrow_forward),
+                    Text(tour.to, style: TextStyle(fontSize: 18)),
+                    Spacer(),
+                    Text(buildCurrencyString(), style: TextStyle(fontSize: 18))
+                  ],
                 ),
-                Icon(Icons.arrow_forward),
-                Text(tour.to, style: TextStyle(fontSize: 18)),
-                Spacer(),
-                Text(buildCurrencyString(), style: TextStyle(fontSize: 18))
-              ],
-            ),
-          ),
-          onTap: () =>
-          tourTapCallback != null
-              ? tourTapCallback(context, myDrawer, tour)
-              : Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => TourEditPage(myDrawer, tour))),
-        ));
+              ),
+              onTap: () =>
+              tourTapCallback != null
+                  ? tourTapCallback(context, myDrawer, tour)
+                  : Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TourEditPage(myDrawer, tour))),
+            )));
   }
 
   String buildCurrencyString() =>

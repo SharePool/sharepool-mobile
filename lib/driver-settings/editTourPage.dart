@@ -5,7 +5,6 @@ import 'package:share_pool/common/currency.dart';
 import 'package:share_pool/common/currencyDropdown.dart';
 import 'package:share_pool/driver-settings/driverSettingsPage.dart';
 import 'package:share_pool/model/dto/tour/TourDto.dart';
-import 'package:share_pool/util/PreferencesService.dart';
 import 'package:share_pool/util/rest/TourRestClient.dart';
 
 import '../mydrawer.dart';
@@ -137,8 +136,6 @@ class _TourEditPageState extends State<TourEditPage> {
   }
 
   void createOrUpdateTour() async {
-    tourDto.ownerId = await PreferencesService.getUserId();
-
     try {
       await TourRestClient.createOrUpdateTour(tourDto);
 

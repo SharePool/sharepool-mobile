@@ -9,12 +9,20 @@ import 'package:share_pool/util/PreferencesService.dart';
 class TourRestClient {
   static const String BASE_URL = Constants.BASE_REST_URL + "/tours";
 
-  static Future<List<TourDto>> getToursForUser(int userId) async {
+  static Future<List<TourDto>> getToursForUser([bool includeInactive]) async {
+    String url = BASE_URL;
+
+    if (includeInactive != null) {
+      url += "?includeInactive=" + includeInactive?.toString();
+    }
+
     var response =
-        await get(BASE_URL + "/users/" + userId.toString(), headers: {
+    await get(
+        url,
+        headers: {
           HttpHeaders.authorizationHeader: await PreferencesService
               .getUserToken()
-    });
+        });
 
     print(response.body);
 
