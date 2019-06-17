@@ -4,11 +4,13 @@ import 'dart:io';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:share_pool/common/currency.dart';
 import 'package:share_pool/model/dto/common/HateoasDto.dart';
 import 'package:share_pool/model/dto/expense/ExpenseRequestResponse.dart';
 import 'package:share_pool/util/PreferencesService.dart';
 import 'package:share_pool/util/rest/ExpenseRestClient.dart';
 
+import 'common/SnackBars.dart';
 import 'mydrawer.dart';
 
 class PassengerPage extends StatefulWidget {
@@ -79,9 +81,10 @@ class _PassengerPageState extends State<PassengerPage> {
                   content: new Text("Wanna ride with " +
                       requestResponse.dto.receiver.userName +
                       " for " +
-                      requestResponse.dto.tour.cost.toString() +
+                      requestResponse.dto.tour.cost.toStringAsFixed(2) +
                       " " +
-                      requestResponse.dto.tour.currency +
+                      currencyStringtoSymbol(
+                          requestResponse.dto.tour.currency) +
                       "?"),
                   actions: <Widget>[
                     new FlatButton(
@@ -100,10 +103,9 @@ class _PassengerPageState extends State<PassengerPage> {
                         Navigator.of(context).pop();
 
                         if (created) {
-                          _scaffoldKey.currentState.showSnackBar(SnackBar(
-                            content: Text('Expense confirmed'),
-                            duration: Duration(seconds: 3),
-                          ));
+                          _scaffoldKey.currentState.showSnackBar(
+                              new SuccessSnackBar("Expense confirmed.")
+                          );
                         }
                       },
                     ),
@@ -115,16 +117,13 @@ class _PassengerPageState extends State<PassengerPage> {
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         setState(() {
-          _scaffoldKey.currentState.showSnackBar(SnackBar(
-            content: Text('Camera permissions not granted!'),
-            duration: Duration(seconds: 3),
-          ));
+          _scaffoldKey.currentState.showSnackBar(
+              new FailureSnackBar("Camera permissions not granted!")
+          );
         });
       } else {
-        _scaffoldKey.currentState.showSnackBar(SnackBar(
-          content: Text('Unknown error: $e'),
-          duration: Duration(seconds: 3),
-        ));
+        _scaffoldKey.currentState.showSnackBar(
+            new FailureSnackBar("Unknown error!"));
       }
     } on FormatException {} catch (e) {}
   }
@@ -132,11 +131,10 @@ class _PassengerPageState extends State<PassengerPage> {
   Future<HateoasDto<ExpenseRequestResponseDto>> requestExpense(int tourId) async {
     try {
       return ExpenseRestClient.requestExpense(tourId);
-    } on SocketException catch (e) {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text('Something went wrong!'),
-        duration: Duration(seconds: 3),
-      ));
+    } on SocketException {
+      _scaffoldKey.currentState.showSnackBar(
+          FailureSnackBar("Something went wrong!")
+      );
     }
 
     return null;
@@ -145,11 +143,10 @@ class _PassengerPageState extends State<PassengerPage> {
   Future<bool> confirmExpense(HateoasDto<ExpenseRequestResponseDto> requestResponse) async {
     try {
       return await ExpenseRestClient.confirmExpense(requestResponse);
-    } on SocketException catch (e) {
-      _scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text('Something went wrong!'),
-        duration: Duration(seconds: 3),
-      ));
+    } on SocketException {
+      _scaffoldKey.currentState.showSnackBar(
+          FailureSnackBar("Something went wrong!")
+      );
     }
   }
 }

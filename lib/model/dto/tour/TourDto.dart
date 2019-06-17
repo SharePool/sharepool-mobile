@@ -6,6 +6,7 @@ class TourDto {
   double cost;
   double kilometers;
   int ownerId;
+  bool active;
 
   TourDto(
       {this.tourId,
@@ -14,7 +15,8 @@ class TourDto {
       this.currency,
       this.cost,
       this.kilometers,
-      this.ownerId});
+        this.ownerId,
+        this.active});
 
   factory TourDto.fromJson(Map<String, dynamic> json) {
     return TourDto(
@@ -24,7 +26,8 @@ class TourDto {
         currency: json['currency'],
         cost: json['cost'],
         kilometers: json['kilometers'],
-        ownerId: json['ownerId']);
+        ownerId: json['ownerId'],
+        active: json['active']);
   }
 
   toJson() {
@@ -33,8 +36,7 @@ class TourDto {
       "to": to,
       "currency": currency,
       "cost": cost,
-      "kilometers": kilometers,
-      "ownerId": ownerId
+      "kilometers": kilometers
     };
   }
 }
