@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/model/dto/user/UserDto.dart';
 import 'package:share_pool/model/dto/user/UserTokenDto.dart';
 import 'package:share_pool/util/PreferencesService.dart';
@@ -18,11 +19,6 @@ class RegisterForm extends StatefulWidget {
 
 class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
-
-  final RegExp emailRegExp = new RegExp(
-      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
-  final RegExp passwordRegExp = new RegExp(
-      r"^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).*$");
 
   String _firstName = "";
   String _lastName = "";
@@ -86,7 +82,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 labelText: "Email",
               ),
               validator: (value) {
-                if (value.isEmpty || !emailRegExp.hasMatch(value)) {
+                if (value.isEmpty || !Constants.emailRegExp.hasMatch(value)) {
                   return "Email must be valid";
                 }
               },
@@ -98,7 +94,8 @@ class _RegisterFormState extends State<RegisterForm> {
               decoration: InputDecoration(labelText: "Password"),
               obscureText: true,
               validator: (value) {
-                if (value.isEmpty || !passwordRegExp.hasMatch(value)) {
+                if (value.isEmpty ||
+                    !Constants.passwordRegExp.hasMatch(value)) {
                   return "Password must have between 8 and 25 characters\nContain lower- and uppercase letters\nand one special character";
                 }
               },

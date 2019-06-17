@@ -45,4 +45,16 @@ class PreferencesService {
     return UserDto.fromJson(
         json.decode(prefs.getString(Constants.SETTINGS_LOGGED_IN_USER)));
   }
+
+  static Future<String> getHomePage() async {
+    var prefs = await SharedPreferences.getInstance();
+
+    return prefs.getString(Constants.SETTINGS_HOME_PAGE);
+  }
+
+  static Future setHomePage(String homePage) async {
+    var prefs = await SharedPreferences.getInstance();
+
+    prefs.setString(Constants.SETTINGS_HOME_PAGE, homePage);
+  }
 }

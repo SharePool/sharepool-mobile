@@ -4,19 +4,25 @@ class UserDto {
   String userName;
   String email;
   String password;
+  String profileImg;
+  double gasConsumption;
 
   UserDto({this.firstName,
     this.lastName,
     this.userName,
     this.email,
-    this.password});
+    this.password,
+    this.profileImg,
+    this.gasConsumption});
 
   UserDto.fromJson(Map<String, dynamic> json)
       : firstName = json['firstName'],
         lastName = json['lastName'],
         userName = json['userName'],
         email = json['email'],
-        password = json['password'];
+        password = json['password'],
+        profileImg = json['profileImg'],
+        gasConsumption = json['gasConsumption'];
 
   dynamic toJson() =>
       {
@@ -24,6 +30,8 @@ class UserDto {
         'lastName': lastName,
         'userName': userName,
         'email': email,
-        'password': password
+        'password': password,
+        'profileImg': profileImg,
+        'gasConsumption': gasConsumption
       };
 }

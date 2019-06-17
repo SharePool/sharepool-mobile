@@ -15,7 +15,7 @@ class UserRestClient {
   static Future<UserCredentialsDto> loginUser(UserLoginDto userLoginDto) async {
     var body = json.encode(userLoginDto);
 
-    var response = await post(BASE_URL,
+    var response = await post(BASE_URL + "/logins",
         body: body, headers: {"Content-Type": "application/json"});
 
     print(response.body);
@@ -31,7 +31,7 @@ class UserRestClient {
       UserDto registerUserDto) async {
     var body = json.encode(registerUserDto);
 
-    var response = await put(BASE_URL,
+    var response = await post(BASE_URL,
         body: body, headers: {"Content-Type": "application/json"});
 
     print(response.body);
@@ -56,5 +56,16 @@ class UserRestClient {
     }
 
     return null;
+  }
+
+  static Future<bool> updateUser(UserDto userDto) async {
+    var body = json.encode(userDto);
+
+    var response = await put(BASE_URL,
+        body: body, headers: {"Content-Type": "application/json"});
+
+    print(response.body);
+
+    return response.statusCode == 200;
   }
 }
