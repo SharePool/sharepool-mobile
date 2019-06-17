@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:share_pool/common/SnackBars.dart';
 import 'package:share_pool/common/Constants.dart';
+import 'package:share_pool/common/SnackBars.dart';
 import 'package:share_pool/model/dto/user/UserDto.dart';
 import 'package:share_pool/model/dto/user/UserTokenDto.dart';
 import 'package:share_pool/util/PreferencesService.dart';
@@ -148,9 +148,8 @@ class _RegisterFormState extends State<RegisterForm> {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => widget.followingPage));
     } else {
-      widget._scaffoldKey.currentState.showSnackBar(
-          FailureSnackBar("Something went wrong!")
-      );
+      widget._scaffoldKey.currentState
+          .showSnackBar(FailureSnackBar("Something went wrong!"));
     }
   }
 }
