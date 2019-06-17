@@ -107,6 +107,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       );
                     }).toList(),
                   ),
+                  Image.memory(base64Decode(profileImg)),
                   FlatButton(
                     child: Text("Change Profile-Picture"),
                     onPressed: () {
@@ -195,7 +196,10 @@ class _SettingsPageState extends State<SettingsPage> {
     String encodedImg = base64Encode(picture.readAsBytesSync());
     print(encodedImg);
 
-    profileImg = encodedImg;
+    setState(() {
+      profileImg = encodedImg;
+    });
+
     Navigator.pop(context);
   }
 
@@ -205,7 +209,11 @@ class _SettingsPageState extends State<SettingsPage> {
     );
 
     String encodedImg = base64Encode(galleryPicture.readAsBytesSync());
-    profileImg = encodedImg;
+
+    setState(() {
+      profileImg = encodedImg;
+    });
+
     Navigator.pop(context);
   }
 
