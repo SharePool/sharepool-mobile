@@ -36,9 +36,7 @@ class TourDto {
       "to": to,
       "currency": currency,
       "cost": cost,
-      "kilometers": kilometers,
-      "ownerId": ownerId,
-      "active": active
+      "kilometers": kilometers
     };
   }
 }
