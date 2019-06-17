@@ -51,6 +51,7 @@ class _TourEditPageState extends State<TourEditPage> {
                 TextFormField(
                   decoration: InputDecoration(
                     labelText: "Starting point",
+                      suffixIcon: Icon(Icons.location_on)
                   ),
                   validator: (value) {
                     if (value.isEmpty) {
@@ -63,7 +64,10 @@ class _TourEditPageState extends State<TourEditPage> {
                   initialValue: tourDto.from,
                 ),
                 TextFormField(
-                  decoration: InputDecoration(labelText: "Destination"),
+                  decoration: InputDecoration(
+                      labelText: "Destination",
+                      suffixIcon: Icon(Icons.flag)
+                  ),
                   validator: (value) {
                     if (value.isEmpty) {
                       return "Destination must be set";
@@ -74,28 +78,57 @@ class _TourEditPageState extends State<TourEditPage> {
                   },
                   initialValue: tourDto.to,
                 ),
-                CurrencyDropdown(
-                  onSaved: handleCurrency,
-                  initialValue:
-                  currencyfromString(tourDto.currency) ?? Currency.EUR,
-                ),
                 TextFormField(
-                  decoration: InputDecoration(labelText: "Tour cost"),
                   keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return "Cost must be set";
-                    }
-
-                    if (double.parse(value) < 0.1) {
-                      return "Value must be over 0.1";
-                    }
-                  },
+                  decoration: InputDecoration(
+                      labelText: "Estimated Kilometers",
+                      suffixIcon: Icon(Icons.transfer_within_a_station)
+                  ),
                   onSaved: (String value) {
-                    tourDto.cost = double.parse(value);
+                    tourDto.kilometers = double.parse(value);
                   },
-                  initialValue:
-                  tourDto.cost == null ? null : tourDto.cost.toString(),
+                  initialValue: tourDto.kilometers == null ? null : tourDto
+                      .kilometers.toStringAsFixed(2),
+                ),
+                Row(
+                    children: <Widget>[
+                      Flexible(
+                        flex: 1,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 11),
+                          child: CurrencyDropdown(
+                            onSaved: handleCurrency,
+                            initialValue:
+                            currencyfromString(tourDto.currency) ??
+                                Currency.EUR,
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 2,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                              labelText: "Tour cost",
+                              suffixIcon: Icon(Icons.attach_money)
+                          ),
+                          keyboardType: TextInputType.number,
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return "Cost must be set";
+                            }
+
+                            if (double.parse(value) < 0.1) {
+                              return "Value must be over 0.1";
+                            }
+                          },
+                          onSaved: (String value) {
+                            tourDto.cost = double.parse(value);
+                          },
+                          initialValue: tourDto.cost == null ? null : tourDto
+                              .cost.toStringAsFixed(2),
+                        ),
+                      ),
+                    ]
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
