@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:share_pool/common/SnackBars.dart';
 import 'package:share_pool/model/dto/user/UserDto.dart';
 import 'package:share_pool/util/PreferencesService.dart';
 import 'package:share_pool/util/rest/UserRestClient.dart';
@@ -22,6 +23,7 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  final _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   MyDrawer myDrawer;
 
@@ -35,7 +37,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
   final TextEditingController _emailController = new TextEditingController();
   final TextEditingController _userNameController = new TextEditingController();
-  final TextEditingController _gasConsumptionController = new TextEditingController();
+  final TextEditingController _gasConsumptionController =
+  new TextEditingController();
 
   _SettingsPageState(MyDrawer myDrawer) {
     this.myDrawer = myDrawer;
@@ -144,11 +147,13 @@ class _SettingsPageState extends State<SettingsPage> {
       gasConsumption = user.gasConsumption;
       _gasConsumptionController.text = gasConsumption.toString();
 
+      profileImg = user.profileImg;
+
       homePage = homePagePref;
     });
   }
 
-  void doSave() {
+  Future doSave() async {
     if (homePage != null && homePage.isNotEmpty) {
       PreferencesService.setHomePage(homePage);
     }
@@ -175,9 +180,10 @@ class _SettingsPageState extends State<SettingsPage> {
       changed = true;
     }
 
-    if (changed) {
-      UserRestClient.updateUser(user);
+    if (changed && await UserRestClient.updateUser(user)) {
       PreferencesService.saveLoggedInUser(user);
+      _scaffoldKey.currentState
+          .showSnackBar(new SuccessSnackBar("Info updated."));
     }
   }
 
