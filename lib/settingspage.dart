@@ -181,10 +181,15 @@ class _SettingsPageState extends State<SettingsPage> {
       changed = true;
     }
 
-    if (changed && await UserRestClient.updateUser(user)) {
-      PreferencesService.saveLoggedInUser(user);
-      _scaffoldKey.currentState
-          .showSnackBar(new SuccessSnackBar("Info updated."));
+    if (changed) {
+      if (await UserRestClient.updateUser(user)) {
+        PreferencesService.saveLoggedInUser(user);
+        _scaffoldKey.currentState
+            .showSnackBar(new SuccessSnackBar("Info updated."));
+      } else {
+        _scaffoldKey.currentState
+            .showSnackBar(new FailureSnackBar("Something went wrong."));
+      }
     }
   }
 
