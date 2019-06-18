@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:share_pool/common/SnackBars.dart';
 import 'package:share_pool/model/dto/user/UserLoginDto.dart';
 import 'package:share_pool/model/dto/user/UserTokenDto.dart';
 import 'package:share_pool/util/PreferencesService.dart';
@@ -92,16 +93,14 @@ class _LoginFormState extends State<LoginForm> {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => widget.followingPage));
       } else {
-        widget._scaffoldKey.currentState.showSnackBar(SnackBar(
-          content: Text('Invalid Credentials'),
-          duration: Duration(seconds: 3),
-        ));
+        widget._scaffoldKey.currentState.showSnackBar(
+            FailureSnackBar("Invalid Credentials!")
+        );
       }
-    } on SocketException catch (e) {
-      widget._scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text('Something went wrong!'),
-        duration: Duration(seconds: 3),
-      ));
+    } on SocketException {
+      widget._scaffoldKey.currentState.showSnackBar(
+          FailureSnackBar("Something went wrong!")
+      );
     }
   }
 }

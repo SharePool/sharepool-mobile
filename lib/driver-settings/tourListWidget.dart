@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:share_pool/common/SnackBars.dart';
 import 'package:share_pool/common/currency.dart';
 import 'package:share_pool/model/dto/tour/TourDto.dart';
 import 'package:share_pool/mydrawer.dart';
@@ -29,6 +30,8 @@ class TourListWidget extends StatefulWidget {
 }
 
 class _TourListWidgetState extends State<TourListWidget> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -43,7 +46,10 @@ class _TourListWidgetState extends State<TourListWidget> {
               onDismissed: (direction) {
                 deleteTour(direction, tour);
               },
-              background: Container(color: Colors.red),
+              background: Card(
+                margin: const EdgeInsets.all(10),
+                color: Colors.red,
+              ),
               direction: DismissDirection.endToStart,
             );
           } else {
@@ -59,11 +65,10 @@ class _TourListWidgetState extends State<TourListWidget> {
       setState(() {
         widget.tours.remove(tour);
       });
-    } on SocketException catch (e) {
-      widget.scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text("Tour couldn't be deleted!"),
-        duration: Duration(seconds: 3),
-      ));
+    } on SocketException {
+      _scaffoldKey.currentState.showSnackBar(
+          FailureSnackBar("Tour couldn't be deleted!")
+      );
     }
   }
 }
@@ -77,32 +82,34 @@ class TourCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-        margin: const EdgeInsets.all(10),
-        child: InkWell(
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Row(
-              children: <Widget>[
-                Text(
-                  tour.from,
-                  style: TextStyle(fontSize: 18),
+    return Opacity(
+        opacity: tour.active ? 1 : .5,
+        child: Card(
+            margin: const EdgeInsets.all(10),
+            child: InkWell(
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      tour.from,
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    Icon(Icons.arrow_forward),
+                    Text(tour.to, style: TextStyle(fontSize: 18)),
+                    Spacer(),
+                    Text(buildCurrencyString(), style: TextStyle(fontSize: 18))
+                  ],
                 ),
-                Icon(Icons.arrow_forward),
-                Text(tour.to, style: TextStyle(fontSize: 18)),
-                Spacer(),
-                Text(buildCurrencyString(), style: TextStyle(fontSize: 18))
-              ],
-            ),
-          ),
-          onTap: () =>
-          tourTapCallback != null
-              ? tourTapCallback(context, myDrawer, tour)
-              : Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => TourEditPage(myDrawer, tour))),
-        ));
+              ),
+              onTap: () =>
+              tourTapCallback != null
+                  ? tourTapCallback(context, myDrawer, tour)
+                  : Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => TourEditPage(myDrawer, tour))),
+            )));
   }
 
   String buildCurrencyString() =>
