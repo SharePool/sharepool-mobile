@@ -107,7 +107,7 @@ class _RegisterFormState extends State<RegisterForm> {
             ),
             TextFormField(
               decoration: InputDecoration(
-                labelText: "Gas Consumption (l per 100 km",
+                labelText: "Gas Consumption (l per 100 km)",
               ),
               validator: (value) {
                 double gasConsumption = double.parse(value);
