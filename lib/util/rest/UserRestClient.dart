@@ -17,7 +17,7 @@ class UserRestClient {
   static Future<UserCredentialsDto> loginUser(UserLoginDto userLoginDto) async {
     var body = json.encode(userLoginDto);
 
-    var response = await put(BASE_URL + "/logins",
+    var response = await put(BASE_URL + "/login",
         body: body,
         headers: {HttpHeaders.contentTypeHeader: ContentType.json.value});
 
