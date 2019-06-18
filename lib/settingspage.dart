@@ -32,7 +32,7 @@ class _SettingsPageState extends State<SettingsPage> {
   String email = "";
   String userName = "";
   String homePage = "";
-  String profileImg = "";
+  String profileImg;
   double gasConsumption = 0.0;
 
   final TextEditingController _emailController = new TextEditingController();
@@ -106,7 +106,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       );
                     }).toList(),
                   ),
-                  Image.memory(base64Decode(profileImg ?? "")),
+                  showProfileImage(),
                   FlatButton(
                     child: Text("Change Profile-Picture"),
                     onPressed: () {
@@ -256,5 +256,13 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           );
         });
+  }
+
+  Widget showProfileImage() {
+    if (profileImg != null && profileImg.length > 0) {
+      return Image.memory(base64Decode(profileImg));
+    } else {
+      return Image.asset('assets/profile_img_placeholder.png',);
+    }
   }
 }
