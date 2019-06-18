@@ -84,7 +84,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 labelText: "Email",
               ),
               validator: (value) {
-                if (value.isEmpty || !Constants.emailRegExp.hasMatch(value)) {
+                if (value.isEmpty || !Constants.EMAIL_REG_EXP.hasMatch(value)) {
                   return "Email must be valid";
                 }
               },
@@ -97,7 +97,7 @@ class _RegisterFormState extends State<RegisterForm> {
               obscureText: true,
               validator: (value) {
                 if (value.isEmpty ||
-                    !Constants.passwordRegExp.hasMatch(value)) {
+                    !Constants.PASSWORD_REG_EXP.hasMatch(value)) {
                   return "Password must have between 8 and 25 characters\nContain lower- and uppercase letters\nand one special character";
                 }
               },
