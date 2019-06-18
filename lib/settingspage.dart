@@ -37,8 +37,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   final TextEditingController _emailController = new TextEditingController();
   final TextEditingController _userNameController = new TextEditingController();
-  final TextEditingController _gasConsumptionController =
-  new TextEditingController();
+  final TextEditingController _gasConsumptionController = new TextEditingController();
 
   _SettingsPageState(MyDrawer myDrawer) {
     this.myDrawer = myDrawer;
@@ -107,7 +106,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       );
                     }).toList(),
                   ),
-                  Image.memory(base64Decode(profileImg)),
+                  Image.memory(base64Decode(profileImg ?? "")),
                   FlatButton(
                     child: Text("Change Profile-Picture"),
                     onPressed: () {
@@ -182,11 +181,18 @@ class _SettingsPageState extends State<SettingsPage> {
     }
 
     if (changed) {
-      if (await UserRestClient.updateUser(user)) {
-        PreferencesService.saveLoggedInUser(user);
-        _scaffoldKey.currentState
-            .showSnackBar(new SuccessSnackBar("Info updated."));
-      } else {
+      try {
+        bool updated = await UserRestClient.updateUser(user);
+
+        if (updated) {
+          PreferencesService.saveLoggedInUser(user);
+          _scaffoldKey.currentState
+              .showSnackBar(new SuccessSnackBar("Info updated."));
+        } else {
+          _scaffoldKey.currentState
+              .showSnackBar(new FailureSnackBar("Something went wrong."));
+        }
+      } on SocketException catch (e) {
         _scaffoldKey.currentState
             .showSnackBar(new FailureSnackBar("Something went wrong."));
       }
