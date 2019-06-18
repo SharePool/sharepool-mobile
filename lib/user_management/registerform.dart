@@ -26,6 +26,7 @@ class _RegisterFormState extends State<RegisterForm> {
   String _userName = "";
   String _email = "";
   String _password = "";
+  double _gasConsumption;
 
   @override
   Widget build(BuildContext context) {
@@ -104,6 +105,21 @@ class _RegisterFormState extends State<RegisterForm> {
                 _password = value;
               },
             ),
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: "Gas Consumption (l per 100 km",
+              ),
+              validator: (value) {
+                double gasConsumption = double.parse(value);
+
+                if (gasConsumption < 0) {
+                  return "Gas Consumption must greater or equals 0";
+                }
+              },
+              onSaved: (String value) {
+                _gasConsumption = double.parse(value);
+              },
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Row(
@@ -135,7 +151,8 @@ class _RegisterFormState extends State<RegisterForm> {
           lastName: _lastName,
           userName: _userName,
           email: _email,
-          password: _password));
+          password: _password,
+          gasConsumption: _gasConsumption));
     } on SocketException catch (e) {
       // NOP: is handled by null check below
     }
