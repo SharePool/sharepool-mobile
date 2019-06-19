@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/common/SnackBars.dart';
 import 'package:share_pool/model/dto/user/UserDto.dart';
 import 'package:share_pool/util/PreferencesService.dart';
@@ -65,28 +66,44 @@ class _SettingsPageState extends State<SettingsPage> {
               padding: EdgeInsets.symmetric(horizontal: 25.0),
               child: Column(
                 children: <Widget>[
-                  TextField(
+                  TextFormField(
                     decoration: const InputDecoration(labelText: "UserName"),
-                    autocorrect: false,
                     controller: _userNameController,
-                    onChanged: (String value) {
+                    validator: (value) {
+                      int strLen = value.length;
+                      if (strLen < 5 || strLen > 20) {
+                        return "Username must have between 5 and 20 characters";
+                      }
+                    },
+                    onSaved: (String value) {
                       userName = value;
                     },
                   ),
-                  TextField(
+                  TextFormField(
                     decoration: const InputDecoration(labelText: "Email"),
-                    autocorrect: false,
                     controller: _emailController,
-                    onChanged: (String value) {
+                    validator: (value) {
+                      if (value.isEmpty ||
+                          !Constants.EMAIL_REG_EXP.hasMatch(value)) {
+                        return "Email must be valid";
+                      }
+                    },
+                    onSaved: (String value) {
                       email = value;
                     },
                   ),
-                  TextField(
+                  TextFormField(
                     decoration: const InputDecoration(
-                        labelText: "Gas Consumption (l per 100 km"),
-                    autocorrect: false,
+                        labelText: "Gas Consumption (l per 100 km)"),
                     controller: _gasConsumptionController,
-                    onChanged: (String value) {
+                    validator: (value) {
+                      double gasConsumption = double.parse(value);
+
+                      if (gasConsumption < 0) {
+                        return "Gas Consumption must be greater than or equal 0";
+                      }
+                    },
+                    onSaved: (String value) {
                       gasConsumption = double.parse(value);
                     },
                   ),

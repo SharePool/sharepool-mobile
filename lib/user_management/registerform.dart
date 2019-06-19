@@ -113,7 +113,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 double gasConsumption = double.parse(value);
 
                 if (gasConsumption < 0) {
-                  return "Gas Consumption must be greater then or equal 0";
+                  return "Gas Consumption must be greater than or equal 0";
                 }
               },
               onSaved: (String value) {
