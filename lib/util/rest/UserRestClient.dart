@@ -17,13 +17,9 @@ class UserRestClient {
   static Future<UserCredentialsDto> loginUser(UserLoginDto userLoginDto) async {
     var body = json.encode(userLoginDto);
 
-    var response = await put(
-        BASE_URL,
+    var response = await put(BASE_URL + "/login",
         body: body,
-        headers: {
-          HttpHeaders.contentTypeHeader: ContentType.json.value
-        }
-    );
+        headers: {HttpHeaders.contentTypeHeader: ContentType.json.value});
 
     print(response.body);
 
@@ -38,13 +34,9 @@ class UserRestClient {
       UserDto registerUserDto) async {
     var body = json.encode(registerUserDto);
 
-    var response = await post(
-        BASE_URL,
+    var response = await post(BASE_URL,
         body: body,
-        headers: {
-          HttpHeaders.contentTypeHeader: ContentType.json.value
-        }
-    );
+        headers: {HttpHeaders.contentTypeHeader: ContentType.json.value});
 
     print(response.body);
 
@@ -56,14 +48,10 @@ class UserRestClient {
   }
 
   static Future<UserDto> getUser() async {
-    var response = await get(
-        BASE_URL,
-        headers: {
-          HttpHeaders.contentTypeHeader: ContentType.json.value,
-          HttpHeaders.authorizationHeader: await PreferencesService
-              .getUserToken()
-        }
-    );
+    var response = await get(BASE_URL, headers: {
+      HttpHeaders.contentTypeHeader: ContentType.json.value,
+      HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
+    });
 
     print(response.body);
 
@@ -72,5 +60,18 @@ class UserRestClient {
     }
 
     return null;
+  }
+
+  static Future<bool> updateUser(UserDto userDto) async {
+    var body = json.encode(userDto);
+
+    var response = await put(BASE_URL, body: body, headers: {
+      HttpHeaders.contentTypeHeader: ContentType.json.value,
+      HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
+    });
+
+    print(response.body);
+
+    return response.statusCode == 200;
   }
 }

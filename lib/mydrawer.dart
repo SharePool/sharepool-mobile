@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:share_pool/settingspage.dart';
 import 'package:share_pool/user_management/usermanagementpage.dart';
@@ -17,9 +19,7 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-
   UserDto userDto;
-
 
   @override
   void initState() {
@@ -35,8 +35,8 @@ class _MyDrawerState extends State<MyDrawer> {
             accountName: Text(userDto?.userName ?? ""),
             accountEmail: Text(userDto?.email ?? ""),
             currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  "https://images.sk-static.com/images/media/img/col6/20180129-145533-323755.jpg"),
+              backgroundImage: MemoryImage(
+                  base64Decode(userDto?.profileImg ?? "")),
             ),
           ),
           ListTile(
@@ -81,7 +81,8 @@ class _MyDrawerState extends State<MyDrawer> {
   void logoutUser(BuildContext context) async {
     PreferencesService.deleteUserInfo();
 
-    Navigator.pushReplacement(context,
+    Navigator.pushReplacement(
+        context,
         MaterialPageRoute(
             builder: (context) => new UserManagementPage(widget.driverPage)));
   }
