@@ -38,7 +38,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
   final TextEditingController _emailController = new TextEditingController();
   final TextEditingController _userNameController = new TextEditingController();
-  final TextEditingController _gasConsumptionController = new TextEditingController();
+  final TextEditingController _gasConsumptionController =
+  new TextEditingController();
 
   _SettingsPageState(MyDrawer myDrawer) {
     this.myDrawer = myDrawer;
@@ -95,6 +96,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   TextFormField(
                     decoration: const InputDecoration(
                         labelText: "Gas Consumption (l per 100 km)"),
+                    keyboardType: TextInputType.numberWithOptions(
+                        signed: false, decimal: true),
                     controller: _gasConsumptionController,
                     validator: (value) {
                       double gasConsumption = double.parse(value);
@@ -107,22 +110,31 @@ class _SettingsPageState extends State<SettingsPage> {
                       gasConsumption = double.parse(value);
                     },
                   ),
-                  DropdownButton<String>(
-                    value: homePage,
-                    isExpanded: true,
-                    onChanged: (String newValue) {
-                      setState(() {
-                        homePage = newValue;
-                      });
-                    },
-                    items: <String>['Driver', 'Passenger']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
+                  Row(children: <Widget>[
+                    Flexible(flex: 1, child: Text("Homepage:")),
+                    Flexible(
+                        flex: 3,
+                        child: Container(
+                            margin: EdgeInsets.only(left: 15),
+                            child: DropdownButton<String>(
+                              value: homePage,
+                              isExpanded: true,
+                              onChanged: (String newValue) {
+                                setState(() {
+                                  homePage = newValue;
+                                });
+                              },
+                              items: <String>[
+                                'Driver',
+                                'Passenger'
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            )))
+                  ]),
                   showProfileImage(),
                   FlatButton(
                     child: Text("Change Profile-Picture"),
@@ -277,9 +289,15 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget showProfileImage() {
     if (profileImg != null && profileImg.length > 0) {
-      return Image.memory(base64Decode(profileImg));
+      return Image.memory(
+        base64Decode(profileImg),
+        height: 100,
+      );
     } else {
-      return Image.asset('assets/profile_img_placeholder.png',);
+      return Image.asset(
+        'assets/profile_img_placeholder.png',
+        height: 100,
+      );
     }
   }
 }
