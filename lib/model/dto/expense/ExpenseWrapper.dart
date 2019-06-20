@@ -6,10 +6,15 @@ class ExpensesWrapper {
 
   ExpensesWrapper(this.receivingExpenses, this.payedExpenses);
 
-  ExpensesWrapper.fromJson(Map<String, dynamic> json) {
-    var receivingExpenses = json["receivingExpenses"];
-    var payedExpenses = json["payedExpenses"];
+  factory ExpensesWrapper.fromJson(Map<String, dynamic> json) {
+    var receivingExpenses = json["receivingExpenses"] as List<dynamic>;
+    var payedExpenses = json["payedExpenses"] as List<dynamic>;
 
-    // todo deseriliaze correctly
+    receivingExpenses =
+        receivingExpenses.map((json) => ExpenseDto.fromJson(json)).toList();
+    payedExpenses =
+        payedExpenses.map((json) => ExpenseDto.fromJson(json)).toList();
+
+    return ExpensesWrapper(receivingExpenses, payedExpenses);
   }
 }

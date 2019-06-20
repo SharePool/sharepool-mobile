@@ -56,13 +56,21 @@ class ExpenseRestClient {
     var response;
     if (receiverId != null) {
       response =
-          await get(BASE_URL + "receiverId=" + receiverId.toString(), headers: {
-        HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
-      });
+      await get(
+          "$BASE_URL?receiverId=${receiverId.toString()}",
+          headers: {
+            HttpHeaders.authorizationHeader: await PreferencesService
+                .getUserToken()
+          }
+      );
     } else {
-      response = await get(BASE_URL, headers: {
-        HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
-      });
+      response = await get(
+          BASE_URL,
+          headers: {
+            HttpHeaders.authorizationHeader: await PreferencesService
+                .getUserToken()
+          }
+      );
     }
 
     print(response.body);
@@ -74,7 +82,7 @@ class ExpenseRestClient {
     return null;
   }
 
-  static Future<double> getTotalBalancegetAllExpensesForLoggedInUser() async {
+  static Future<double> getTotalBalance() async {
     var response = await get(
         "$BASE_URL/balance",
         headers: {
