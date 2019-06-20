@@ -59,7 +59,8 @@ class _SettingsPageState extends State<SettingsPage> {
         title: Text(widget.title),
       ),
       drawer: myDrawer,
-      body: new Column(
+      body: ListView(
+        shrinkWrap: true,
         children: <Widget>[
           Form(
             key: _formKey,
