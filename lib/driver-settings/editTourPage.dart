@@ -79,7 +79,8 @@ class _TourEditPageState extends State<TourEditPage> {
                   initialValue: tourDto.to,
                 ),
                 TextFormField(
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.numberWithOptions(
+                      signed: false, decimal: true),
                   decoration: InputDecoration(
                       labelText: "Estimated Kilometers",
                       suffixIcon: Icon(Icons.transfer_within_a_station)
@@ -111,7 +112,8 @@ class _TourEditPageState extends State<TourEditPage> {
                               labelText: "Tour cost",
                               suffixIcon: Icon(Icons.attach_money)
                           ),
-                          keyboardType: TextInputType.number,
+                          keyboardType: TextInputType.numberWithOptions(
+                              signed: false, decimal: true),
                           validator: (value) {
                             if (value.isEmpty) {
                               return "Cost must be set";

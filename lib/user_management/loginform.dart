@@ -29,7 +29,8 @@ class _LoginFormState extends State<LoginForm> {
       key: _formKey,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 25.0),
-        child: Column(
+        child: ListView(
+          shrinkWrap: true,
           children: <Widget>[
             TextFormField(
               keyboardType: TextInputType.emailAddress,
