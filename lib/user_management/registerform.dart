@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/common/SnackBars.dart';
 import 'package:share_pool/model/dto/user/UserDto.dart';
 import 'package:share_pool/model/dto/user/UserTokenDto.dart';
@@ -20,16 +21,12 @@ class RegisterForm extends StatefulWidget {
 class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
 
-  final RegExp emailRegExp = new RegExp(
-      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
-  final RegExp passwordRegExp = new RegExp(
-      r"^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).*$");
-
   String _firstName = "";
   String _lastName = "";
   String _userName = "";
   String _email = "";
   String _password = "";
+  double _gasConsumption;
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +84,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 labelText: "Email",
               ),
               validator: (value) {
-                if (value.isEmpty || !emailRegExp.hasMatch(value)) {
+                if (value.isEmpty || !Constants.EMAIL_REG_EXP.hasMatch(value)) {
                   return "Email must be valid";
                 }
               },
@@ -99,12 +96,28 @@ class _RegisterFormState extends State<RegisterForm> {
               decoration: InputDecoration(labelText: "Password"),
               obscureText: true,
               validator: (value) {
-                if (value.isEmpty || !passwordRegExp.hasMatch(value)) {
+                if (value.isEmpty ||
+                    !Constants.PASSWORD_REG_EXP.hasMatch(value)) {
                   return "Password must have between 8 and 25 characters\nContain lower- and uppercase letters\nand one special character";
                 }
               },
               onSaved: (String value) {
                 _password = value;
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: "Gas Consumption (l per 100 km)",
+              ),
+              validator: (value) {
+                double gasConsumption = double.parse(value);
+
+                if (gasConsumption < 0) {
+                  return "Gas Consumption must be greater than or equal 0";
+                }
+              },
+              onSaved: (String value) {
+                _gasConsumption = double.parse(value);
               },
             ),
             Padding(
@@ -138,7 +151,8 @@ class _RegisterFormState extends State<RegisterForm> {
           lastName: _lastName,
           userName: _userName,
           email: _email,
-          password: _password));
+          password: _password,
+          gasConsumption: _gasConsumption));
     } on SocketException catch (e) {
       // NOP: is handled by null check below
     }
@@ -151,9 +165,8 @@ class _RegisterFormState extends State<RegisterForm> {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => widget.followingPage));
     } else {
-      widget._scaffoldKey.currentState.showSnackBar(
-          FailureSnackBar("Something went wrong!")
-      );
+      widget._scaffoldKey.currentState
+          .showSnackBar(FailureSnackBar("Something went wrong!"));
     }
   }
 }
