@@ -75,9 +75,11 @@ class ExpensesPerUserWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: _expensesWrapper.expenses.length,
+        itemCount: _expensesWrapper?.expenses == null
+            ? 0
+            : _expensesWrapper?.expenses?.length,
         itemBuilder: (BuildContext context, int index) {
-          var expensePerReceiver = _expensesWrapper.expenses[index];
+          var expensePerReceiver = _expensesWrapper?.expenses[index];
 
           return InkWell(
             child: Padding(
@@ -92,12 +94,13 @@ class ExpensesPerUserWidget extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 5),
                         child: Text(
                           expensePerReceiver.userDto.userName,
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ),
                       Spacer(),
                       Text(_getFittingText(expensePerReceiver.sumOfExpenses)),
-                      Text(expensePerReceiver.sumOfExpenses.toStringAsFixed(2),
+                      Text(_fixUpNegative(expensePerReceiver.sumOfExpenses),
                           style: TextStyle(
                               fontSize: 16,
                               color: _getFittingColor(
@@ -147,7 +150,7 @@ class TotalBalanceWidget extends StatelessWidget {
                       style: TextStyle(fontSize: 18),
                     ),
                     Text(
-                      _userBalance?.toStringAsFixed(2),
+                      _fixUpNegative(_userBalance),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 20, color: _getFittingColor(_userBalance)),
@@ -169,4 +172,10 @@ Color _getFittingColor(double amount) {
 
 String _getFittingText(double amount) {
   return amount <= 0 ? "You owe: " : "You are owed: ";
+}
+
+String _fixUpNegative(double amount) {
+  return amount < 0
+      ? (amount * -1).toStringAsFixed(2)
+      : amount.toStringAsFixed(2);
 }
