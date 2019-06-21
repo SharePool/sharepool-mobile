@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:share_pool/common/images.dart';
 import 'package:share_pool/model/dto/expense/ExpenseWrapper.dart';
+import 'package:share_pool/statistics/singleUserExpensesPage.dart';
 import 'package:share_pool/util/rest/ExpenseRestClient.dart';
 
 import '../mydrawer.dart';
@@ -55,7 +56,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
           children: <Widget>[
             TotalBalanceWidget(userBalance: _userBalance),
             Flexible(
-              child: ExpensesPerUserWidget(expensesWrapper: _expensesWrapper),
+              child: ExpensesPerUserWidget(widget.myDrawer, _expensesWrapper),
             )
           ],
         ));
@@ -63,14 +64,12 @@ class _StatisticsPageState extends State<StatisticsPage> {
 }
 
 class ExpensesPerUserWidget extends StatelessWidget {
-  const ExpensesPerUserWidget({
-    Key key,
-    @required ExpensesWrapper expensesWrapper,
-  })
-      : _expensesWrapper = expensesWrapper,
-        super(key: key);
 
   final ExpensesWrapper _expensesWrapper;
+
+  MyDrawer myDrawer;
+
+  ExpensesPerUserWidget(this.myDrawer, this._expensesWrapper);
 
   @override
   Widget build(BuildContext context) {
@@ -99,17 +98,24 @@ class ExpensesPerUserWidget extends StatelessWidget {
                         ),
                       ),
                       Spacer(),
-                      Text(_getFittingText(expensePerReceiver.sumOfExpenses)),
-                      Text(_fixUpNegative(expensePerReceiver.sumOfExpenses),
+                      Text(getFittingText(expensePerReceiver.sumOfExpenses)),
+                      Text(fixUpNegative(expensePerReceiver.sumOfExpenses),
                           style: TextStyle(
                               fontSize: 16,
-                              color: _getFittingColor(
+                              color: getFittingColor(
                                   expensePerReceiver.sumOfExpenses))),
                     ],
                   ),
                 ),
               ),
             ),
+            onTap: () =>
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            SingleUserExpensesPage(
+                                myDrawer, expensePerReceiver))),
           );
         });
   }
@@ -145,15 +151,15 @@ class TotalBalanceWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      _getFittingText(_userBalance),
+                      getFittingText(_userBalance),
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 18),
                     ),
                     Text(
-                      _fixUpNegative(_userBalance),
+                      fixUpNegative(_userBalance),
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: 20, color: _getFittingColor(_userBalance)),
+                          fontSize: 20, color: getFittingColor(_userBalance)),
                     )
                   ],
                 )
@@ -166,15 +172,15 @@ class TotalBalanceWidget extends StatelessWidget {
   }
 }
 
-Color _getFittingColor(double amount) {
+Color getFittingColor(double amount) {
   return amount <= 0 ? Colors.redAccent : Colors.greenAccent;
 }
 
-String _getFittingText(double amount) {
+String getFittingText(double amount) {
   return amount <= 0 ? "You owe: " : "You are owed: ";
 }
 
-String _fixUpNegative(double amount) {
+String fixUpNegative(double amount) {
   return amount < 0
       ? (amount * -1).toStringAsFixed(2)
       : amount.toStringAsFixed(2);
