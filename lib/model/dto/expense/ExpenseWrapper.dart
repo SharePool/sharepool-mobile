@@ -1,20 +1,20 @@
-import 'ExpenseDto.dart';
+import 'package:share_pool/model/dto/expense/ExpensePerUserDto.dart';
 
 class ExpensesWrapper {
-  List<ExpenseDto> receivingExpenses;
-  List<ExpenseDto> payedExpenses;
+  double totalBalance;
+  List<ExpensePerUserDto> expenses;
 
-  ExpensesWrapper(this.receivingExpenses, this.payedExpenses);
+  ExpensesWrapper(this.totalBalance, this.expenses);
 
   factory ExpensesWrapper.fromJson(Map<String, dynamic> json) {
-    var receivingExpenses = json["receivingExpenses"] as List<dynamic>;
-    var payedExpenses = json["payedExpenses"] as List<dynamic>;
+    var expenses = json["expenses"] as List;
 
-    receivingExpenses =
-        receivingExpenses.map((json) => ExpenseDto.fromJson(json)).toList();
-    payedExpenses =
-        payedExpenses.map((json) => ExpenseDto.fromJson(json)).toList();
+    List<ExpensePerUserDto> expensesPerUser = expenses.map((i) =>
+        ExpensePerUserDto.fromJson(i)).toList();
 
-    return ExpensesWrapper(receivingExpenses, payedExpenses);
+    return ExpensesWrapper(
+        json["totalBalance"],
+        expensesPerUser
+    );
   }
 }

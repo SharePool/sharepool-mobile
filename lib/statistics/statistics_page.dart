@@ -34,12 +34,11 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   void loadUserBalance() async {
-    var totalBalance = await ExpenseRestClient.getTotalBalance();
-    var expensesWrapper = await ExpenseRestClient
-        .getAllExpensesForLoggedInUser();
+    var expensesWrapper =
+    await ExpenseRestClient.getAllExpensesForLoggedInUser();
 
     setState(() {
-      _userBalance = totalBalance;
+      _userBalance = expensesWrapper.totalBalance;
       _expensesWrapper = expensesWrapper;
     });
   }
@@ -53,7 +52,18 @@ class _StatisticsPageState extends State<StatisticsPage> {
       drawer: myDrawer,
       body: ListView(
         children: <Widget>[
-          TotalBalanceWidget(userBalance: _userBalance)
+          TotalBalanceWidget(userBalance: _userBalance),
+//          ListView.builder(
+//              itemCount: _expensesWrapper == null
+//                  ? 0
+//                  : _expensesWrapper.payedExpenses.length,
+//              itemBuilder: (context, index) {
+//                var payedExpense = _expensesWrapper.payedExpenses[index];
+//
+//                return Card(
+//                  child: Text(payedExpense.amount.toStringAsFixed(2)),
+//                );
+//              })
         ],
       ),
     );
@@ -84,10 +94,7 @@ class TotalBalanceWidget extends StatelessWidget {
                 Text(
                   "Total Balance",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 24,
-                      color: Colors.teal
-                  ),
+                  style: TextStyle(fontSize: 24, color: Colors.teal),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -95,9 +102,7 @@ class TotalBalanceWidget extends StatelessWidget {
                     Text(
                       _userBalance <= 0 ? "You owe: " : "You are owed: ",
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 18
-                      ),
+                      style: TextStyle(fontSize: 18),
                     ),
                     Text(
                       _userBalance?.toStringAsFixed(2),
@@ -106,8 +111,7 @@ class TotalBalanceWidget extends StatelessWidget {
                           fontSize: 20,
                           color: _userBalance <= 0
                               ? Colors.redAccent
-                              : Colors.greenAccent
-                      ),
+                              : Colors.greenAccent),
                     )
                   ],
                 )

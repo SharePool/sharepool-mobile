@@ -28,7 +28,7 @@ class ExpenseRestClient {
     if (RestHelper.statusOk(response.statusCode)) {
       var decode = json.decode(response.body);
       var hateoasDto = HateoasDto.create(
-          () => ExpenseRequestResponseDto.fromJson(decode), decode);
+              () => ExpenseRequestResponseDto.fromJson(decode), decode);
       return hateoasDto;
     }
 
@@ -77,24 +77,6 @@ class ExpenseRestClient {
 
     if (RestHelper.statusOk(response.statusCode)) {
       return ExpensesWrapper.fromJson(json.decode(response.body));
-    }
-
-    return null;
-  }
-
-  static Future<double> getTotalBalance() async {
-    var response = await get(
-        "$BASE_URL/balance",
-        headers: {
-          HttpHeaders.authorizationHeader: await PreferencesService
-              .getUserToken()
-        }
-    );
-
-    print(response.body);
-
-    if (RestHelper.statusOk(response.statusCode)) {
-      return json.decode(response.body) as double;
     }
 
     return null;

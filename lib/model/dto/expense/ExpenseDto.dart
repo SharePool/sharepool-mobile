@@ -14,6 +14,7 @@ class ExpenseDto {
       : amount = json["amount"],
       creationDate = json["creationDate"],
       currency = json["currency"],
-      tour = TourDto.fromJson(json["tour"]),
-      receiver = UserDto.fromJson(json["receiver"]);
+        tour = json["tour"] == null ? null : TourDto.fromJson(json["tour"]),
+        receiver = json["receiver"] == null ? null : UserDto.fromJson(
+            json["receiver"]);
 }
