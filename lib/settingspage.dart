@@ -9,6 +9,7 @@ import 'package:share_pool/model/dto/user/UserDto.dart';
 import 'package:share_pool/util/PreferencesService.dart';
 import 'package:share_pool/util/rest/UserRestClient.dart';
 
+import 'common/images.dart';
 import 'mydrawer.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -136,7 +137,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               }).toList(),
                             )))
                   ]),
-                  showProfileImage(),
+                  showProfileImage(user, 100),
                   FlatButton(
                     child: Text("Change Profile-Picture"),
                     onPressed: () {
@@ -286,19 +287,5 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           );
         });
-  }
-
-  Widget showProfileImage() {
-    if (profileImg != null && profileImg.length > 0) {
-      return Image.memory(
-        base64Decode(profileImg),
-        height: 100,
-      );
-    } else {
-      return Image.asset(
-        'assets/profile_img_placeholder.png',
-        height: 100,
-      );
-    }
   }
 }

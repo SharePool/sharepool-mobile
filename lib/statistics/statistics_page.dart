@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:share_pool/common/images.dart';
 import 'package:share_pool/model/dto/expense/ExpenseWrapper.dart';
 import 'package:share_pool/util/rest/ExpenseRestClient.dart';
 
@@ -46,27 +47,68 @@ class _StatisticsPageState extends State<StatisticsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      drawer: myDrawer,
-      body: ListView(
-        children: <Widget>[
-          TotalBalanceWidget(userBalance: _userBalance),
-//          ListView.builder(
-//              itemCount: _expensesWrapper == null
-//                  ? 0
-//                  : _expensesWrapper.payedExpenses.length,
-//              itemBuilder: (context, index) {
-//                var payedExpense = _expensesWrapper.payedExpenses[index];
-//
-//                return Card(
-//                  child: Text(payedExpense.amount.toStringAsFixed(2)),
-//                );
-//              })
-        ],
-      ),
-    );
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        drawer: myDrawer,
+        body: Column(
+          children: <Widget>[
+            TotalBalanceWidget(userBalance: _userBalance),
+            Flexible(
+              child: ExpensesPerUserWidget(expensesWrapper: _expensesWrapper),
+            )
+          ],
+        ));
+  }
+}
+
+class ExpensesPerUserWidget extends StatelessWidget {
+  const ExpensesPerUserWidget({
+    Key key,
+    @required ExpensesWrapper expensesWrapper,
+  })
+      : _expensesWrapper = expensesWrapper,
+        super(key: key);
+
+  final ExpensesWrapper _expensesWrapper;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        itemCount: _expensesWrapper.expenses.length,
+        itemBuilder: (BuildContext context, int index) {
+          var expensePerReceiver = _expensesWrapper.expenses[index];
+
+          return InkWell(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    children: <Widget>[
+                      showProfileImage(expensePerReceiver.userDto, 50),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Text(
+                          expensePerReceiver.userDto.userName,
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      Spacer(),
+                      Text(_getFittingText(expensePerReceiver.sumOfExpenses)),
+                      Text(expensePerReceiver.sumOfExpenses.toStringAsFixed(2),
+                          style: TextStyle(
+                              fontSize: 16,
+                              color: _getFittingColor(
+                                  expensePerReceiver.sumOfExpenses))),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
   }
 }
 
@@ -100,7 +142,7 @@ class TotalBalanceWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      _userBalance <= 0 ? "You owe: " : "You are owed: ",
+                      _getFittingText(_userBalance),
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 18),
                     ),
@@ -108,10 +150,7 @@ class TotalBalanceWidget extends StatelessWidget {
                       _userBalance?.toStringAsFixed(2),
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: 20,
-                          color: _userBalance <= 0
-                              ? Colors.redAccent
-                              : Colors.greenAccent),
+                          fontSize: 20, color: _getFittingColor(_userBalance)),
                     )
                   ],
                 )
@@ -122,4 +161,12 @@ class TotalBalanceWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+Color _getFittingColor(double amount) {
+  return amount <= 0 ? Colors.redAccent : Colors.greenAccent;
+}
+
+String _getFittingText(double amount) {
+  return amount <= 0 ? "You owe: " : "You are owed: ";
 }
