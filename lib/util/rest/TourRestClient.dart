@@ -18,15 +18,10 @@ class TourRestClient {
       url += "?includeInactive=" + includeInactive?.toString();
     }
 
-    var response =
-    await get(
-        url,
-        headers: {
-          HttpHeaders.contentTypeHeader: ContentType.json.value,
-          HttpHeaders.authorizationHeader: await PreferencesService
-              .getUserToken()
-        }
-    );
+    var response = await get(url, headers: {
+      HttpHeaders.contentTypeHeader: ContentType.json.value,
+      HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
+    });
 
     print(response.body);
 
@@ -43,52 +38,38 @@ class TourRestClient {
 
     var response;
     if (tourDto.tourId != null) {
-      response = await put(
-          "$BASE_URL/${tourDto.tourId.toString()}",
+      response = await put("$BASE_URL/${tourDto.tourId.toString()}",
           body: body,
           headers: {
             HttpHeaders.contentTypeHeader: ContentType.json.value,
             HttpHeaders.authorizationHeader:
-            await PreferencesService.getUserToken()
-          }
-      );
+                await PreferencesService.getUserToken()
+          });
     } else {
-      response = await post(
-          BASE_URL,
-          body: body,
-          headers: {
-            HttpHeaders.contentTypeHeader: ContentType.json.value,
-            HttpHeaders.authorizationHeader: await PreferencesService
-                .getUserToken()
-          }
-      );
+      response = await post(BASE_URL, body: body, headers: {
+        HttpHeaders.contentTypeHeader: ContentType.json.value,
+        HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
+      });
     }
 
     print(response.body);
   }
 
   static Future<void> deleteTour(int tourId) async {
-    var response = await delete(
-        "$BASE_URL/${tourId.toString()}",
-        headers: {
-          HttpHeaders.contentTypeHeader: ContentType.json.value,
-          HttpHeaders.authorizationHeader: await PreferencesService
-              .getUserToken()
-        }
-    );
+    var response = await delete("$BASE_URL/${tourId.toString()}", headers: {
+      HttpHeaders.contentTypeHeader: ContentType.json.value,
+      HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
+    });
 
     print(response.body);
   }
 
   static Future<void> activateTour(int tourId) async {
-    var response = await put(
-        "$BASE_URL/${tourId.toString()}/activate",
-        headers: {
-          HttpHeaders.contentTypeHeader: ContentType.json.value,
-          HttpHeaders.authorizationHeader: await PreferencesService
-              .getUserToken()
-        }
-    );
+    var response =
+        await put("$BASE_URL/${tourId.toString()}/activate", headers: {
+      HttpHeaders.contentTypeHeader: ContentType.json.value,
+      HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
+    });
 
     print(response.body);
   }

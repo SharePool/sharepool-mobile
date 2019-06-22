@@ -27,56 +27,54 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Padding(
+      child: ListView(
         padding: EdgeInsets.symmetric(horizontal: 25.0),
-        child: ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            TextFormField(
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(
-                labelText: "Email or Username",
-              ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return "Email or Username must not be empty";
-                }
-              },
-              onSaved: (String value) {
-                _userNameOrEmail = value;
-              },
+        shrinkWrap: true,
+        children: <Widget>[
+          TextFormField(
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+                labelText: "Email or Username", suffixIcon: Icon(Icons.person)),
+            validator: (value) {
+              if (value.isEmpty) {
+                return "Email or Username must not be empty";
+              }
+            },
+            onSaved: (String value) {
+              _userNameOrEmail = value;
+            },
+          ),
+          TextFormField(
+            decoration: InputDecoration(
+                labelText: "Password", suffixIcon: Icon(Icons.lock)),
+            obscureText: true,
+            validator: (value) {
+              if (value.isEmpty) {
+                return "Password must not be empty";
+              }
+            },
+            onSaved: (String value) {
+              _password = value;
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Row(
+              children: <Widget>[
+                Spacer(),
+                RaisedButton(
+                    onPressed: () {
+                      var form = _formKey.currentState;
+                      if (form.validate()) {
+                        form.save();
+                        doLogin();
+                      }
+                    },
+                    child: Text('Submit')),
+              ],
             ),
-            TextFormField(
-              decoration: InputDecoration(labelText: "Password"),
-              obscureText: true,
-              validator: (value) {
-                if (value.isEmpty) {
-                  return "Password must not be empty";
-                }
-              },
-              onSaved: (String value) {
-                _password = value;
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Row(
-                children: <Widget>[
-                  Spacer(),
-                  RaisedButton(
-                      onPressed: () {
-                        var form = _formKey.currentState;
-                        if (form.validate()) {
-                          form.save();
-                          doLogin();
-                        }
-                      },
-                      child: Text('Submit')),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -94,14 +92,12 @@ class _LoginFormState extends State<LoginForm> {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => widget.followingPage));
       } else {
-        widget._scaffoldKey.currentState.showSnackBar(
-            FailureSnackBar("Invalid Credentials!")
-        );
+        widget._scaffoldKey.currentState
+            .showSnackBar(FailureSnackBar("Invalid Credentials!"));
       }
     } on SocketException {
-      widget._scaffoldKey.currentState.showSnackBar(
-          FailureSnackBar("Something went wrong!")
-      );
+      widget._scaffoldKey.currentState
+          .showSnackBar(FailureSnackBar("Something went wrong!"));
     }
   }
 }

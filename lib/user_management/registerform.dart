@@ -33,117 +33,114 @@ class _RegisterFormState extends State<RegisterForm> {
     return Flexible(
       child: Form(
         key: _formKey,
-        child: Padding(
+        child: ListView(
           padding: EdgeInsets.symmetric(horizontal: 25.0),
-          child: ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "First Name",
-                ),
-                validator: (value) {
-                  int strLen = value.length;
-                  if (strLen < 3 || strLen > 20) {
-                    return "First Name must have between 3 and 20 characters";
-                  }
-                },
-                onSaved: (String value) {
-                  _firstName = value;
-                },
+          shrinkWrap: true,
+          children: <Widget>[
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: "First Name",
               ),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Last Name",
-                ),
-                validator: (value) {
-                  int strLen = value.length;
-                  if (strLen < 3 || strLen > 20) {
-                    return "Last Name must have between 3 and 20 characters";
-                  }
-                },
-                onSaved: (String value) {
-                  _lastName = value;
-                },
+              validator: (value) {
+                int strLen = value.length;
+                if (strLen < 3 || strLen > 20) {
+                  return "First Name must have between 3 and 20 characters";
+                }
+              },
+              onSaved: (String value) {
+                _firstName = value;
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: "Last Name",
               ),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Username",
-                ),
-                validator: (value) {
-                  int strLen = value.length;
-                  if (strLen < 5 || strLen > 20) {
-                    return "Username must have between 5 and 20 characters";
-                  }
-                },
-                onSaved: (String value) {
-                  _userName = value;
-                },
+              validator: (value) {
+                int strLen = value.length;
+                if (strLen < 3 || strLen > 20) {
+                  return "Last Name must have between 3 and 20 characters";
+                }
+              },
+              onSaved: (String value) {
+                _lastName = value;
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: "Username",
               ),
-              TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  labelText: "Email",
-                ),
-                validator: (value) {
-                  if (value.isEmpty ||
-                      !Constants.EMAIL_REG_EXP.hasMatch(value)) {
-                    return "Email must be valid";
-                  }
-                },
-                onSaved: (String value) {
-                  _email = value;
-                },
+              validator: (value) {
+                int strLen = value.length;
+                if (strLen < 5 || strLen > 20) {
+                  return "Username must have between 5 and 20 characters";
+                }
+              },
+              onSaved: (String value) {
+                _userName = value;
+              },
+            ),
+            TextFormField(
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                labelText: "Email",
               ),
-              TextFormField(
-                decoration: InputDecoration(labelText: "Password"),
-                obscureText: true,
-                validator: (value) {
-                  if (value.isEmpty ||
-                      !Constants.PASSWORD_REG_EXP.hasMatch(value)) {
-                    return "Password must have between 8 and 25 characters\nContain lower- and uppercase letters\nand one special character";
-                  }
-                },
-                onSaved: (String value) {
-                  _password = value;
-                },
+              validator: (value) {
+                if (value.isEmpty || !Constants.EMAIL_REG_EXP.hasMatch(value)) {
+                  return "Email must be valid";
+                }
+              },
+              onSaved: (String value) {
+                _email = value;
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(labelText: "Password"),
+              obscureText: true,
+              validator: (value) {
+                if (value.isEmpty ||
+                    !Constants.PASSWORD_REG_EXP.hasMatch(value)) {
+                  return "Password must have between 8 and 25 characters\nContain lower- and uppercase letters\nand one special character";
+                }
+              },
+              onSaved: (String value) {
+                _password = value;
+              },
+            ),
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: "Gas Consumption (l per 100 km)",
               ),
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: "Gas Consumption (l per 100 km)",
-                ),
-                keyboardType: TextInputType.numberWithOptions(
-                    signed: false, decimal: true),
-                validator: (value) {
-                  double gasConsumption = double.parse(value);
+              keyboardType:
+                  TextInputType.numberWithOptions(signed: false, decimal: true),
+              validator: (value) {
+                double gasConsumption = double.parse(value);
 
-                  if (gasConsumption < 0) {
-                    return "Gas Consumption must be greater than or equal 0";
-                  }
-                },
-                onSaved: (String value) {
-                  _gasConsumption = double.parse(value);
-                },
+                if (gasConsumption < 0) {
+                  return "Gas Consumption must be greater than or equal 0";
+                }
+              },
+              onSaved: (String value) {
+                _gasConsumption = double.parse(value);
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Row(
+                children: <Widget>[
+                  Spacer(),
+                  RaisedButton(
+                      onPressed: () {
+                        var form = _formKey.currentState;
+                        if (form.validate()) {
+                          form.save();
+                          doRegister();
+                        }
+                      },
+                      child: Text('Submit')),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Row(
-                  children: <Widget>[
-                    Spacer(),
-                    RaisedButton(
-                        onPressed: () {
-                          var form = _formKey.currentState;
-                          if (form.validate()) {
-                            form.save();
-                            doRegister();
-                          }
-                        },
-                        child: Text('Submit')),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

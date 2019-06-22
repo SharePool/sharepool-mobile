@@ -50,9 +50,8 @@ class _TourEditPageState extends State<TourEditPage> {
               children: <Widget>[
                 TextFormField(
                   decoration: InputDecoration(
-                    labelText: "Starting point",
-                      suffixIcon: Icon(Icons.location_on)
-                  ),
+                      labelText: "Starting point",
+                      suffixIcon: Icon(Icons.location_on)),
                   validator: (value) {
                     if (value.isEmpty) {
                       return "Starting point must be set";
@@ -65,9 +64,7 @@ class _TourEditPageState extends State<TourEditPage> {
                 ),
                 TextFormField(
                   decoration: InputDecoration(
-                      labelText: "Destination",
-                      suffixIcon: Icon(Icons.flag)
-                  ),
+                      labelText: "Destination", suffixIcon: Icon(Icons.flag)),
                   validator: (value) {
                     if (value.isEmpty) {
                       return "Destination must be set";
@@ -83,55 +80,52 @@ class _TourEditPageState extends State<TourEditPage> {
                       signed: false, decimal: true),
                   decoration: InputDecoration(
                       labelText: "Estimated Kilometers",
-                      suffixIcon: Icon(Icons.transfer_within_a_station)
-                  ),
+                      suffixIcon: Icon(Icons.transfer_within_a_station)),
                   onSaved: (String value) {
                     tourDto.kilometers = double.parse(value);
                   },
-                  initialValue: tourDto.kilometers == null ? null : tourDto
-                      .kilometers.toStringAsFixed(2),
+                  initialValue: tourDto.kilometers == null
+                      ? null
+                      : tourDto.kilometers.toStringAsFixed(2),
                 ),
-                Row(
-                    children: <Widget>[
-                      Flexible(
-                        flex: 1,
-                        child: Container(
-                          margin: EdgeInsets.only(top: 11),
-                          child: CurrencyDropdown(
-                            onSaved: handleCurrency,
-                            initialValue:
-                            currencyfromString(tourDto.currency) ??
-                                Currency.EUR,
-                          ),
-                        ),
+                Row(children: <Widget>[
+                  Flexible(
+                    flex: 1,
+                    child: Container(
+                      margin: EdgeInsets.only(top: 11),
+                      child: CurrencyDropdown(
+                        onSaved: handleCurrency,
+                        initialValue: currencyfromString(tourDto.currency) ??
+                            Currency.EUR,
                       ),
-                      Flexible(
-                        flex: 2,
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                              labelText: "Tour cost",
-                              suffixIcon: Icon(Icons.attach_money)
-                          ),
-                          keyboardType: TextInputType.numberWithOptions(
-                              signed: false, decimal: true),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Cost must be set";
-                            }
+                    ),
+                  ),
+                  Flexible(
+                    flex: 2,
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                          labelText: "Tour cost",
+                          suffixIcon: Icon(Icons.attach_money)),
+                      keyboardType: TextInputType.numberWithOptions(
+                          signed: false, decimal: true),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return "Cost must be set";
+                        }
 
-                            if (double.parse(value) < 0.1) {
-                              return "Value must be over 0.1";
-                            }
-                          },
-                          onSaved: (String value) {
-                            tourDto.cost = double.parse(value);
-                          },
-                          initialValue: tourDto.cost == null ? null : tourDto
-                              .cost.toStringAsFixed(2),
-                        ),
-                      ),
-                    ]
-                ),
+                        if (double.parse(value) < 0.1) {
+                          return "Value must be over 0.1";
+                        }
+                      },
+                      onSaved: (String value) {
+                        tourDto.cost = double.parse(value);
+                      },
+                      initialValue: tourDto.cost == null
+                          ? null
+                          : tourDto.cost.toStringAsFixed(2),
+                    ),
+                  ),
+                ]),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16.0),
                   child: Row(
@@ -180,9 +174,8 @@ class _TourEditPageState extends State<TourEditPage> {
           MaterialPageRoute(
               builder: (context) => DriverSettingsPage(widget.myDrawer)));
     } on SocketException {
-      _scaffoldKey.currentState.showSnackBar(
-          FailureSnackBar("Tour couldn't be updated/created!")
-      );
+      _scaffoldKey.currentState
+          .showSnackBar(FailureSnackBar("Tour couldn't be updated/created!"));
     }
   }
 }

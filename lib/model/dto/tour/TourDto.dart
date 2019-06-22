@@ -15,8 +15,8 @@ class TourDto {
       this.currency,
       this.cost,
       this.kilometers,
-        this.ownerId,
-        this.active});
+      this.ownerId,
+      this.active});
 
   factory TourDto.fromJson(Map<String, dynamic> json) {
     return TourDto(

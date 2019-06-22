@@ -9,6 +9,7 @@ import 'package:share_pool/model/dto/user/UserDto.dart';
 import 'package:share_pool/util/PreferencesService.dart';
 import 'package:share_pool/util/rest/UserRestClient.dart';
 
+import 'common/images.dart';
 import 'mydrawer.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -39,7 +40,7 @@ class _SettingsPageState extends State<SettingsPage> {
   final TextEditingController _emailController = new TextEditingController();
   final TextEditingController _userNameController = new TextEditingController();
   final TextEditingController _gasConsumptionController =
-  new TextEditingController();
+      new TextEditingController();
 
   _SettingsPageState(MyDrawer myDrawer) {
     this.myDrawer = myDrawer;
@@ -55,6 +56,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -136,7 +138,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               }).toList(),
                             )))
                   ]),
-                  showProfileImage(),
+                  showProfileImage(profileImg, 100),
                   FlatButton(
                     child: Text("Change Profile-Picture"),
                     onPressed: () {
@@ -286,19 +288,5 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
           );
         });
-  }
-
-  Widget showProfileImage() {
-    if (profileImg != null && profileImg.length > 0) {
-      return Image.memory(
-        base64Decode(profileImg),
-        height: 100,
-      );
-    } else {
-      return Image.asset(
-        'assets/profile_img_placeholder.png',
-        height: 100,
-      );
-    }
   }
 }

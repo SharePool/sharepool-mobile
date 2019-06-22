@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:share_pool/settingspage.dart';
+import 'package:share_pool/statistics/statistics_page.dart';
 import 'package:share_pool/user_management/usermanagementpage.dart';
 import 'package:share_pool/util/PreferencesService.dart';
 
@@ -13,6 +14,7 @@ class MyDrawer extends StatefulWidget {
   DriverPage driverPage;
   PassengerPage passengerPage;
   SettingsPage settingsPage;
+  StatisticsPage statisticsPage;
 
   @override
   _MyDrawerState createState() => _MyDrawerState();
@@ -35,8 +37,8 @@ class _MyDrawerState extends State<MyDrawer> {
             accountName: Text(userDto?.userName ?? ""),
             accountEmail: Text(userDto?.email ?? ""),
             currentAccountPicture: CircleAvatar(
-              backgroundImage: MemoryImage(
-                  base64Decode(userDto?.profileImg ?? "")),
+              backgroundImage:
+                  MemoryImage(base64Decode(userDto?.profileImg ?? "")),
             ),
           ),
           ListTile(
@@ -55,6 +57,15 @@ class _MyDrawerState extends State<MyDrawer> {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => widget.passengerPage));
+            },
+          ),
+          ListTile(
+            title: Text("Statistics"),
+            trailing: Icon(Icons.insert_chart),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) => widget.statisticsPage));
             },
           ),
           ListTile(

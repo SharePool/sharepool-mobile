@@ -19,11 +19,12 @@ class TourListWidget extends StatefulWidget {
   bool isDismissable;
   TourTapCallback tourTapCallback;
 
-  TourListWidget({this.myDrawer,
-    this.tours,
-    this.isDismissable = true,
-    this.tourTapCallback,
-    this.scaffoldKey});
+  TourListWidget(
+      {this.myDrawer,
+      this.tours,
+      this.isDismissable = true,
+      this.tourTapCallback,
+      this.scaffoldKey});
 
   @override
   _TourListWidgetState createState() => _TourListWidgetState();
@@ -34,7 +35,9 @@ class _TourListWidgetState extends State<TourListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return widget.tours == null || widget.tours.isEmpty
+        ? Text("No tours defined yet.")
+        : ListView.builder(
         itemCount: widget.tours == null ? 0 : widget.tours.length,
         itemBuilder: (BuildContext context, int index) {
           var tour = widget.tours[index];
@@ -66,9 +69,8 @@ class _TourListWidgetState extends State<TourListWidget> {
         widget.tours.remove(tour);
       });
     } on SocketException {
-      _scaffoldKey.currentState.showSnackBar(
-          FailureSnackBar("Tour couldn't be deleted!")
-      );
+      _scaffoldKey.currentState
+          .showSnackBar(FailureSnackBar("Tour couldn't be deleted!"));
     }
   }
 }
@@ -91,24 +93,18 @@ class TourCard extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 child: Row(
                   children: <Widget>[
-                    Text(
-                      tour.from,
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    Icon(Icons.arrow_forward),
-                    Text(tour.to, style: TextStyle(fontSize: 18)),
+                    displayTour(tour, 18),
                     Spacer(),
                     Text(buildCurrencyString(), style: TextStyle(fontSize: 18))
                   ],
                 ),
               ),
-              onTap: () =>
-              tourTapCallback != null
+              onTap: () => tourTapCallback != null
                   ? tourTapCallback(context, myDrawer, tour)
                   : Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => TourEditPage(myDrawer, tour))),
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => TourEditPage(myDrawer, tour))),
             )));
   }
 
@@ -118,3 +114,16 @@ class TourCard extends StatelessWidget {
 
 typedef TourTapCallback = void Function(
     BuildContext context, MyDrawer myDrawer, TourDto tour);
+
+Widget displayTour(TourDto tourDto, double fontSize) {
+  return Row(
+    children: <Widget>[
+      Text(
+        tourDto.from,
+        style: TextStyle(fontSize: fontSize),
+      ),
+      Icon(Icons.arrow_forward),
+      Text(tourDto.to, style: TextStyle(fontSize: fontSize))
+    ],
+  );
+}

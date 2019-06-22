@@ -14,7 +14,6 @@ class UserManagementPage extends StatefulWidget {
 }
 
 class _UserManagementPageState extends State<UserManagementPage> {
-
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   DriverPage driverPage;
@@ -30,8 +29,7 @@ class _UserManagementPageState extends State<UserManagementPage> {
     registerButton = RaisedButton(
         onPressed: () {
           setState(() {
-            userManagementWidget =
-                RegisterForm(driverPage, _scaffoldKey);
+            userManagementWidget = RegisterForm(driverPage, _scaffoldKey);
             switchButton = loginButton;
           });
         },

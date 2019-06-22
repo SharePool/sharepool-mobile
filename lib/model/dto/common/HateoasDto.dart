@@ -4,7 +4,8 @@ class HateoasDto<T> {
 
   HateoasDto(this.dto, this.link);
 
-  static HateoasDto<T> create<T>(DtoFromJsonFunction<T> func, Map<String, dynamic> json) {
+  static HateoasDto<T> create<T>(
+      DtoFromJsonFunction<T> func, Map<String, dynamic> json) {
     return new HateoasDto(func(), getRelLinkFromJson("self", json));
   }
 
