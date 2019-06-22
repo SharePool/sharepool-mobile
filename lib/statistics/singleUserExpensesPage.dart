@@ -72,7 +72,7 @@ class SingleUserExpensesPage extends StatelessWidget {
     var parsed = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS").parse(
         creationDate);
 
-    return DateFormat("HH:ss dd.MM.yy").format(parsed);
+    return DateFormat("HH:mm dd.MM.yy").format(parsed);
   }
 }
 
