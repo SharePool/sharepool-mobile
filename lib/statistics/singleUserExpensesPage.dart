@@ -1,11 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:share_pool/common/SnackBars.dart';
 import 'package:share_pool/driver-settings/tourListWidget.dart';
 import 'package:share_pool/model/dto/expense/ExpensePerUserDto.dart';
 import 'package:share_pool/model/dto/expense/PaybackDto.dart';
 import 'package:share_pool/model/dto/user/UserDto.dart';
 import 'package:share_pool/mydrawer.dart';
 import 'package:share_pool/statistics/statistics_page.dart';
+import 'package:share_pool/util/rest/ExpenseRestClient.dart';
 
 class SingleUserExpensesPage extends StatelessWidget {
   final MyDrawer myDrawer;
@@ -44,7 +46,9 @@ class SingleUserExpensesPage extends StatelessWidget {
                   return ListTile(
                     title: Row(
                       children: <Widget>[
-                        displayTour(expense.tour, 18),
+                        expense.tour != null
+                            ? displayTour(expense.tour, 18)
+                            : Text("Payback"),
                         Spacer(),
                         Text(
                           getFittingText(expense.amount),
@@ -72,21 +76,23 @@ class PaybackForm extends StatefulWidget {
   PaybackForm(this.myDrawer, this.userDto);
 
   @override
-  _PaybackFormState createState() => _PaybackFormState();
+  _PaybackFormState createState() => _PaybackFormState(this.userDto);
 }
 
 class _PaybackFormState extends State<PaybackForm> {
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   PaybackDto paybackDto;
 
-  _PaybackFormState() {
+  _PaybackFormState(UserDto userDto) {
     this.paybackDto = new PaybackDto();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text("Payback with ${widget.userDto.userName}"),
       ),
@@ -170,11 +176,20 @@ class _PaybackFormState extends State<PaybackForm> {
     );
   }
 
-  confirmPayback(PaybackDto paybackDto) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (BuildContext context) =>
-                StatisticsPage(widget.myDrawer)));
+  confirmPayback(PaybackDto paybackDto) async {
+    paybackDto.userNameOrEmail = widget.userDto.userName;
+
+    bool success = await ExpenseRestClient.sendPayback(paybackDto);
+
+    if (success) {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  StatisticsPage(widget.myDrawer)));
+    } else {
+      _scaffoldKey.currentState
+          .showSnackBar(new FailureSnackBar("Payback could not be sent."));
+    }
   }
 }

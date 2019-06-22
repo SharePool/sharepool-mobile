@@ -1,6 +1,8 @@
-import 'package:share_pool/model/dto/user/UserDto.dart';
-
 class PaybackDto {
-  UserDto receiver;
+  String userNameOrEmail;
   double amount;
+
+  toJson() {
+    return {"userNameOrEmail": userNameOrEmail, "amount": amount};
+  }
 }
