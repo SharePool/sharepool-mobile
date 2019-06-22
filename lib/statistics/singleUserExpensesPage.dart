@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:share_pool/common/SnackBars.dart';
 import 'package:share_pool/driver-settings/tourListWidget.dart';
 import 'package:share_pool/model/dto/expense/ExpensePerUserDto.dart';
@@ -53,18 +54,25 @@ class SingleUserExpensesPage extends StatelessWidget {
                         Text(
                           getFittingText(expense.amount),
                         ),
-                        Text(expense.amount.toStringAsFixed(2),
+                        Text(fixUpNegative(expense.amount),
                             style: TextStyle(
                                 color: getFittingColor(expense.amount))),
                       ],
                     ),
-                    subtitle: Text(expense.creationDate),
+                    subtitle: Text(dateFromString(expense.creationDate)),
                   );
                 },
               ),
             )
           ],
         ));
+  }
+
+  String dateFromString(String creationDate) {
+    var parsed = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS").parse(
+        creationDate);
+
+    return DateFormat("HH:ss dd.MM.yy").format(parsed);
   }
 }
 
