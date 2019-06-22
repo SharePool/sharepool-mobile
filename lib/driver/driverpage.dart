@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_pool/common/SnackBars.dart';
 import 'package:share_pool/driver-settings/driverSettingsPage.dart';
-import 'package:share_pool/driver-settings/editTourPage.dart';
 import 'package:share_pool/driver-settings/tourListWidget.dart';
 import 'package:share_pool/driver/searchTour.dart';
 import 'package:share_pool/model/dto/tour/TourDto.dart';
@@ -105,17 +105,25 @@ class _DriverPageState extends State<DriverPage> {
                 Spacer()
               ]),
       ),
-      floatingActionButton: tours == null || tours.isEmpty
-          ? FloatingActionButton(
-              child: Icon(Icons.add),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => TourEditPage(widget.myDrawer)));
-              },
-            )
-          : null,
+      floatingActionButton: SpeedDial(
+        animatedIcon: AnimatedIcons.menu_close,
+        animatedIconTheme: IconThemeData(size: 22.0),
+        curve: Curves.bounceIn,
+        overlayOpacity: 0.5,
+        tooltip: "You found the easter egg.",
+        children: [
+          SpeedDialChild(
+            child: Icon(Icons.photo_camera),
+            label: "Scan QR code",
+            backgroundColor: Colors.green,
+          ),
+          SpeedDialChild(
+            child: Icon(Icons.navigation),
+            backgroundColor: Colors.blue,
+            label: "Create a tour",
+          )
+        ],
+      ),
     );
   }
 
