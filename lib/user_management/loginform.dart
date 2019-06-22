@@ -35,6 +35,7 @@ class _LoginFormState extends State<LoginForm> {
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               labelText: "Email or Username",
+              suffixIcon: Icon(Icons.person)
             ),
             validator: (value) {
               if (value.isEmpty) {
@@ -46,7 +47,8 @@ class _LoginFormState extends State<LoginForm> {
             },
           ),
           TextFormField(
-            decoration: InputDecoration(labelText: "Password"),
+            decoration: InputDecoration(labelText: "Password",
+            suffixIcon: Icon(Icons.lock)),
             obscureText: true,
             validator: (value) {
               if (value.isEmpty) {
