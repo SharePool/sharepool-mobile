@@ -68,7 +68,7 @@ class _PassengerPageState extends State<PassengerPage> {
 
       if (userId != null) {
         HateoasDto<ExpenseRequestResponseDto> requestResponse =
-        await requestExpense(tourId);
+            await requestExpense(tourId);
 
         if (requestResponse != null) {
           showDialog(
@@ -97,15 +97,13 @@ class _PassengerPageState extends State<PassengerPage> {
                       child: new Text("Yes"),
                       textColor: Colors.white,
                       onPressed: () async {
-                        bool created =
-                        await confirmExpense(requestResponse);
+                        bool created = await confirmExpense(requestResponse);
 
                         Navigator.of(context).pop();
 
                         if (created) {
                           _scaffoldKey.currentState.showSnackBar(
-                              new SuccessSnackBar("Expense confirmed.")
-                          );
+                              new SuccessSnackBar("Expense confirmed."));
                         }
                       },
                     ),
@@ -118,35 +116,34 @@ class _PassengerPageState extends State<PassengerPage> {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         setState(() {
           _scaffoldKey.currentState.showSnackBar(
-              new FailureSnackBar("Camera permissions not granted!")
-          );
+              new FailureSnackBar("Camera permissions not granted!"));
         });
       } else {
-        _scaffoldKey.currentState.showSnackBar(
-            new FailureSnackBar("Unknown error!"));
+        _scaffoldKey.currentState
+            .showSnackBar(new FailureSnackBar("Unknown error!"));
       }
     } on FormatException {} catch (e) {}
   }
 
-  Future<HateoasDto<ExpenseRequestResponseDto>> requestExpense(int tourId) async {
+  Future<HateoasDto<ExpenseRequestResponseDto>> requestExpense(
+      int tourId) async {
     try {
       return ExpenseRestClient.requestExpense(tourId);
     } on SocketException {
-      _scaffoldKey.currentState.showSnackBar(
-          FailureSnackBar("Something went wrong!")
-      );
+      _scaffoldKey.currentState
+          .showSnackBar(FailureSnackBar("Something went wrong!"));
     }
 
     return null;
   }
 
-  Future<bool> confirmExpense(HateoasDto<ExpenseRequestResponseDto> requestResponse) async {
+  Future<bool> confirmExpense(
+      HateoasDto<ExpenseRequestResponseDto> requestResponse) async {
     try {
       return await ExpenseRestClient.confirmExpense(requestResponse);
     } on SocketException {
-      _scaffoldKey.currentState.showSnackBar(
-          FailureSnackBar("Something went wrong!")
-      );
+      _scaffoldKey.currentState
+          .showSnackBar(FailureSnackBar("Something went wrong!"));
     }
   }
 }

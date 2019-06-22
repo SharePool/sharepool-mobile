@@ -51,22 +51,21 @@ class _SearchTourPageState extends State<SearchTourPage> {
                         prefixIcon: Icon(Icons.search),
                         border: OutlineInputBorder(
                             borderRadius:
-                            BorderRadius.all(Radius.circular(25.0))))),
+                                BorderRadius.all(Radius.circular(25.0))))),
               ),
               Flexible(
                   child: TourListWidget(
-                    tours: tours,
-                    myDrawer: widget.myDrawer,
-                    isDismissable: false,
-                    tourTapCallback: (context, myDrawer, tour) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  DriverPage(myDrawer, tour)));
-                    },
-                    scaffoldKey: _scaffoldKey,
-                  )),
+                tours: tours,
+                myDrawer: widget.myDrawer,
+                isDismissable: false,
+                tourTapCallback: (context, myDrawer, tour) {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DriverPage(myDrawer, tour)));
+                },
+                scaffoldKey: _scaffoldKey,
+              )),
             ],
           ),
         ));
@@ -83,8 +82,8 @@ class _SearchTourPageState extends State<SearchTourPage> {
     setState(() {
       tours = widget.tours
           .where((t) =>
-      t.from.toLowerCase().contains(value.toLowerCase()) ||
-          t.to.toLowerCase().contains(value.toLowerCase()))
+              t.from.toLowerCase().contains(value.toLowerCase()) ||
+              t.to.toLowerCase().contains(value.toLowerCase()))
           .toList();
     });
   }

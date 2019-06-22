@@ -37,8 +37,8 @@ class _MyDrawerState extends State<MyDrawer> {
             accountName: Text(userDto?.userName ?? ""),
             accountEmail: Text(userDto?.email ?? ""),
             currentAccountPicture: CircleAvatar(
-              backgroundImage: MemoryImage(
-                  base64Decode(userDto?.profileImg ?? "")),
+              backgroundImage:
+                  MemoryImage(base64Decode(userDto?.profileImg ?? "")),
             ),
           ),
           ListTile(

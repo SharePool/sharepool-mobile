@@ -85,8 +85,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 labelText: "Email",
               ),
               validator: (value) {
-                if (value.isEmpty ||
-                    !Constants.EMAIL_REG_EXP.hasMatch(value)) {
+                if (value.isEmpty || !Constants.EMAIL_REG_EXP.hasMatch(value)) {
                   return "Email must be valid";
                 }
               },
@@ -111,8 +110,8 @@ class _RegisterFormState extends State<RegisterForm> {
               decoration: InputDecoration(
                 labelText: "Gas Consumption (l per 100 km)",
               ),
-              keyboardType: TextInputType.numberWithOptions(
-                  signed: false, decimal: true),
+              keyboardType:
+                  TextInputType.numberWithOptions(signed: false, decimal: true),
               validator: (value) {
                 double gasConsumption = double.parse(value);
 

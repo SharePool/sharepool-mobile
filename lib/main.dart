@@ -57,8 +57,7 @@ class _AppState extends State<App> {
           primarySwatch: Colors.blueGrey,
         ),
         home:
-        _isAuthenticated ? driverPage : new UserManagementPage(
-            driverPage));
+            _isAuthenticated ? driverPage : new UserManagementPage(driverPage));
   }
 
   @override

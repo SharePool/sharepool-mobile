@@ -41,13 +41,12 @@ class _DriverPageState extends State<DriverPage> {
           this.selectedTour = widget.tour;
         } else {
           this.selectedTour =
-          tours != null && tours.isNotEmpty ? tours[0] : null;
+              tours != null && tours.isNotEmpty ? tours[0] : null;
         }
       });
     } on SocketException {
-      _scaffoldKey.currentState.showSnackBar(
-          FailureSnackBar("Tours couldn't be loaded!")
-      );
+      _scaffoldKey.currentState
+          .showSnackBar(FailureSnackBar("Tours couldn't be loaded!"));
     }
   }
 
@@ -79,43 +78,43 @@ class _DriverPageState extends State<DriverPage> {
         child: tours == null || tours.isEmpty
             ? Text("No tours defined yet.")
             : Column(children: <Widget>[
-          Spacer(),
-          Row(
-            children: <Widget>[
-              Flexible(
-                  child: new TourCard(selectedTour, widget.myDrawer)),
-              IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                SearchTourPage(widget.myDrawer, tours)));
-                  })
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: QrImage(
-                data: buildQrCodeData(),
-                onError: (ex) {
-                  print("[QR] ERROR - $ex");
-                }),
-          ),
-          Spacer()
-        ]),
+                Spacer(),
+                Row(
+                  children: <Widget>[
+                    Flexible(
+                        child: new TourCard(selectedTour, widget.myDrawer)),
+                    IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      SearchTourPage(widget.myDrawer, tours)));
+                        })
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: QrImage(
+                      data: buildQrCodeData(),
+                      onError: (ex) {
+                        print("[QR] ERROR - $ex");
+                      }),
+                ),
+                Spacer()
+              ]),
       ),
       floatingActionButton: tours == null || tours.isEmpty
           ? FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => TourEditPage(widget.myDrawer)));
-        },
-      )
+              child: Icon(Icons.add),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TourEditPage(widget.myDrawer)));
+              },
+            )
           : null,
     );
   }

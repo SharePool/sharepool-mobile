@@ -53,12 +53,10 @@ class _DriverSettingsPageState extends State<DriverSettingsPage> {
             actions: <Widget>[
               IconButton(
                   icon: Icon(Icons.directions_car, color: Colors.white),
-                  onPressed: () =>
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  DriverPage(widget.myDrawer))))
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => DriverPage(widget.myDrawer))))
             ],
             bottom: TabBar(
               tabs: <Widget>[
@@ -85,10 +83,7 @@ class _DriverSettingsPageState extends State<DriverSettingsPage> {
                     child: _activeTours == null || _activeTours.isEmpty
                         ? Text("No tours defined yet.")
                         : TourListWidget(
-                        myDrawer: widget.myDrawer,
-                        tours: _activeTours
-                    )
-                ),
+                            myDrawer: widget.myDrawer, tours: _activeTours)),
                 onRefresh: loadTours,
               ),
               RefreshIndicator(
@@ -100,8 +95,7 @@ class _DriverSettingsPageState extends State<DriverSettingsPage> {
                     tourTapCallback: (context, drawer, tour) {
                       showDialog(
                           context: context,
-                          builder: (context) =>
-                              AlertDialog(
+                          builder: (context) => AlertDialog(
                                 title: Text("Activate tour"),
                                 content: Text(
                                     "Do you want to re-activate this tour?"),
@@ -116,11 +110,9 @@ class _DriverSettingsPageState extends State<DriverSettingsPage> {
                                       child: new Text("Yes"),
                                       textColor: Colors.white,
                                       onPressed: () =>
-                                          reActivateTour(context, tour)
-                                  ),
+                                          reActivateTour(context, tour)),
                                 ],
-                              )
-                      );
+                              ));
                     },
                   ),
                 ),

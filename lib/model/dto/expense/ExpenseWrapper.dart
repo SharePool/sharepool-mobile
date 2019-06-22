@@ -9,12 +9,9 @@ class ExpensesWrapper {
   factory ExpensesWrapper.fromJson(Map<String, dynamic> json) {
     var expenses = json["expenses"] as List;
 
-    List<ExpensePerUserDto> expensesPerUser = expenses.map((i) =>
-        ExpensePerUserDto.fromJson(i)).toList();
+    List<ExpensePerUserDto> expensesPerUser =
+        expenses.map((i) => ExpensePerUserDto.fromJson(i)).toList();
 
-    return ExpensesWrapper(
-        json["totalBalance"],
-        expensesPerUser
-    );
+    return ExpensesWrapper(json["totalBalance"], expensesPerUser);
   }
 }

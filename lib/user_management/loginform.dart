@@ -34,9 +34,7 @@ class _LoginFormState extends State<LoginForm> {
           TextFormField(
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-              labelText: "Email or Username",
-              suffixIcon: Icon(Icons.person)
-            ),
+                labelText: "Email or Username", suffixIcon: Icon(Icons.person)),
             validator: (value) {
               if (value.isEmpty) {
                 return "Email or Username must not be empty";
@@ -47,8 +45,8 @@ class _LoginFormState extends State<LoginForm> {
             },
           ),
           TextFormField(
-            decoration: InputDecoration(labelText: "Password",
-            suffixIcon: Icon(Icons.lock)),
+            decoration: InputDecoration(
+                labelText: "Password", suffixIcon: Icon(Icons.lock)),
             obscureText: true,
             validator: (value) {
               if (value.isEmpty) {
@@ -94,14 +92,12 @@ class _LoginFormState extends State<LoginForm> {
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => widget.followingPage));
       } else {
-        widget._scaffoldKey.currentState.showSnackBar(
-            FailureSnackBar("Invalid Credentials!")
-        );
+        widget._scaffoldKey.currentState
+            .showSnackBar(FailureSnackBar("Invalid Credentials!"));
       }
     } on SocketException {
-      widget._scaffoldKey.currentState.showSnackBar(
-          FailureSnackBar("Something went wrong!")
-      );
+      widget._scaffoldKey.currentState
+          .showSnackBar(FailureSnackBar("Something went wrong!"));
     }
   }
 }

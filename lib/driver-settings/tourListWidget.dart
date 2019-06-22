@@ -19,11 +19,12 @@ class TourListWidget extends StatefulWidget {
   bool isDismissable;
   TourTapCallback tourTapCallback;
 
-  TourListWidget({this.myDrawer,
-    this.tours,
-    this.isDismissable = true,
-    this.tourTapCallback,
-    this.scaffoldKey});
+  TourListWidget(
+      {this.myDrawer,
+      this.tours,
+      this.isDismissable = true,
+      this.tourTapCallback,
+      this.scaffoldKey});
 
   @override
   _TourListWidgetState createState() => _TourListWidgetState();
@@ -66,9 +67,8 @@ class _TourListWidgetState extends State<TourListWidget> {
         widget.tours.remove(tour);
       });
     } on SocketException {
-      _scaffoldKey.currentState.showSnackBar(
-          FailureSnackBar("Tour couldn't be deleted!")
-      );
+      _scaffoldKey.currentState
+          .showSnackBar(FailureSnackBar("Tour couldn't be deleted!"));
     }
   }
 }
@@ -97,13 +97,12 @@ class TourCard extends StatelessWidget {
                   ],
                 ),
               ),
-              onTap: () =>
-              tourTapCallback != null
+              onTap: () => tourTapCallback != null
                   ? tourTapCallback(context, myDrawer, tour)
                   : Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => TourEditPage(myDrawer, tour))),
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => TourEditPage(myDrawer, tour))),
             )));
   }
 

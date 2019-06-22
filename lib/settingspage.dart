@@ -40,7 +40,7 @@ class _SettingsPageState extends State<SettingsPage> {
   final TextEditingController _emailController = new TextEditingController();
   final TextEditingController _userNameController = new TextEditingController();
   final TextEditingController _gasConsumptionController =
-  new TextEditingController();
+      new TextEditingController();
 
   _SettingsPageState(MyDrawer myDrawer) {
     this.myDrawer = myDrawer;

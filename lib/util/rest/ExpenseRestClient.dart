@@ -15,21 +15,17 @@ class ExpenseRestClient {
 
   static Future<HateoasDto<ExpenseRequestResponseDto>> requestExpense(
       int tourId) async {
-    var response = await post(
-        "$BASE_URL/${tourId.toString()}",
-        headers: {
-          HttpHeaders.contentTypeHeader: ContentType.json.value,
-          HttpHeaders.authorizationHeader: await PreferencesService
-              .getUserToken()
-        }
-    );
+    var response = await post("$BASE_URL/${tourId.toString()}", headers: {
+      HttpHeaders.contentTypeHeader: ContentType.json.value,
+      HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
+    });
 
     print(response.body);
 
     if (RestHelper.statusOk(response.statusCode)) {
       var decode = json.decode(response.body);
       var hateoasDto = HateoasDto.create(
-              () => ExpenseRequestResponseDto.fromJson(decode), decode);
+          () => ExpenseRequestResponseDto.fromJson(decode), decode);
       return hateoasDto;
     }
 
@@ -38,14 +34,10 @@ class ExpenseRestClient {
 
   static Future<bool> confirmExpense(
       HateoasDto<ExpenseRequestResponseDto> hateoasDto) async {
-    var response = await put(
-        hateoasDto.link,
-        headers: {
-          HttpHeaders.contentTypeHeader: ContentType.json.value,
-          HttpHeaders.authorizationHeader: await PreferencesService
-              .getUserToken()
-        }
-    );
+    var response = await put(hateoasDto.link, headers: {
+      HttpHeaders.contentTypeHeader: ContentType.json.value,
+      HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
+    });
 
     print(response.body);
 
@@ -57,21 +49,13 @@ class ExpenseRestClient {
     var response;
     if (receiverId != null) {
       response =
-      await get(
-          "$BASE_URL?receiverId=${receiverId.toString()}",
-          headers: {
-            HttpHeaders.authorizationHeader: await PreferencesService
-                .getUserToken()
-          }
-      );
+          await get("$BASE_URL?receiverId=${receiverId.toString()}", headers: {
+        HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
+      });
     } else {
-      response = await get(
-          BASE_URL,
-          headers: {
-            HttpHeaders.authorizationHeader: await PreferencesService
-                .getUserToken()
-          }
-      );
+      response = await get(BASE_URL, headers: {
+        HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
+      });
     }
 
     print(response.body);
@@ -84,12 +68,11 @@ class ExpenseRestClient {
   }
 
   static Future<bool> sendPayback(PaybackDto paybackDto) async {
-    var response = await post(
-        BASE_URL,
+    var response = await post(BASE_URL,
         headers: {
           HttpHeaders.contentTypeHeader: ContentType.json.value,
-          HttpHeaders.authorizationHeader: await PreferencesService
-              .getUserToken(),
+          HttpHeaders.authorizationHeader:
+              await PreferencesService.getUserToken(),
         },
         body: json.encode(paybackDto));
 
