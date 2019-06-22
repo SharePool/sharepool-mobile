@@ -87,7 +87,8 @@ class ExpensesPerUserWidget extends StatelessWidget {
                   padding: const EdgeInsets.all(10),
                   child: Row(
                     children: <Widget>[
-                      showProfileImage(expensePerReceiver.userDto, 50),
+                      showProfileImage(
+                          expensePerReceiver?.userDto?.profileImg, 50),
                       Padding(
                         padding: const EdgeInsets.only(left: 5),
                         child: Text(

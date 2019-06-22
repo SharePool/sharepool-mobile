@@ -56,6 +56,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -137,7 +138,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               }).toList(),
                             )))
                   ]),
-                  showProfileImage(user, 100),
+                  showProfileImage(profileImg, 100),
                   FlatButton(
                     child: Text("Change Profile-Picture"),
                     onPressed: () {

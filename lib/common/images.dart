@@ -1,12 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:share_pool/model/dto/user/UserDto.dart';
 
-Widget showProfileImage(UserDto user, double height) {
-  if (user.profileImg != null && user.profileImg.length > 0) {
+Widget showProfileImage(String profileImg, double height) {
+  if (profileImg != null && profileImg.length > 0) {
     return Image.memory(
-      base64Decode(user.profileImg),
+      base64Decode(profileImg),
       height: height,
     );
   } else {
