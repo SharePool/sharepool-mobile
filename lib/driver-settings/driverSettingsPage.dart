@@ -80,10 +80,8 @@ class _DriverSettingsPageState extends State<DriverSettingsPage> {
             children: <Widget>[
               RefreshIndicator(
                 child: Center(
-                    child: _activeTours == null || _activeTours.isEmpty
-                        ? Text("No tours defined yet.")
-                        : TourListWidget(
-                            myDrawer: widget.myDrawer, tours: _activeTours)),
+                    child: TourListWidget(
+                        myDrawer: widget.myDrawer, tours: _activeTours)),
                 onRefresh: loadTours,
               ),
               RefreshIndicator(

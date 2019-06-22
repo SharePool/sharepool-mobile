@@ -35,7 +35,9 @@ class _TourListWidgetState extends State<TourListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return widget.tours == null || widget.tours.isEmpty
+        ? Text("No tours defined yet.")
+        : ListView.builder(
         itemCount: widget.tours == null ? 0 : widget.tours.length,
         itemBuilder: (BuildContext context, int index) {
           var tour = widget.tours[index];
