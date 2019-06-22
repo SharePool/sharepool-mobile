@@ -142,10 +142,7 @@ class _PaybackFormState extends State<PaybackForm> {
                                   return AlertDialog(
                                     title: Text("Confirm payback"),
                                     content: Text(
-                                        "Do you really want to pay back ${paybackDto
-                                            .amount.toStringAsFixed(
-                                            2)} to ${widget.userDto
-                                            .userName}?"),
+                                        "Do you really want to pay back ${paybackDto.amount.toStringAsFixed(2)} to ${widget.userDto.userName}?"),
                                     actions: <Widget>[
                                       new FlatButton(
                                         child: new Text("No"),

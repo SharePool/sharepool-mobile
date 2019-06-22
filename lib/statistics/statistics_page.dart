@@ -37,7 +37,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   void loadUserBalance() async {
     var expensesWrapper =
-    await ExpenseRestClient.getAllExpensesForLoggedInUser();
+        await ExpenseRestClient.getAllExpensesForLoggedInUser();
 
     setState(() {
       _userBalance = expensesWrapper.totalBalance;
@@ -64,7 +64,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
 }
 
 class ExpensesPerUserWidget extends StatelessWidget {
-
   final ExpensesWrapper _expensesWrapper;
 
   MyDrawer myDrawer;
@@ -99,23 +98,24 @@ class ExpensesPerUserWidget extends StatelessWidget {
                       ),
                       Spacer(),
                       Text(getFittingText(expensePerReceiver.sumOfExpenses)),
-                      Text(fixUpNegative(expensePerReceiver.sumOfExpenses),
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: getFittingColor(
-                                  expensePerReceiver.sumOfExpenses))),
+                      expensePerReceiver.sumOfExpenses == 0
+                          ? Text("")
+                          : Text(
+                              fixUpNegative(expensePerReceiver.sumOfExpenses),
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: getFittingColor(
+                                      expensePerReceiver.sumOfExpenses))),
                     ],
                   ),
                 ),
               ),
             ),
-            onTap: () =>
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            SingleUserExpensesPage(
-                                myDrawer, expensePerReceiver))),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        SingleUserExpensesPage(myDrawer, expensePerReceiver))),
           );
         });
   }
@@ -125,8 +125,7 @@ class TotalBalanceWidget extends StatelessWidget {
   const TotalBalanceWidget({
     Key key,
     @required double userBalance,
-  })
-      : _userBalance = userBalance,
+  })  : _userBalance = userBalance,
         super(key: key);
 
   final double _userBalance;
@@ -155,12 +154,15 @@ class TotalBalanceWidget extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 18),
                     ),
-                    Text(
-                      fixUpNegative(_userBalance),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 20, color: getFittingColor(_userBalance)),
-                    )
+                    _userBalance == 0
+                        ? Text("")
+                        : Text(
+                            fixUpNegative(_userBalance),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: getFittingColor(_userBalance)),
+                          )
                   ],
                 )
               ],
@@ -177,7 +179,11 @@ Color getFittingColor(double amount) {
 }
 
 String getFittingText(double amount) {
-  return amount <= 0 ? "You owe: " : "You are owed: ";
+  if (amount == 0) {
+    return "You are even";
+  }
+
+  return amount < 0 ? "You owe: " : "You are owed: ";
 }
 
 String fixUpNegative(double amount) {
