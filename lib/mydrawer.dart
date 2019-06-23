@@ -8,11 +8,9 @@ import 'package:share_pool/util/PreferencesService.dart';
 
 import 'driver/driverpage.dart';
 import 'model/dto/user/UserDto.dart';
-import 'passengerpage.dart';
 
 class MyDrawer extends StatefulWidget {
   DriverPage driverPage;
-  PassengerPage passengerPage;
   SettingsPage settingsPage;
   StatisticsPage statisticsPage;
 
@@ -48,15 +46,6 @@ class _MyDrawerState extends State<MyDrawer> {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => widget.driverPage));
-            },
-          ),
-          ListTile(
-            title: Text("Passenger"),
-            trailing: Icon(Icons.thumb_up),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => widget.passengerPage));
             },
           ),
           ListTile(

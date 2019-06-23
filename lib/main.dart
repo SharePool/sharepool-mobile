@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:share_pool/model/dto/user/UserDto.dart';
 import 'package:share_pool/mydrawer.dart';
-import 'package:share_pool/passengerpage.dart';
 import 'package:share_pool/settingspage.dart';
 import 'package:share_pool/statistics/statistics_page.dart';
 import 'package:share_pool/user_management/usermanagementpage.dart';
@@ -45,7 +44,6 @@ class _AppState extends State<App> {
   Widget startScreen;
 
   DriverPage driverPage;
-  PassengerPage passengerPage;
   SettingsPage settingsPage;
   StatisticsPage statisticsPage;
 
@@ -71,12 +69,10 @@ class _AppState extends State<App> {
     MyDrawer myDrawer = new MyDrawer();
 
     driverPage = new DriverPage(myDrawer);
-    passengerPage = new PassengerPage(myDrawer);
     settingsPage = new SettingsPage(myDrawer);
     statisticsPage = new StatisticsPage(myDrawer);
 
     myDrawer.driverPage = driverPage;
-    myDrawer.passengerPage = passengerPage;
     myDrawer.settingsPage = settingsPage;
     myDrawer.statisticsPage = statisticsPage;
   }
