@@ -36,20 +36,20 @@ class DriverPage extends StatefulWidget {
 class _DriverPageState extends State<DriverPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  TourDto selectedTour;
-  List<TourDto> tours;
+  TourDto _selectedTour;
+  List<TourDto> _tours;
 
   Future<void> loadTours() async {
     try {
       List<TourDto> tours = await TourRestClient.getToursForUser();
 
       setState(() {
-        this.tours = tours;
+        this._tours = tours;
 
         if (widget.tour != null) {
-          this.selectedTour = widget.tour;
+          this._selectedTour = widget.tour;
         } else {
-          this.selectedTour =
+          this._selectedTour =
           tours != null && tours.isNotEmpty ? tours[0] : null;
         }
       });
@@ -84,14 +84,14 @@ class _DriverPageState extends State<DriverPage> {
       ),
       drawer: widget.myDrawer,
       body: Center(
-        child: tours == null || tours.isEmpty
+        child: _tours == null || _tours.isEmpty
             ? Text("No tours defined yet.")
             : Column(children: <Widget>[
           Spacer(),
           Row(
             children: <Widget>[
               Flexible(
-                  child: new TourCard(selectedTour, widget.myDrawer)),
+                  child: new TourCard(_selectedTour, widget.myDrawer)),
               IconButton(
                   icon: Icon(Icons.search),
                   onPressed: () {
@@ -99,7 +99,7 @@ class _DriverPageState extends State<DriverPage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                SearchTourPage(widget.myDrawer, tours)));
+                                SearchTourPage(widget.myDrawer, _tours)));
                   })
             ],
           ),
@@ -119,7 +119,7 @@ class _DriverPageState extends State<DriverPage> {
         animatedIconTheme: IconThemeData(size: 22.0),
         curve: Curves.bounceIn,
         overlayOpacity: 0.5,
-        tooltip: "You found the easter egg.",
+        tooltip: "You found an easter egg.",
         children: [
           SpeedDialChild(
               child: Icon(Icons.photo_camera),
@@ -143,7 +143,7 @@ class _DriverPageState extends State<DriverPage> {
   }
 
   String _buildQrCodeForSelectedTour() {
-    return selectedTour == null ? "error" : selectedTour.tourId.toString();
+    return _selectedTour == null ? "error" : _selectedTour.tourId.toString();
   }
 
   Future _openQrCodesScanner() async {
