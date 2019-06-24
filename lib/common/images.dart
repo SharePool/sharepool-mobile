@@ -2,16 +2,20 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 
-Widget showProfileImage(String profileImg, double height) {
+Widget showProfileImage(String profileImg, [double radius]) {
   if (profileImg != null && profileImg.length > 0) {
-    return Image.memory(
-      base64Decode(profileImg),
-      height: height,
+    return Center(
+      child: CircleAvatar(
+        radius: radius ?? 80,
+        backgroundImage: MemoryImage(base64Decode(profileImg)),
+      ),
     );
   } else {
-    return Image.asset(
-      'assets/profile_img_placeholder.png',
-      height: height,
+    return Center(
+      child: CircleAvatar(
+        radius: radius ?? 80,
+        backgroundImage: AssetImage("assets/profile_img_placeholder.png"),
+      ),
     );
   }
 }
