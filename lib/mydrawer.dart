@@ -19,11 +19,11 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-  UserDto userDto;
+  UserDto _userDto;
 
   @override
   void initState() {
-    getUserInfo();
+    _getUserInfo();
   }
 
   @override
@@ -32,11 +32,13 @@ class _MyDrawerState extends State<MyDrawer> {
       child: ListView(
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: Text(userDto?.userName ?? ""),
-            accountEmail: Text(userDto?.email ?? ""),
+            accountName: Text(_userDto?.userName ?? ""),
+            accountEmail: Text(_userDto?.email ?? ""),
             currentAccountPicture: CircleAvatar(
               backgroundImage:
-                  MemoryImage(base64Decode(userDto?.profileImg ?? "")),
+              _userDto?.profileImg == null || _userDto.profileImg.isEmpty
+                  ? ExactAssetImage("assets/profile_img_placeholder.png")
+                  : MemoryImage(base64Decode(_userDto?.profileImg)),
             ),
           ),
           ListTile(
@@ -70,7 +72,7 @@ class _MyDrawerState extends State<MyDrawer> {
             title: Text("Logout"),
             trailing: Icon(Icons.exit_to_app),
             onTap: () {
-              logoutUser(context);
+              _logoutUser(context);
             },
           ),
         ],
@@ -78,7 +80,7 @@ class _MyDrawerState extends State<MyDrawer> {
     );
   }
 
-  void logoutUser(BuildContext context) async {
+  void _logoutUser(BuildContext context) async {
     PreferencesService.deleteUserInfo();
 
     Navigator.pushReplacement(
@@ -87,10 +89,10 @@ class _MyDrawerState extends State<MyDrawer> {
             builder: (context) => new UserManagementPage(widget.driverPage)));
   }
 
-  Future getUserInfo() async {
+  Future _getUserInfo() async {
     UserDto loggedInUser = await PreferencesService.getLoggedInUser();
     setState(() {
-      userDto = loggedInUser;
+      _userDto = loggedInUser;
     });
   }
 }
