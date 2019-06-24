@@ -148,6 +148,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ),
                   onPressed: () {
                     _loadUserData();
+                    _hasSomeValueChanged = false;
                   },
                 )
                     : Spacer(),
@@ -217,6 +218,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     setState(() {
       _profileImg = encodedImg;
+      _hasSomeValueChanged = _profileImg != _user.profileImg;
     });
 
     Navigator.pop(context);
@@ -231,6 +233,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
     setState(() {
       _profileImg = encodedImg;
+      _hasSomeValueChanged = _profileImg != _user.profileImg;
     });
 
     Navigator.pop(context);
@@ -252,6 +255,10 @@ class _SettingsPageState extends State<SettingsPage> {
                     onTap: () {
                       setState(() {
                         _profileImg = null;
+                        setState(() {
+                          _hasSomeValueChanged =
+                              _profileImg != _user.profileImg;
+                        });
                         Navigator.pop(context);
                       });
                     },
