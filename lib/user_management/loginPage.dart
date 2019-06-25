@@ -82,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                           var form = _formKey.currentState;
                           if (form.validate()) {
                             form.save();
-                            doLogin();
+                            _doLogin();
                           }
                         },
                         child: Text('Submit')),
@@ -96,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void doLogin() async {
+  void _doLogin() async {
     try {
       UserCredentialsDto credentials = await UserRestClient.loginUser(
           new UserLoginDto(_userNameOrEmail, _password));
