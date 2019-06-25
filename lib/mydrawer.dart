@@ -3,16 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:share_pool/settingspage.dart';
 import 'package:share_pool/statistics/statistics_page.dart';
-import 'package:share_pool/user_management/usermanagementpage.dart';
+import 'package:share_pool/user_management/loginPage.dart';
 import 'package:share_pool/util/PreferencesService.dart';
 
 import 'driver/driverpage.dart';
 import 'model/dto/user/UserDto.dart';
-import 'passengerpage.dart';
 
 class MyDrawer extends StatefulWidget {
   DriverPage driverPage;
-  PassengerPage passengerPage;
   SettingsPage settingsPage;
   StatisticsPage statisticsPage;
 
@@ -21,11 +19,11 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-  UserDto userDto;
+  UserDto _userDto;
 
   @override
   void initState() {
-    getUserInfo();
+    _getUserInfo();
   }
 
   @override
@@ -34,11 +32,13 @@ class _MyDrawerState extends State<MyDrawer> {
       child: ListView(
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: Text(userDto?.userName ?? ""),
-            accountEmail: Text(userDto?.email ?? ""),
+            accountName: Text(_userDto?.userName ?? ""),
+            accountEmail: Text(_userDto?.email ?? ""),
             currentAccountPicture: CircleAvatar(
               backgroundImage:
-                  MemoryImage(base64Decode(userDto?.profileImg ?? "")),
+              _userDto?.profileImg == null || _userDto.profileImg.isEmpty
+                  ? ExactAssetImage("assets/profile_img_placeholder.png")
+                  : MemoryImage(base64Decode(_userDto?.profileImg)),
             ),
           ),
           ListTile(
@@ -48,15 +48,6 @@ class _MyDrawerState extends State<MyDrawer> {
               Navigator.of(context).pop();
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (BuildContext context) => widget.driverPage));
-            },
-          ),
-          ListTile(
-            title: Text("Passenger"),
-            trailing: Icon(Icons.thumb_up),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => widget.passengerPage));
             },
           ),
           ListTile(
@@ -81,7 +72,7 @@ class _MyDrawerState extends State<MyDrawer> {
             title: Text("Logout"),
             trailing: Icon(Icons.exit_to_app),
             onTap: () {
-              logoutUser(context);
+              _logoutUser(context);
             },
           ),
         ],
@@ -89,19 +80,19 @@ class _MyDrawerState extends State<MyDrawer> {
     );
   }
 
-  void logoutUser(BuildContext context) async {
+  void _logoutUser(BuildContext context) async {
     PreferencesService.deleteUserInfo();
 
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => new UserManagementPage(widget.driverPage)));
+            builder: (context) => LoginPage(widget.driverPage)));
   }
 
-  Future getUserInfo() async {
+  Future _getUserInfo() async {
     UserDto loggedInUser = await PreferencesService.getLoggedInUser();
     setState(() {
-      userDto = loggedInUser;
+      _userDto = loggedInUser;
     });
   }
 }

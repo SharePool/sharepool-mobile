@@ -23,6 +23,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   double _userBalance = 0;
   ExpensesWrapper _expensesWrapper;
+  bool _expensesLoading;
 
   _StatisticsPageState(MyDrawer myDrawer) {
     this.myDrawer = myDrawer;
@@ -31,17 +32,19 @@ class _StatisticsPageState extends State<StatisticsPage> {
   @override
   void initState() {
     super.initState();
+    _expensesLoading = true;
 
-    loadUserBalance();
+    _loadUserBalance();
   }
 
-  void loadUserBalance() async {
+  void _loadUserBalance() async {
     var expensesWrapper =
         await ExpenseRestClient.getAllExpensesForLoggedInUser();
 
     setState(() {
       _userBalance = expensesWrapper.totalBalance;
       _expensesWrapper = expensesWrapper;
+      _expensesLoading = false;
     });
   }
 
@@ -56,10 +59,14 @@ class _StatisticsPageState extends State<StatisticsPage> {
           children: <Widget>[
             TotalBalanceWidget(userBalance: _userBalance),
             Flexible(
-              child: RefreshIndicator(
-                  onRefresh: () async => loadUserBalance(),
-                  child:
-                  ExpensesPerUserWidget(widget.myDrawer, _expensesWrapper)),
+              child: Center(
+                child: _expensesLoading == true
+                    ? CircularProgressIndicator()
+                    : RefreshIndicator(
+                    onRefresh: () async => _loadUserBalance(),
+                    child: ExpensesPerUserWidget(
+                        widget.myDrawer, _expensesWrapper)),
+              ),
             )
           ],
         ));
@@ -91,7 +98,7 @@ class ExpensesPerUserWidget extends StatelessWidget {
                   child: Row(
                     children: <Widget>[
                       showProfileImage(
-                          expensePerReceiver?.userDto?.profileImg, 50),
+                          expensePerReceiver?.userDto?.profileImg, 30),
                       Padding(
                         padding: const EdgeInsets.only(left: 5),
                         child: Text(

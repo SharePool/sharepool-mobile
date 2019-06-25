@@ -1,28 +1,26 @@
-import 'dart:io';
+import "package:flutter/material.dart";
+import "package:share_pool/common/SnackBars.dart";
+import "package:share_pool/common/currency.dart";
+import "package:share_pool/common/currencyDropdown.dart";
+import "package:share_pool/driver-settings/driverSettingsPage.dart";
+import "package:share_pool/model/dto/tour/TourDto.dart";
+import "package:share_pool/util/rest/TourRestClient.dart";
 
-import 'package:flutter/material.dart';
-import 'package:share_pool/common/SnackBars.dart';
-import 'package:share_pool/common/currency.dart';
-import 'package:share_pool/common/currencyDropdown.dart';
-import 'package:share_pool/driver-settings/driverSettingsPage.dart';
-import 'package:share_pool/model/dto/tour/TourDto.dart';
-import 'package:share_pool/util/rest/TourRestClient.dart';
-
-import '../mydrawer.dart';
+import "../mydrawer.dart";
 
 class TourEditPage extends StatefulWidget {
   MyDrawer myDrawer;
 
-  TourDto editableTour;
+  TourDto _editableTour;
 
-  TourEditPage(this.myDrawer, [this.editableTour]);
+  TourEditPage(this.myDrawer, [this._editableTour]);
 
   @override
   State<StatefulWidget> createState() {
-    if (editableTour == null) {
+    if (_editableTour == null) {
       return _TourEditPageState(TourDto());
     }
-    return _TourEditPageState(editableTour);
+    return _TourEditPageState(_editableTour);
   }
 }
 
@@ -30,9 +28,9 @@ class _TourEditPageState extends State<TourEditPage> {
   final _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  TourDto tourDto;
+  TourDto _tourDto;
 
-  _TourEditPageState(this.tourDto);
+  _TourEditPageState(this._tourDto);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +38,7 @@ class _TourEditPageState extends State<TourEditPage> {
         key: _scaffoldKey,
         appBar: AppBar(
             title: Text(
-                widget.editableTour == null ? "Create tour" : "Edit tour")),
+                widget._editableTour == null ? "Create tour" : "Edit tour")),
         drawer: widget.myDrawer,
         body: Form(
           key: _formKey,
@@ -58,9 +56,9 @@ class _TourEditPageState extends State<TourEditPage> {
                     }
                   },
                   onSaved: (String value) {
-                    tourDto.from = value;
+                    _tourDto.from = value;
                   },
-                  initialValue: tourDto.from,
+                  initialValue: _tourDto.from,
                 ),
                 TextFormField(
                   decoration: InputDecoration(
@@ -71,9 +69,9 @@ class _TourEditPageState extends State<TourEditPage> {
                     }
                   },
                   onSaved: (String value) {
-                    tourDto.to = value;
+                    _tourDto.to = value;
                   },
-                  initialValue: tourDto.to,
+                  initialValue: _tourDto.to,
                 ),
                 TextFormField(
                   keyboardType: TextInputType.numberWithOptions(
@@ -82,11 +80,11 @@ class _TourEditPageState extends State<TourEditPage> {
                       labelText: "Estimated Kilometers",
                       suffixIcon: Icon(Icons.transfer_within_a_station)),
                   onSaved: (String value) {
-                    tourDto.kilometers = double.parse(value);
+                    _tourDto.kilometers = double.parse(value);
                   },
-                  initialValue: tourDto.kilometers == null
+                  initialValue: _tourDto.kilometers == null
                       ? null
-                      : tourDto.kilometers.toStringAsFixed(2),
+                      : _tourDto.kilometers.toStringAsFixed(2),
                 ),
                 Row(children: <Widget>[
                   Flexible(
@@ -94,8 +92,8 @@ class _TourEditPageState extends State<TourEditPage> {
                     child: Container(
                       margin: EdgeInsets.only(top: 11),
                       child: CurrencyDropdown(
-                        onSaved: handleCurrency,
-                        initialValue: currencyfromString(tourDto.currency) ??
+                        onSaved: _handleCurrency,
+                        initialValue: currencyfromString(_tourDto.currency) ??
                             Currency.EUR,
                       ),
                     ),
@@ -118,11 +116,11 @@ class _TourEditPageState extends State<TourEditPage> {
                         }
                       },
                       onSaved: (String value) {
-                        tourDto.cost = double.parse(value);
+                        _tourDto.cost = double.parse(value);
                       },
-                      initialValue: tourDto.cost == null
+                      initialValue: _tourDto.cost == null
                           ? null
-                          : tourDto.cost.toStringAsFixed(2),
+                          : _tourDto.cost.toStringAsFixed(2),
                     ),
                   ),
                 ]),
@@ -136,10 +134,10 @@ class _TourEditPageState extends State<TourEditPage> {
                             var form = _formKey.currentState;
                             if (form.validate()) {
                               form.save();
-                              createOrUpdateTour();
+                              _createOrUpdateTour();
                             }
                           },
-                          child: Text('Submit')),
+                          child: Text("Submit")),
                     ],
                   ),
                 ),
@@ -149,31 +147,31 @@ class _TourEditPageState extends State<TourEditPage> {
         ));
   }
 
-  void handleCurrency(Currency currency) {
+  void _handleCurrency(Currency currency) {
     switch (currency) {
       case Currency.EUR:
-        tourDto.currency = "EUR";
+        _tourDto.currency = "EUR";
         break;
 
       case Currency.USD:
-        tourDto.currency = "USD";
+        _tourDto.currency = "USD";
         break;
 
       case Currency.GBP:
-        tourDto.currency = "GBP";
+        _tourDto.currency = "GBP";
         break;
     }
   }
 
-  void createOrUpdateTour() async {
+  void _createOrUpdateTour() async {
     try {
-      await TourRestClient.createOrUpdateTour(tourDto);
+      await TourRestClient.createOrUpdateTour(_tourDto);
 
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => DriverSettingsPage(widget.myDrawer)));
-    } on SocketException {
+    } on Exception {
       _scaffoldKey.currentState
           .showSnackBar(FailureSnackBar("Tour couldn't be updated/created!"));
     }
