@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:share_pool/driver-settings/tourListWidget.dart';
-import 'package:share_pool/driver/driverpage.dart';
-import 'package:share_pool/model/dto/tour/TourDto.dart';
+import "package:flutter/material.dart";
+import "package:share_pool/driver-settings/tourListWidget.dart";
+import "package:share_pool/driver/driverpage.dart";
+import "package:share_pool/model/dto/tour/TourDto.dart";
 
-import '../mydrawer.dart';
+import "../mydrawer.dart";
 
 class SearchTourPage extends StatefulWidget {
   final String title = "Search for a tour";
 
   MyDrawer myDrawer;
-  List<TourDto> tours;
+  List<TourDto> _tours;
 
-  SearchTourPage(this.myDrawer, this.tours);
+  SearchTourPage(this.myDrawer, this._tours);
 
   @override
   _SearchTourPageState createState() => _SearchTourPageState();
@@ -26,7 +26,7 @@ class _SearchTourPageState extends State<SearchTourPage> {
   void initState() {
     super.initState();
 
-    this.tours = widget.tours;
+    this.tours = widget._tours;
   }
 
   @override
@@ -74,13 +74,13 @@ class _SearchTourPageState extends State<SearchTourPage> {
   void applyFilter(String value) {
     if (value.isEmpty) {
       setState(() {
-        tours = widget.tours;
+        tours = widget._tours;
       });
       return;
     }
 
     setState(() {
-      tours = widget.tours
+      tours = widget._tours
           .where((t) =>
               t.from.toLowerCase().contains(value.toLowerCase()) ||
               t.to.toLowerCase().contains(value.toLowerCase()))
