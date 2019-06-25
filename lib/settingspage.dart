@@ -202,7 +202,7 @@ class _SettingsPageState extends State<SettingsPage> {
         _scaffoldKey.currentState
             .showSnackBar(new FailureSnackBar("Something went wrong."));
       }
-    } on SocketException catch (e) {
+    } on Exception {
       _scaffoldKey.currentState
           .showSnackBar(new FailureSnackBar("Something went wrong."));
     }

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +52,7 @@ class _DriverPageState extends State<DriverPage> {
           tours != null && tours.isNotEmpty ? tours[0] : null;
         }
       });
-    } on SocketException {
+    } on Exception {
       _scaffoldKey.currentState
           .showSnackBar(FailureSnackBar("Tours couldn't be loaded!"));
     }
@@ -201,11 +200,11 @@ class _DriverPageState extends State<DriverPage> {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         setState(() {
           _scaffoldKey.currentState.showSnackBar(
-              new FailureSnackBar("Camera permissions not granted!"));
+              FailureSnackBar("Camera permissions not granted!"));
         });
       } else {
         _scaffoldKey.currentState
-            .showSnackBar(new FailureSnackBar("Unknown error!"));
+            .showSnackBar(FailureSnackBar("Unknown error!"));
       }
     } on FormatException {} catch (e) {}
   }
@@ -214,7 +213,7 @@ class _DriverPageState extends State<DriverPage> {
       int tourId) async {
     try {
       return ExpenseRestClient.requestExpense(tourId);
-    } on SocketException {
+    } on Exception {
       _scaffoldKey.currentState
           .showSnackBar(FailureSnackBar("Something went wrong!"));
     }
@@ -226,7 +225,7 @@ class _DriverPageState extends State<DriverPage> {
       HateoasDto<ExpenseRequestResponseDto> requestResponse) async {
     try {
       return await ExpenseRestClient.confirmExpense(requestResponse);
-    } on SocketException {
+    } on Exception {
       _scaffoldKey.currentState
           .showSnackBar(FailureSnackBar("Something went wrong!"));
     }

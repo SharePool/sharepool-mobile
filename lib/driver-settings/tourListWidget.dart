@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -68,7 +66,7 @@ class _TourListWidgetState extends State<TourListWidget> {
       setState(() {
         widget.tours.remove(tour);
       });
-    } on SocketException {
+    } on Exception {
       _scaffoldKey.currentState
           .showSnackBar(FailureSnackBar("Tour couldn't be deleted!"));
     }

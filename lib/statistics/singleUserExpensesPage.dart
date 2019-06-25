@@ -194,7 +194,7 @@ class _PaybackFormState extends State<PaybackForm> {
                   StatisticsPage(widget.myDrawer)));
     } else {
       _scaffoldKey.currentState
-          .showSnackBar(new FailureSnackBar("Payback could not be sent."));
+          .showSnackBar(FailureSnackBar("Payback could not be sent."));
     }
   }
 }

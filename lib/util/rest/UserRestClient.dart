@@ -19,7 +19,8 @@ class UserRestClient {
 
     var response = await put(BASE_URL + "/login",
         body: body,
-        headers: {HttpHeaders.contentTypeHeader: ContentType.json.value});
+        headers: {HttpHeaders.contentTypeHeader: ContentType.json.value})
+        .timeout(const Duration(seconds: 10));
 
     print(response.body);
 
@@ -36,7 +37,8 @@ class UserRestClient {
 
     var response = await post(BASE_URL,
         body: body,
-        headers: {HttpHeaders.contentTypeHeader: ContentType.json.value});
+        headers: {HttpHeaders.contentTypeHeader: ContentType.json.value})
+        .timeout(const Duration(seconds: 10));
 
     print(response.body);
 

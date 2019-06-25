@@ -1,12 +1,10 @@
-import 'dart:io';
-
-import 'package:flutter/material.dart';
-import 'package:share_pool/common/SnackBars.dart';
-import 'package:share_pool/model/dto/user/UserLoginDto.dart';
-import 'package:share_pool/model/dto/user/UserTokenDto.dart';
-import 'package:share_pool/user_management/registerPage.dart';
-import 'package:share_pool/util/PreferencesService.dart';
-import 'package:share_pool/util/rest/UserRestClient.dart';
+import "package:flutter/material.dart";
+import "package:share_pool/common/SnackBars.dart";
+import "package:share_pool/model/dto/user/UserLoginDto.dart";
+import "package:share_pool/model/dto/user/UserTokenDto.dart";
+import "package:share_pool/user_management/registerPage.dart";
+import "package:share_pool/util/PreferencesService.dart";
+import "package:share_pool/util/rest/UserRestClient.dart";
 
 class LoginPage extends StatefulWidget {
   final Widget followingPage;
@@ -85,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                             _doLogin();
                           }
                         },
-                        child: Text('Submit')),
+                        child: Text("Login")),
                   ],
                 ),
               ),
@@ -112,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
         _scaffoldKey.currentState
             .showSnackBar(FailureSnackBar("Invalid Credentials!"));
       }
-    } on SocketException {
+    } on Exception {
       _scaffoldKey.currentState
           .showSnackBar(FailureSnackBar("Something went wrong!"));
     }

@@ -1,5 +1,3 @@
-import "dart:io";
-
 import "package:flutter/material.dart";
 import "package:share_pool/common/SnackBars.dart";
 import "package:share_pool/common/currency.dart";
@@ -173,7 +171,7 @@ class _TourEditPageState extends State<TourEditPage> {
           context,
           MaterialPageRoute(
               builder: (context) => DriverSettingsPage(widget.myDrawer)));
-    } on SocketException {
+    } on Exception {
       _scaffoldKey.currentState
           .showSnackBar(FailureSnackBar("Tour couldn't be updated/created!"));
     }

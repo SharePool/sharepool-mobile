@@ -1,5 +1,3 @@
-import "dart:io";
-
 import "package:flutter/material.dart";
 import "package:share_pool/common/Constants.dart";
 import "package:share_pool/common/SnackBars.dart";
@@ -154,17 +152,18 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   Future doRegister() async {
-    UserCredentialsDto credentials = null;
+    UserCredentialsDto credentials;
     try {
-      credentials = await UserRestClient.registerUser(new UserDto(
+      credentials = await UserRestClient.registerUser(UserDto(
           firstName: _firstName,
           lastName: _lastName,
           userName: _userName,
           email: _email,
           password: _password,
           gasConsumption: _gasConsumption));
-    } on SocketException catch (e) {
-      // NOP: is handled by null check below
+    } on Exception {
+      _scaffoldKey.currentState
+          .showSnackBar(FailureSnackBar("Something went wrong!"));
     }
 
     if (credentials != null) {
