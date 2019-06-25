@@ -59,12 +59,14 @@ class _StatisticsPageState extends State<StatisticsPage> {
           children: <Widget>[
             TotalBalanceWidget(userBalance: _userBalance),
             Flexible(
-              child: _expensesLoading == true
-                  ? CircularProgressIndicator()
-                  : RefreshIndicator(
-                  onRefresh: () async => _loadUserBalance(),
-                  child: ExpensesPerUserWidget(
-                      widget.myDrawer, _expensesWrapper)),
+              child: Center(
+                child: _expensesLoading == true
+                    ? CircularProgressIndicator()
+                    : RefreshIndicator(
+                    onRefresh: () async => _loadUserBalance(),
+                    child: ExpensesPerUserWidget(
+                        widget.myDrawer, _expensesWrapper)),
+              ),
             )
           ],
         ));
