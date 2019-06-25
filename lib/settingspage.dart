@@ -191,6 +191,11 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future _doSave() async {
+    _user.email = _email;
+    _user.userName = _userName;
+    _user.gasConsumption = _gasConsumption;
+    _user.profileImg = _profileImg;
+
     try {
       bool updated = await UserRestClient.updateUser(_user);
 
@@ -198,6 +203,10 @@ class _SettingsPageState extends State<SettingsPage> {
         PreferencesService.saveLoggedInUser(_user);
         _scaffoldKey.currentState
             .showSnackBar(new SuccessSnackBar("Info updated."));
+
+        setState(() {
+          _hasSomeValueChanged = false;
+        });
       } else {
         _scaffoldKey.currentState
             .showSnackBar(new FailureSnackBar("Something went wrong."));
@@ -211,6 +220,8 @@ class _SettingsPageState extends State<SettingsPage> {
   void _openCamera(BuildContext context) async {
     File picture = await ImagePicker.pickImage(
       source: ImageSource.camera,
+        maxHeight: 400,
+        maxWidth: 400
     );
 
     String encodedImg = base64Encode(picture.readAsBytesSync());
