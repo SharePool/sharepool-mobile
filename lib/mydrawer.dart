@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:share_pool/settingspage.dart';
 import 'package:share_pool/statistics/statistics_page.dart';
-import 'package:share_pool/user_management/usermanagementpage.dart';
+import 'package:share_pool/user_management/loginPage.dart';
 import 'package:share_pool/util/PreferencesService.dart';
 
 import 'driver/driverpage.dart';
@@ -86,7 +86,7 @@ class _MyDrawerState extends State<MyDrawer> {
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => new UserManagementPage(widget.driverPage)));
+            builder: (context) => LoginPage(widget.driverPage)));
   }
 
   Future _getUserInfo() async {

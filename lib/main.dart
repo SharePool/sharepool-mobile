@@ -5,7 +5,7 @@ import 'package:share_pool/model/dto/user/UserDto.dart';
 import 'package:share_pool/mydrawer.dart';
 import 'package:share_pool/settingspage.dart';
 import 'package:share_pool/statistics/statistics_page.dart';
-import 'package:share_pool/user_management/usermanagementpage.dart';
+import 'package:share_pool/user_management/loginPage.dart';
 import 'package:share_pool/util/PreferencesService.dart';
 import 'package:share_pool/util/rest/UserRestClient.dart';
 
@@ -55,7 +55,7 @@ class _AppState extends State<App> {
           primarySwatch: Colors.blueGrey,
         ),
         home:
-            _isAuthenticated ? driverPage : new UserManagementPage(driverPage));
+        _isAuthenticated ? driverPage : LoginPage(driverPage));
   }
 
   @override

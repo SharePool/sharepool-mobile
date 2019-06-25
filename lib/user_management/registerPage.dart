@@ -1,24 +1,23 @@
-import 'dart:io';
+import "dart:io";
 
-import 'package:flutter/material.dart';
-import 'package:share_pool/common/Constants.dart';
-import 'package:share_pool/common/SnackBars.dart';
-import 'package:share_pool/model/dto/user/UserDto.dart';
-import 'package:share_pool/model/dto/user/UserTokenDto.dart';
-import 'package:share_pool/util/PreferencesService.dart';
-import 'package:share_pool/util/rest/UserRestClient.dart';
+import "package:flutter/material.dart";
+import "package:share_pool/common/Constants.dart";
+import "package:share_pool/common/SnackBars.dart";
+import "package:share_pool/model/dto/user/UserDto.dart";
+import "package:share_pool/model/dto/user/UserTokenDto.dart";
+import "package:share_pool/util/PreferencesService.dart";
+import "package:share_pool/util/rest/UserRestClient.dart";
 
 class RegisterForm extends StatefulWidget {
-  final Widget followingPage;
-  final GlobalKey<ScaffoldState> _scaffoldKey;
 
-  RegisterForm(this.followingPage, this._scaffoldKey);
+  RegisterForm();
 
   @override
   _RegisterFormState createState() => _RegisterFormState();
 }
 
 class _RegisterFormState extends State<RegisterForm> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
   String _firstName = "";
@@ -30,8 +29,12 @@ class _RegisterFormState extends State<RegisterForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: Form(
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+        title: Text("Register"),
+      ),
+      body: Form(
         key: _formKey,
         child: ListView(
           padding: EdgeInsets.symmetric(horizontal: 25.0),
@@ -111,12 +114,16 @@ class _RegisterFormState extends State<RegisterForm> {
                 labelText: "Gas Consumption (l per 100 km)",
               ),
               keyboardType:
-                  TextInputType.numberWithOptions(signed: false, decimal: true),
+              TextInputType.numberWithOptions(signed: false, decimal: true),
               validator: (value) {
+                if (value?.isEmpty) {
+                  return "Gas consumption must be set";
+                }
+
                 double gasConsumption = double.parse(value);
 
                 if (gasConsumption < 0) {
-                  return "Gas Consumption must be greater than or equal 0";
+                  return "Gas consumption must be greater than or equal 0";
                 }
               },
               onSaved: (String value) {
@@ -136,7 +143,7 @@ class _RegisterFormState extends State<RegisterForm> {
                           doRegister();
                         }
                       },
-                      child: Text('Submit')),
+                      child: Text("Register")),
                 ],
               ),
             ),
@@ -165,10 +172,9 @@ class _RegisterFormState extends State<RegisterForm> {
       PreferencesService.saveUserId(credentials.userId);
       PreferencesService.saveLoggedInUser(await UserRestClient.getUser());
 
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => widget.followingPage));
+      Navigator.pop(context);
     } else {
-      widget._scaffoldKey.currentState
+      _scaffoldKey.currentState
           .showSnackBar(FailureSnackBar("Something went wrong!"));
     }
   }
