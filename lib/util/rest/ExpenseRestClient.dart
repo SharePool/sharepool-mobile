@@ -11,7 +11,7 @@ import 'package:share_pool/util/PreferencesService.dart';
 import 'package:share_pool/util/RestHelper.dart';
 
 class ExpenseRestClient {
-  static const String BASE_URL = Constants.BASE_REST_URL + "/expenses";
+  static const String BASE_URL = Constants.BASE_SERVER_REST_URL + "/expenses";
 
   static Future<HateoasDto<ExpenseRequestResponseDto>> requestExpense(
       int tourId) async {
