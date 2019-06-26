@@ -20,7 +20,7 @@ class ExpenseRestClient {
       HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
     });
 
-    print(response.body);
+//    print(response.body);
 
     if (RestHelper.statusOk(response.statusCode)) {
       var decode = json.decode(response.body);
@@ -39,7 +39,7 @@ class ExpenseRestClient {
       HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
     });
 
-    print(response.body);
+//    print(response.body);
 
     return RestHelper.statusOk(response.statusCode);
   }
@@ -58,7 +58,7 @@ class ExpenseRestClient {
       });
     }
 
-    print(response.body);
+//    print(response.body);
 
     if (RestHelper.statusOk(response.statusCode)) {
       return ExpensesWrapper.fromJson(json.decode(response.body));
@@ -76,7 +76,7 @@ class ExpenseRestClient {
         },
         body: json.encode(paybackDto));
 
-    print(response.body);
+//    print(response.body);
 
     return RestHelper.statusOk(response.statusCode);
   }

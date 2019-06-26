@@ -54,6 +54,7 @@ class _AppState extends State<App> {
         theme: ThemeData(
           primarySwatch: Colors.blueGrey,
         ),
+        debugShowCheckedModeBanner: false,
         home:
         _isAuthenticated ? driverPage : LoginPage(driverPage));
   }

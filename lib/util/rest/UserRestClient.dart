@@ -22,7 +22,7 @@ class UserRestClient {
         headers: {HttpHeaders.contentTypeHeader: ContentType.json.value})
         .timeout(const Duration(seconds: 10));
 
-    print(response.body);
+//    print(response.body);
 
     if (RestHelper.statusOk(response.statusCode)) {
       return UserCredentialsDto.fromJson(json.decode(response.body));
@@ -40,7 +40,7 @@ class UserRestClient {
         headers: {HttpHeaders.contentTypeHeader: ContentType.json.value})
         .timeout(const Duration(seconds: 10));
 
-    print(response.body);
+//    print(response.body);
 
     if (RestHelper.statusOk(response.statusCode)) {
       return UserCredentialsDto.fromJson(json.decode(response.body));
@@ -55,7 +55,7 @@ class UserRestClient {
       HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
     });
 
-    print(response.body);
+//    print(response.body);
 
     if (RestHelper.statusOk(response.statusCode)) {
       return UserDto.fromJson(json.decode(response.body));
@@ -72,7 +72,7 @@ class UserRestClient {
       HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
     });
 
-    print(response.body);
+//    print(response.body);
 
     return response.statusCode == 200;
   }

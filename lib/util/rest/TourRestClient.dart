@@ -23,7 +23,7 @@ class TourRestClient {
       HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
     });
 
-    print(response.body);
+//    print(response.body);
 
     if (RestHelper.statusOk(response.statusCode)) {
       final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
@@ -52,7 +52,7 @@ class TourRestClient {
       });
     }
 
-    print(response.body);
+//    print(response.body);
   }
 
   static Future<void> deleteTour(int tourId) async {
@@ -61,7 +61,7 @@ class TourRestClient {
       HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
     });
 
-    print(response.body);
+//    print(response.body);
   }
 
   static Future<void> activateTour(int tourId) async {
@@ -71,6 +71,6 @@ class TourRestClient {
       HttpHeaders.authorizationHeader: await PreferencesService.getUserToken()
     });
 
-    print(response.body);
+//    print(response.body);
   }
 }

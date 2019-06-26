@@ -83,10 +83,11 @@ class _MyDrawerState extends State<MyDrawer> {
   void _logoutUser(BuildContext context) async {
     PreferencesService.deleteUserInfo();
 
-    Navigator.pushReplacement(
+    Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-            builder: (context) => LoginPage(widget.driverPage)));
+            builder: (context) => LoginPage(widget.driverPage)),
+            (_) => false);
   }
 
   Future _getUserInfo() async {
