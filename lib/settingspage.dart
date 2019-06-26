@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share_pool/common/Constants.dart';
 import 'package:share_pool/common/SnackBars.dart';
@@ -219,10 +220,13 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void _openCamera(BuildContext context) async {
     File picture = await ImagePicker.pickImage(
-      source: ImageSource.camera,
-        maxHeight: 400,
-        maxWidth: 400
+        source: ImageSource.camera,
+        maxHeight: 200,
+        maxWidth: 200
     );
+
+    picture = await FlutterImageCompress.compressAndGetFile(
+        picture.absolute.path, picture.absolute.path, quality: 70);
 
     String encodedImg = base64Encode(picture.readAsBytesSync());
     print(encodedImg);
@@ -237,8 +241,14 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void _openGallery(BuildContext context) async {
     File galleryPicture = await ImagePicker.pickImage(
-      source: ImageSource.gallery,
+        source: ImageSource.gallery,
+        maxHeight: 200,
+        maxWidth: 200
     );
+
+    galleryPicture = await FlutterImageCompress.compressAndGetFile(
+        galleryPicture.absolute.path, galleryPicture.absolute.path,
+        quality: 70);
 
     String encodedImg = base64Encode(galleryPicture.readAsBytesSync());
 
