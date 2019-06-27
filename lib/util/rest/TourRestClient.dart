@@ -9,7 +9,7 @@ import 'package:share_pool/util/PreferencesService.dart';
 import '../RestHelper.dart';
 
 class TourRestClient {
-  static const String BASE_URL = Constants.BASE_REST_URL + "/tours";
+  static const String BASE_URL = Constants.BASE_SERVER_REST_URL + "/tours";
 
   static Future<List<TourDto>> getToursForUser([bool includeInactive]) async {
     String url = BASE_URL;
