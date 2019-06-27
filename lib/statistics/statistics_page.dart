@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:share_pool/common/images.dart';
 import 'package:share_pool/model/dto/expense/ExpenseWrapper.dart';
+import 'package:share_pool/statistics/AnalyticsTab.dart';
 import 'package:share_pool/statistics/singleUserExpensesPage.dart';
 import 'package:share_pool/util/rest/ExpenseRestClient.dart';
 
@@ -50,26 +51,37 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        drawer: myDrawer,
-        body: Column(
-          children: <Widget>[
-            TotalBalanceWidget(userBalance: _userBalance),
-            Flexible(
-              child: Center(
-                child: _expensesLoading == true
-                    ? CircularProgressIndicator()
-                    : RefreshIndicator(
-                    onRefresh: () async => _loadUserBalance(),
-                    child: ExpensesPerUserWidget(
-                        widget.myDrawer, _expensesWrapper)),
+    return DefaultTabController(
+        length: 2,
+        child: Scaffold(
+            appBar: AppBar(
+              title: Text(widget.title),
+              bottom: TabBar(
+                tabs: <Widget>[
+                  Tab(text: "Balance"),
+                  Tab(text: "Analytics"),
+                ],
               ),
-            )
-          ],
-        ));
+            ),
+            drawer: myDrawer,
+            body: TabBarView(children: <Widget>[
+              Column(
+                children: <Widget>[
+                  TotalBalanceWidget(userBalance: _userBalance),
+                  Flexible(
+                    child: Center(
+                      child: _expensesLoading == true
+                          ? CircularProgressIndicator()
+                          : RefreshIndicator(
+                          onRefresh: () async => _loadUserBalance(),
+                          child: ExpensesPerUserWidget(
+                              widget.myDrawer, _expensesWrapper)),
+                    ),
+                  )
+                ],
+              ),
+              AnalyticsTab()
+            ])));
   }
 }
 
