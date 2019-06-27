@@ -81,14 +81,16 @@ class _AnalyticsTabState extends State<AnalyticsTab> {
     setState(() {
       seriesList = [
         new Series<AnalyticsEntry, DateTime>(
-            id: "km",
+            id: "kmSum",
+            displayName: "KMs driven",
             colorFn: (AnalyticsEntry entry, _) =>
                 MaterialPalette.blue.shadeDefault,
             domainFn: (AnalyticsEntry entry, _) => entry.creationDate,
             measureFn: (AnalyticsEntry entry, _) => entry.kmSum,
             data: analyticsData.values.toList()),
         new Series<AnalyticsEntry, DateTime>(
-            id: "gas saved",
+            id: "litersGasSaved",
+            displayName: "gas saved (in l)",
             colorFn: (AnalyticsEntry entry, _) =>
                 MaterialPalette.lime.shadeDefault,
             domainFn: (AnalyticsEntry entry, _) => entry.creationDate,
