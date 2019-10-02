@@ -1,5 +1,5 @@
 # SharePool Mobile
-&copy; Tobias Kaderle & Jan Wiebauer
+&copy; Tobias Kaderle & Jan Wiesbauer
 
 ## Beschreibung
 Dieses Projekt stellt das Frontend für die `SharePool` Anwendung dar. Bei SharePool handelt es sich um eine Anwendung, die das Bilden und Instandhalten einer Fahrgemeinschaft vereinfachen soll. Generische Geldverwaltungsapps sind unserem Empfinden nach teilweise zu komplex strukturiert. Das einfache Buchen einer Fahrt umfasst zu viele Schritte als das es noch intuitiv ist. Deshalb wollten wir diesen, doch einfachen Prozess, auch in einer Applikation simpel abbilden.
