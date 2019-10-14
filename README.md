@@ -1,40 +1,40 @@
 # SharePool Mobile
 &copy; Tobias Kaderle & Jan Wiesbauer
 
-## Beschreibung
-Dieses Projekt stellt das Frontend für die `SharePool` Anwendung dar. Bei SharePool handelt es sich um eine Anwendung, die das Bilden und Instandhalten einer Fahrgemeinschaft vereinfachen soll. Generische Geldverwaltungsapps sind unserem Empfinden nach teilweise zu komplex strukturiert. Das einfache Buchen einer Fahrt umfasst zu viele Schritte als das es noch intuitiv ist. Deshalb wollten wir diesen, doch einfachen Prozess, auch in einer Applikation simpel abbilden.
+## Description
+This project is the frontend for the `SharePool` application. SharePool is an application designed to simplify the creation and maintenance of carpool communities. In our opinion, generic money management apps are partly too complexly structured. The simple booking of a ride includes too many steps to be intuitive. That's why we wanted to map this simple process in an application as well.
 
-Die komplette Vision für die Anwendung kann in diesem [Proposal](PROPOSAL.md) nachgelesen werden.
+The complete vision for the application can be found in this [Proposal](PROPOSAL.md).
 
 ## Flutter
-Für die Umsetzung de mobilen Anwendung wurde Googles [Flutter](https://flutter.dev) verwendet. Dies ermöglicht mit einer gemeinsamen Code-Basis Android, iOS und seit kurzem auch Web- bzw. Desktop-Apps zu entwickeln. Die Anwendung wird mittels der Programmiersprache [Dart](https://dart.dev) entwickelt, und kompiliert dann in nativen Swift-, bzw. Java- Code.
+Googles [Flutter](https://flutter.dev) was used to implement the mobile application. This makes it possible to develop Android, iOS and recently web and desktop apps with a common code base. The application is developed using the programming language [Dart](https://dart.dev), and then compiled in native Swift or Java code.
 
-Wir waren mit dem Framework sehr zufrieden, da es viele Standardkomponenten bietet, und die Entwicklung durch Features wie z.b. "Hot-Reload" (Code-Änderungen werden binnen einer Sekunde am Test-Gerät aktualisiert) sehr angenehm ist.
+We were very pleased with the framework, as it offers many standard components, and the development is very pleasant due to features like "Hot-Reload" (code changes are updated on the test device within a second).
 
 ## Use-Cases
-### Login / Registrieren
-Damit sich der Benutzer einen Account erstellen kann, bzw. sich in seinen Account einloggen kann, wird beim Start der App die Möglichkeit dazu geboten. Die eingegebenen Daten werden sowohl validiert (valide Email, Passwort-Regex, ...), und wenn sie keinen Fehler mehr enthalten, kann ein Request an den Server abgesetzt werden. Auch dort werden die Daten erneut validiert, und wenn alles passt, wird der User-Token retourniert. Dieser Token wird dann für alle anderen Requests an den Server benötigt, um den User zu authentifizieren.
+### Login / Register
+At the start of the app the user is prompted to either log in to their account or create a new account. The entered data is validated (valid email, password rule, ...), and if it does not contain any errors, a request can be sent to the server. The data is also validated again on the server and if everything fits, the user token is returned. This token is then required for all other requests to the server to authenticate the user.
 
 <img src="doc/login-register.gif" alt="login-register" width="250"/>
 
-### Sicht des Fahrers
-Ein Benutzer, der als Fahrer der Fahrgemeinschaft agiert, kann für seinen Account Touren anlegen und verwalten. Wenn er oben rechts auf das Zahnrad-Icon klickt, sieht er alle sein Fahrten. Durch einen Klick auf einen Eintrag die Bearbeitungs-Seite öffnen. Wenn er jedoch auf das Plus-Icon rechts unten klickt, kann er eine neue Fahrt anlegen.
+### Driver's View
+A user who acts as a carpool driver can create and manage tours for his account. If he clicks on the cogwheel icon in the upper right corner, he can see all his trips. Click on an entry to open the editing page. If he clicks on the plus icon at the bottom right, he can create a new trip.
 
-Aus den erstellten Touren kann eine gewählt werden, deren Infos dann mittels des QR-Code angezeigt werden. Durch einen Klick auf das Lupen-Icon wird die Liste der Touren angezeigt, aus der die gewünschte ausgewählt werden kann.
+One of the created tours can be selected, whose information is then displayed using the QR code. A click on the magnifying glass icon displays the list of tours from which the desired one can be selected.
 
 <img src="doc/driver.gif" alt="driver" width="250"/>
 
-### Sicht des Mitfahrers
-Ein Mitfahrer kann durch einen Klick auf den "Scan QR-Code" Menü-Eintrag die Kamera öffnen, und einen Tour-QR-Code eines Fahrers scannen. Wenn der Code erkannt wurde, wird erst einmal ein Request an den Server abgesetzt, um die benötigten Informationen zu erhalten (welche Tour, Entfernung, Preis, Fahrer, ..), die dann in einem Dialog angezeigt werden. Der Mitfahrer kann die Infos überprüfen, und dann entweder bestätigen oder ablehnen. Wenn er auf "Ja" klickt wird die Fahrt auf dem Server bestätigt.
+### Passenger's View
+A passenger can open the camera by clicking on the "Scan QR Code" menu item and scan a tour QR code of a driver. Once the code has been recognized, a request is first sent to the server to obtain the required information (which tour, distance, price, driver, ..), which is then displayed in a dialog. The passenger can check the information and then either confirm or refuse. If he clicks on "Yes" the ride will be confirmed on the server.
 
 <img src="doc/passenger.gif" alt="passenger" width="250"/>
 
-### Einsicht der Bilanz
-Nachdem ein Benutzer mehrere Fahrten absolviert hat, kann er sich auf der "Statistic"-Seite seine Bilanz ansehen. Ganz oben wird ihm seine Gesamt-Bilanz angezeigt, und darunter in einer Liste die Bilanzen gegenüber der einzelnen Benutzer. Wenn er einen User auswählt, werden auf einer neuen Seite die einzelnen Fahrten und Rückzahlungen aufgelistet. Durch einen Klick auf das Plus-Icon rechts unten können neue Rückzählungen erstellt werden.
+### Balance View
+After a user has completed several trips, he can view his balance on the "Statistic" page. At the top, the user's overall balance sheet is displayed, and below it, a list of the balance sheets for the individual users. When he selects a user, the individual trips and refunds are listed on a new page. New recounts can be created by clicking on the plus icon at the bottom right.
 
 <img src="doc/balance.gif" alt="balance" width="250"/>
 
-### Einsicht der Analyse
-Damit sich der Benutzer auch seine Analyse-Daten anzeigen lassen kann, muss er von den Bilanzen einfach nur nach links wischen, um den Tab zu wechseln. Dort sieht er Graphen, die ihm auf den Tag aufsummiert, die gefahrenen Kilometer, sowie die eingesparten Liter Treibstoff anzeigt (diese Daten werden vom Analytics-Microservice abgefragt). Die Daten können nach Datum eingeschränkt werden, und auch durch einen Klick auf de Namen in der Legende aus/eingeblendet werden.
+### Analysis View
+So that the user can also display his analysis data, he simply has to swipe the balance sheets to the left to change the tab. There he can see graphs summarizing the day, the kilometres driven and the litres of fuel saved (this data is queried by the Analytics Microservice). The data can be restricted by date, and can also be shown or hidden by clicking on the name in the legend.
 
 <img src="doc/analytics.gif" alt="analytics" width="250"/>
